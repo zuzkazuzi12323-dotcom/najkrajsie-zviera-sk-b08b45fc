@@ -1,22 +1,45 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import Index from "./pages/Index";
+import Gallery from "./pages/Gallery";
+import DogProfile from "./pages/DogProfile";
+import AddDog from "./pages/AddDog";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import AdminLayout from "./components/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminDogs from "./pages/admin/AdminDogs";
+import AdminComments from "./pages/admin/AdminComments";
+import AdminPayments from "./pages/admin/AdminPayments";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
       <Sonner />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/galeria" element={<Gallery />} />
+          <Route path="/pes/:id" element={<DogProfile />} />
+          <Route path="/pridat" element={<AddDog />} />
+          <Route path="/prihlasenie" element={<Login />} />
+          <Route path="/registracia" element={<Register />} />
+          
+          {/* Admin */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="pouzivatelia" element={<AdminUsers />} />
+            <Route path="psy" element={<AdminDogs />} />
+            <Route path="komentare" element={<AdminComments />} />
+            <Route path="platby" element={<AdminPayments />} />
+          </Route>
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
