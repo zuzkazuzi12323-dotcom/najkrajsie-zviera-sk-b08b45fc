@@ -2,12 +2,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Gallery from "./pages/Gallery";
 import DogProfile from "./pages/DogProfile";
 import AddDog from "./pages/AddDog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
@@ -22,27 +24,30 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/galeria" element={<Gallery />} />
-          <Route path="/pes/:id" element={<DogProfile />} />
-          <Route path="/pridat" element={<AddDog />} />
-          <Route path="/prihlasenie" element={<Login />} />
-          <Route path="/registracia" element={<Register />} />
-          
-          {/* Admin */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="pouzivatelia" element={<AdminUsers />} />
-            <Route path="psy" element={<AdminDogs />} />
-            <Route path="komentare" element={<AdminComments />} />
-            <Route path="platby" element={<AdminPayments />} />
-          </Route>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/galeria" element={<Gallery />} />
+            <Route path="/pes/:id" element={<DogProfile />} />
+            <Route path="/pridat" element={<AddDog />} />
+            <Route path="/prihlasenie" element={<Login />} />
+            <Route path="/registracia" element={<Register />} />
+            <Route path="/platba-uspesna" element={<PaymentSuccess />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+            {/* Admin */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="pouzivatelia" element={<AdminUsers />} />
+              <Route path="psy" element={<AdminDogs />} />
+              <Route path="komentare" element={<AdminComments />} />
+              <Route path="platby" element={<AdminPayments />} />
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
