@@ -6,21 +6,29 @@ const AdminPayments = () => {
   const { data } = useQuery({
     queryKey: ["admin-payments"],
     queryFn: async () => {
-      const { data: payments } = await supabase
-        .from("payments")
-        .select("*, profiles!payments_user_id_fkey(display_name), dogs!payments_dog_id_fkey(name)")
-        .order("created_at", { ascending: false });
+      const { data: payments } = await supabase.from("payments").select("*").order("created_at", { ascending: false });
+      if (!payments) return { items: [], totalRevenue: 0, highlightedCount: 0 };
 
-      const items = payments?.map((p) => ({
-        ...p,
-        user_name: (p.profiles as any)?.display_name || "Neznámy",
-        dog_name: (p.dogs as any)?.name || "-",
-      })) || [];
-
-      const totalRevenue = items
-        .filter((p) => p.status === "completed")
-        .reduce((sum, p) => sum + p.amount, 0);
+      const userIds = [...new Set(payments.map((p) => p.user_id))];
+      const dogIds = payments.map((p) => p.dog_id).filter(Boolean) as string[];
       
+      const { data: profiles } = await supabase.from("profiles").select("user_id, display_name").in("user_id", userIds);
+      const { data: dogs } = dogIds.length > 0 
+        ? await supabase.from("dogs").select("id, name").in("id", dogIds)
+        : { data: [] };
+      
+      const profileMap: Record<string, string> = {};
+      profiles?.forEach((p) => { profileMap[p.user_id] = p.display_name || "Neznámy"; });
+      const dogMap: Record<string, string> = {};
+      dogs?.forEach((d) => { dogMap[d.id] = d.name; });
+
+      const items = payments.map((p) => ({
+        ...p,
+        user_name: profileMap[p.user_id] || "Neznámy",
+        dog_name: p.dog_id ? (dogMap[p.dog_id] || "-") : "-",
+      }));
+
+      const totalRevenue = items.filter((p) => p.status === "completed").reduce((sum, p) => sum + p.amount, 0);
       const highlightedCount = items.filter((p) => p.type === "highlight" && p.status === "completed").length;
 
       return { items, totalRevenue, highlightedCount };
@@ -35,9 +43,7 @@ const AdminPayments = () => {
             <CreditCard className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <p className="text-2xl font-bold tabular-nums text-card-foreground">
-              {((data?.totalRevenue || 0) / 100).toFixed(2)} €
-            </p>
+            <p className="text-2xl font-bold tabular-nums text-card-foreground">{((data?.totalRevenue || 0) / 100).toFixed(2)} €</p>
             <p className="text-sm text-muted-foreground">Celkové príjmy</p>
           </div>
         </div>
@@ -80,29 +86,22 @@ const AdminPayments = () => {
                     </span>
                   </td>
                   <td className="px-5 py-3 text-sm text-muted-foreground">{payment.dog_name}</td>
-                  <td className="px-5 py-3 text-sm tabular-nums font-medium text-foreground">
-                    {(payment.amount / 100).toFixed(2)} €
-                  </td>
+                  <td className="px-5 py-3 text-sm tabular-nums font-medium text-foreground">{(payment.amount / 100).toFixed(2)} €</td>
                   <td className="px-5 py-3">
                     <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
                       payment.status === "completed" ? "bg-green-100 text-green-700" :
-                      payment.status === "pending" ? "bg-yellow-100 text-yellow-700" :
-                      "bg-red-100 text-red-700"
+                      payment.status === "pending" ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"
                     }`}>
                       {payment.status === "completed" ? "Zaplatené" : payment.status === "pending" ? "Čaká" : "Zlyhalo"}
                     </span>
                   </td>
-                  <td className="px-5 py-3 text-sm text-muted-foreground">
-                    {new Date(payment.created_at).toLocaleDateString("sk")}
-                  </td>
+                  <td className="px-5 py-3 text-sm text-muted-foreground">{new Date(payment.created_at).toLocaleDateString("sk")}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        {(!data?.items || data.items.length === 0) && (
-          <p className="text-center py-10 text-muted-foreground">Žiadne platby</p>
-        )}
+        {(!data?.items || data.items.length === 0) && <p className="text-center py-10 text-muted-foreground">Žiadne platby</p>}
       </div>
     </div>
   );

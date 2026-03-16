@@ -11,12 +11,13 @@ const AdminDogs = () => {
   const { data: dogs = [] } = useQuery({
     queryKey: ["admin-dogs"],
     queryFn: async () => {
-      const { data: dogsData } = await supabase
-        .from("dogs")
-        .select("*, profiles!dogs_owner_id_fkey(display_name)")
-        .order("created_at", { ascending: false });
-      
+      const { data: dogsData } = await supabase.from("dogs").select("*").order("created_at", { ascending: false });
       if (!dogsData) return [];
+
+      const ownerIds = [...new Set(dogsData.map((d) => d.owner_id))];
+      const { data: profiles } = await supabase.from("profiles").select("user_id, display_name").in("user_id", ownerIds);
+      const profileMap: Record<string, string> = {};
+      profiles?.forEach((p) => { profileMap[p.user_id] = p.display_name || "Neznámy"; });
 
       const { data: voteCounts } = await supabase.from("votes").select("dog_id");
       const voteMap: Record<string, number> = {};
@@ -24,7 +25,7 @@ const AdminDogs = () => {
 
       return dogsData.map((d) => ({
         ...d,
-        owner_name: (d.profiles as any)?.display_name || "Neznámy",
+        owner_name: profileMap[d.owner_id] || "Neznámy",
         votes: voteMap[d.id] || 0,
       }));
     },
@@ -36,35 +37,22 @@ const AdminDogs = () => {
 
   const deleteDog = async (id: string) => {
     const { error } = await supabase.from("dogs").delete().eq("id", id);
-    if (error) {
-      toast.error("Nepodarilo sa vymazať psa");
-    } else {
-      toast.success("Pes bol vymazaný");
-      queryClient.invalidateQueries({ queryKey: ["admin-dogs"] });
-    }
+    if (error) toast.error("Nepodarilo sa vymazať psa");
+    else { toast.success("Pes bol vymazaný"); queryClient.invalidateQueries({ queryKey: ["admin-dogs"] }); }
   };
 
   const toggleHighlight = async (id: string, current: boolean) => {
     const { error } = await supabase.from("dogs").update({ highlighted: !current }).eq("id", id);
-    if (error) {
-      toast.error("Nepodarilo sa zmeniť zvýraznenie");
-    } else {
-      toast.success("Zvýraznenie zmenené");
-      queryClient.invalidateQueries({ queryKey: ["admin-dogs"] });
-    }
+    if (error) toast.error("Nepodarilo sa zmeniť zvýraznenie");
+    else { toast.success("Zvýraznenie zmenené"); queryClient.invalidateQueries({ queryKey: ["admin-dogs"] }); }
   };
 
   return (
     <div className="space-y-4">
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Hľadať psa..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
-        />
+        <input type="text" placeholder="Hľadať psa..." value={search} onChange={(e) => setSearch(e.target.value)}
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
       </div>
 
       <div className="bg-card rounded-2xl shadow-soft overflow-hidden">
@@ -83,9 +71,7 @@ const AdminDogs = () => {
             <tbody className="divide-y divide-border">
               {filtered.map((dog) => (
                 <tr key={dog.id} className="group hover:bg-secondary/30 transition-colors">
-                  <td className="px-5 py-3">
-                    <img src={dog.image_url} alt={dog.name} className="w-10 h-10 rounded-lg object-cover" />
-                  </td>
+                  <td className="px-5 py-3"><img src={dog.image_url} alt={dog.name} className="w-10 h-10 rounded-lg object-cover" /></td>
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-foreground">{dog.name}</span>
@@ -97,18 +83,10 @@ const AdminDogs = () => {
                   <td className="px-5 py-3 text-sm text-muted-foreground">{dog.owner_name}</td>
                   <td className="px-5 py-3 text-right">
                     <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        onClick={() => toggleHighlight(dog.id, dog.highlighted)}
-                        className={`p-2 rounded-lg hover:bg-secondary ${dog.highlighted ? "text-primary" : "text-muted-foreground"}`}
-                        title="Zvýrazniť"
-                      >
+                      <button onClick={() => toggleHighlight(dog.id, dog.highlighted)} className={`p-2 rounded-lg hover:bg-secondary ${dog.highlighted ? "text-primary" : "text-muted-foreground"}`} title="Zvýrazniť">
                         <Award className="w-4 h-4" />
                       </button>
-                      <button
-                        onClick={() => deleteDog(dog.id)}
-                        className="p-2 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive"
-                        title="Vymazať"
-                      >
+                      <button onClick={() => deleteDog(dog.id)} className="p-2 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive" title="Vymazať">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -118,6 +96,7 @@ const AdminDogs = () => {
             </tbody>
           </table>
         </div>
+        {filtered.length === 0 && <p className="text-center py-10 text-muted-foreground">Žiadni psy</p>}
       </div>
     </div>
   );
