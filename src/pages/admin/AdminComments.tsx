@@ -1,17 +1,35 @@
-import { useState } from "react";
 import { Trash2 } from "lucide-react";
-import { mockComments, mockDogs } from "@/data/mockDogs";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const AdminComments = () => {
-  const [comments, setComments] = useState(mockComments);
+  const queryClient = useQueryClient();
 
-  const deleteComment = (id: string) => {
-    setComments((prev) => prev.filter((c) => c.id !== id));
-    toast.success("Komentár bol vymazaný");
+  const { data: comments = [] } = useQuery({
+    queryKey: ["admin-comments"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("comments")
+        .select("*, profiles!comments_user_id_fkey(display_name), dogs!comments_dog_id_fkey(name)")
+        .order("created_at", { ascending: false });
+      return data?.map((c) => ({
+        ...c,
+        user_name: (c.profiles as any)?.display_name || "Neznámy",
+        dog_name: (c.dogs as any)?.name || "Neznámy",
+      })) || [];
+    },
+  });
+
+  const deleteComment = async (id: string) => {
+    const { error } = await supabase.from("comments").delete().eq("id", id);
+    if (error) {
+      toast.error("Nepodarilo sa vymazať komentár");
+    } else {
+      toast.success("Komentár bol vymazaný");
+      queryClient.invalidateQueries({ queryKey: ["admin-comments"] });
+    }
   };
-
-  const getDogName = (dogId: string) => mockDogs.find((d) => d.id === dogId)?.name || "Neznámy";
 
   return (
     <div className="space-y-4">
@@ -30,10 +48,12 @@ const AdminComments = () => {
             <tbody className="divide-y divide-border">
               {comments.map((comment) => (
                 <tr key={comment.id} className="group hover:bg-secondary/30 transition-colors">
-                  <td className="px-5 py-3 text-sm font-medium text-foreground">{comment.userName}</td>
-                  <td className="px-5 py-3 text-sm text-muted-foreground">{getDogName(comment.dogId)}</td>
+                  <td className="px-5 py-3 text-sm font-medium text-foreground">{comment.user_name}</td>
+                  <td className="px-5 py-3 text-sm text-muted-foreground">{comment.dog_name}</td>
                   <td className="px-5 py-3 text-sm text-foreground max-w-xs truncate">{comment.text}</td>
-                  <td className="px-5 py-3 text-sm text-muted-foreground">{comment.createdAt}</td>
+                  <td className="px-5 py-3 text-sm text-muted-foreground">
+                    {new Date(comment.created_at).toLocaleDateString("sk")}
+                  </td>
                   <td className="px-5 py-3 text-right">
                     <button
                       onClick={() => deleteComment(comment.id)}

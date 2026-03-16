@@ -2,20 +2,92 @@ import { useParams, Link } from "react-router-dom";
 import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { mockDogs, mockComments } from "@/data/mockDogs";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
 const DogProfile = () => {
   const { id } = useParams();
-  const dog = mockDogs.find((d) => d.id === id);
-  const comments = mockComments.filter((c) => c.dogId === id);
-
-  const [votes, setVotes] = useState(dog?.votes || 0);
-  const [voted, setVoted] = useState(false);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [newComment, setNewComment] = useState("");
-  const [localComments, setLocalComments] = useState(comments);
+
+  const { data: dog, isLoading } = useQuery({
+    queryKey: ["dog", id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("dogs")
+        .select("*, profiles!dogs_owner_id_fkey(display_name)")
+        .eq("id", id!)
+        .single();
+      if (!data) return null;
+
+      const { count } = await supabase
+        .from("votes")
+        .select("*", { count: "exact", head: true })
+        .eq("dog_id", id!);
+
+      return {
+        ...data,
+        owner_name: (data.profiles as any)?.display_name || "Neznámy",
+        votes: count || 0,
+      };
+    },
+  });
+
+  const { data: comments = [] } = useQuery({
+    queryKey: ["comments", id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("comments")
+        .select("*, profiles!comments_user_id_fkey(display_name)")
+        .eq("dog_id", id!)
+        .order("created_at", { ascending: false });
+      return data?.map((c) => ({
+        ...c,
+        user_name: (c.profiles as any)?.display_name || "Neznámy",
+      })) || [];
+    },
+  });
+
+  const { data: userVoted = false } = useQuery({
+    queryKey: ["user-vote", id, user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("votes")
+        .select("id")
+        .eq("user_id", user!.id)
+        .eq("dog_id", id!)
+        .maybeSingle();
+      return !!data;
+    },
+  });
+
+  const [voted, setVoted] = useState(false);
+  const [voteCount, setVoteCount] = useState(0);
+
+  // Sync state when data loads
+  if (dog && voteCount !== dog.votes && !voted) {
+    setVoteCount(dog.votes);
+  }
+  if (userVoted && !voted) {
+    setVoted(true);
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-muted-foreground">Načítavam...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!dog) {
     return (
@@ -31,28 +103,45 @@ const DogProfile = () => {
     );
   }
 
-  const handleVote = () => {
-    if (!voted) {
-      setVotes((v) => v + 1);
+  const handleVote = async () => {
+    if (!user) {
+      toast.error("Pre hlasovanie sa musíte prihlásiť");
+      return;
+    }
+    if (voted) {
+      await supabase.from("votes").delete().eq("user_id", user.id).eq("dog_id", dog.id);
+      setVoteCount((v) => v - 1);
+      setVoted(false);
+      toast.info("Hlas bol odobratý");
+    } else {
+      const { error } = await supabase.from("votes").insert({ user_id: user.id, dog_id: dog.id });
+      if (error) {
+        toast.error("Nepodarilo sa hlasovať");
+        return;
+      }
+      setVoteCount((v) => v + 1);
       setVoted(true);
       toast.success("Hlas započítaný! 🐾");
-    } else {
-      toast.info("Už si hlasoval za tohto psa");
     }
   };
 
-  const handleComment = () => {
+  const handleComment = async () => {
     if (!newComment.trim()) return;
-    const comment = {
-      id: `c-new-${Date.now()}`,
-      dogId: dog.id,
-      userId: "guest",
-      userName: "Hosť",
+    if (!user) {
+      toast.error("Pre komentovanie sa musíte prihlásiť");
+      return;
+    }
+    const { error } = await supabase.from("comments").insert({
+      dog_id: dog.id,
+      user_id: user.id,
       text: newComment.trim(),
-      createdAt: new Date().toISOString().split("T")[0],
-    };
-    setLocalComments((prev) => [comment, ...prev]);
+    });
+    if (error) {
+      toast.error("Nepodarilo sa pridať komentár");
+      return;
+    }
     setNewComment("");
+    queryClient.invalidateQueries({ queryKey: ["comments", id] });
     toast.success("Komentár pridaný!");
   };
 
@@ -75,7 +164,7 @@ const DogProfile = () => {
             className="relative"
           >
             <img
-              src={dog.image}
+              src={dog.image_url}
               alt={dog.name}
               className="w-full aspect-[4/5] object-cover rounded-3xl shadow-elevated"
             />
@@ -114,13 +203,13 @@ const DogProfile = () => {
               <div className="text-center">
                 <AnimatePresence mode="wait">
                   <motion.p
-                    key={votes}
+                    key={voteCount}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     className="text-3xl font-bold tabular-nums text-foreground"
                   >
-                    {votes}
+                    {voteCount}
                   </motion.p>
                 </AnimatePresence>
                 <p className="text-sm text-muted-foreground">hlasov</p>
@@ -129,41 +218,47 @@ const DogProfile = () => {
 
             <div className="flex items-center gap-4 text-sm text-muted-foreground mb-8">
               <span className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4" /> Pridaný {dog.createdAt}
+                <Calendar className="w-4 h-4" /> Pridaný {new Date(dog.created_at).toLocaleDateString("sk")}
               </span>
-              <span>Majiteľ: {dog.ownerName}</span>
+              <span>Majiteľ: {dog.owner_name}</span>
             </div>
 
             {/* Comments */}
             <div>
               <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                 <MessageCircle className="w-5 h-5" />
-                Komentáre ({localComments.length})
+                Komentáre ({comments.length})
               </h3>
 
-              {/* Add comment */}
-              <div className="flex gap-2 mb-6">
-                <input
-                  type="text"
-                  placeholder="Napíšte komentár..."
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleComment()}
-                  className="flex-1 px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-shadow"
-                  maxLength={500}
-                />
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleComment}
-                  className="px-4 py-3 rounded-xl gradient-golden text-primary-foreground"
-                >
-                  <Send className="w-4 h-4" />
-                </motion.button>
-              </div>
+              {user && (
+                <div className="flex gap-2 mb-6">
+                  <input
+                    type="text"
+                    placeholder="Napíšte komentár..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleComment()}
+                    className="flex-1 px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-shadow"
+                    maxLength={500}
+                  />
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleComment}
+                    className="px-4 py-3 rounded-xl gradient-golden text-primary-foreground"
+                  >
+                    <Send className="w-4 h-4" />
+                  </motion.button>
+                </div>
+              )}
 
-              {/* Comments list */}
+              {!user && (
+                <p className="text-sm text-muted-foreground mb-6">
+                  <Link to="/prihlasenie" className="text-primary hover:underline">Prihláste sa</Link> pre pridanie komentára.
+                </p>
+              )}
+
               <div className="space-y-3">
-                {localComments.map((comment) => (
+                {comments.map((comment) => (
                   <motion.div
                     key={comment.id}
                     initial={{ opacity: 0, y: 10 }}
@@ -171,13 +266,15 @@ const DogProfile = () => {
                     className="bg-secondary/50 rounded-xl p-4"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-semibold text-sm text-foreground">{comment.userName}</span>
-                      <span className="text-xs text-muted-foreground">{comment.createdAt}</span>
+                      <span className="font-semibold text-sm text-foreground">{comment.user_name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(comment.created_at).toLocaleDateString("sk")}
+                      </span>
                     </div>
                     <p className="text-sm text-foreground/80">{comment.text}</p>
                   </motion.div>
                 ))}
-                {localComments.length === 0 && (
+                {comments.length === 0 && (
                   <p className="text-muted-foreground text-sm">Zatiaľ žiadne komentáre. Buďte prvý!</p>
                 )}
               </div>

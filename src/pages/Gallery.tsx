@@ -1,18 +1,58 @@
 import { useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DogCard from "@/components/DogCard";
-import { mockDogs } from "@/data/mockDogs";
-
-const breeds = ["Všetky", ...new Set(mockDogs.map((d) => d.breed))];
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Gallery = () => {
   const [search, setSearch] = useState("");
   const [selectedBreed, setSelectedBreed] = useState("Všetky");
   const [sortBy, setSortBy] = useState<"votes" | "name" | "newest">("votes");
+  const { user } = useAuth();
 
-  const filtered = mockDogs
+  const { data: dogs = [] } = useQuery({
+    queryKey: ["dogs"],
+    queryFn: async () => {
+      const { data: dogsData } = await supabase
+        .from("dogs")
+        .select("*, profiles!dogs_owner_id_fkey(display_name)");
+      
+      if (!dogsData) return [];
+
+      const { data: voteCounts } = await supabase.from("votes").select("dog_id");
+      const voteMap: Record<string, number> = {};
+      voteCounts?.forEach((v) => { voteMap[v.dog_id] = (voteMap[v.dog_id] || 0) + 1; });
+
+      return dogsData.map((d) => ({
+        id: d.id,
+        name: d.name,
+        breed: d.breed,
+        age: d.age,
+        description: d.description,
+        image_url: d.image_url,
+        highlighted: d.highlighted,
+        owner_name: (d.profiles as any)?.display_name || "Neznámy",
+        votes: voteMap[d.id] || 0,
+        created_at: d.created_at,
+      }));
+    },
+  });
+
+  const { data: userVotes = [] } = useQuery({
+    queryKey: ["user-votes", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase.from("votes").select("dog_id").eq("user_id", user!.id);
+      return data?.map((v) => v.dog_id) || [];
+    },
+  });
+
+  const breeds = ["Všetky", ...new Set(dogs.map((d) => d.breed))];
+
+  const filtered = dogs
     .filter((dog) => {
       const matchesSearch =
         dog.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -23,7 +63,7 @@ const Gallery = () => {
     .sort((a, b) => {
       if (sortBy === "votes") return b.votes - a.votes;
       if (sortBy === "name") return a.name.localeCompare(b.name);
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 
   return (
@@ -82,7 +122,7 @@ const Gallery = () => {
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((dog) => (
-            <DogCard key={dog.id} dog={dog} />
+            <DogCard key={dog.id} dog={dog} userVoted={userVotes.includes(dog.id)} />
           ))}
         </div>
 

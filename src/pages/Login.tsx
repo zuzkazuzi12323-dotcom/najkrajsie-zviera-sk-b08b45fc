@@ -1,16 +1,27 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Heart, Mail, Lock, LogIn } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.info("Prihlásenie bude funkčné po pripojení databázy");
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Úspešne prihlásený!");
+      navigate("/");
+    }
   };
 
   return (
@@ -65,9 +76,10 @@ const Login = () => {
           <motion.button
             whileTap={{ scale: 0.95 }}
             type="submit"
-            className="w-full gradient-golden text-primary-foreground py-3 rounded-xl font-bold flex items-center justify-center gap-2"
+            disabled={loading}
+            className="w-full gradient-golden text-primary-foreground py-3 rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-50"
           >
-            <LogIn className="w-4 h-4" /> Prihlásiť sa
+            <LogIn className="w-4 h-4" /> {loading ? "Prihlasujem..." : "Prihlásiť sa"}
           </motion.button>
         </form>
 

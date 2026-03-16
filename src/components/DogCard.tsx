@@ -2,26 +2,51 @@ import { Heart, Award } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import type { Dog } from "@/data/mockDogs";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface DogCardProps {
-  dog: Dog;
+  dog: {
+    id: string;
+    name: string;
+    breed: string;
+    age: string;
+    image_url: string;
+    highlighted: boolean;
+    owner_name?: string | null;
+    votes: number;
+  };
+  userVoted?: boolean;
 }
 
-const DogCard = ({ dog }: DogCardProps) => {
+const DogCard = ({ dog, userVoted = false }: DogCardProps) => {
   const [votes, setVotes] = useState(dog.votes);
-  const [voted, setVoted] = useState(false);
+  const [voted, setVoted] = useState(userVoted);
+  const { user } = useAuth();
 
-  const handleVote = (e: React.MouseEvent) => {
+  const handleVote = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!voted) {
+    if (!user) {
+      toast.error("Pre hlasovanie sa musíte prihlásiť");
+      return;
+    }
+    if (voted) {
+      // Remove vote
+      await supabase.from("votes").delete().eq("user_id", user.id).eq("dog_id", dog.id);
+      setVotes((v) => v - 1);
+      setVoted(false);
+      toast.info("Hlas bol odobratý");
+    } else {
+      const { error } = await supabase.from("votes").insert({ user_id: user.id, dog_id: dog.id });
+      if (error) {
+        toast.error("Nepodarilo sa hlasovať");
+        return;
+      }
       setVotes((v) => v + 1);
       setVoted(true);
       toast.success("Hlas započítaný! 🐾");
-    } else {
-      toast.info("Už si hlasoval za tohto psa");
     }
   };
 
@@ -35,17 +60,14 @@ const DogCard = ({ dog }: DogCardProps) => {
           dog.highlighted ? "ring-2 ring-primary" : ""
         }`}
       >
-        {/* Image */}
         <div className="relative aspect-[4/5] overflow-hidden rounded-t-2xl">
           <img
-            src={dog.image}
+            src={dog.image_url}
             alt={dog.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          {/* Gradient overlay */}
           <div className="absolute inset-0 gradient-hero opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
-          {/* Vote button on hover */}
           <motion.button
             onClick={handleVote}
             whileHover={{ scale: 1.05 }}
@@ -60,7 +82,6 @@ const DogCard = ({ dog }: DogCardProps) => {
             <span className="tabular-nums">{votes}</span>
           </motion.button>
 
-          {/* Highlighted badge */}
           {dog.highlighted && (
             <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold shadow-golden">
               <Award className="w-3.5 h-3.5" />
@@ -69,7 +90,6 @@ const DogCard = ({ dog }: DogCardProps) => {
           )}
         </div>
 
-        {/* Info */}
         <div className="p-4">
           <h3 className="text-lg font-bold text-card-foreground">{dog.name}</h3>
           <p className="text-sm text-muted-foreground">{dog.breed} · {dog.age}</p>
@@ -78,7 +98,7 @@ const DogCard = ({ dog }: DogCardProps) => {
               <Heart className={`w-4 h-4 ${voted ? "text-primary fill-primary" : ""}`} />
               <span className="tabular-nums font-medium">{votes} hlasov</span>
             </div>
-            <span className="text-xs text-muted-foreground">{dog.ownerName}</span>
+            <span className="text-xs text-muted-foreground">{dog.owner_name}</span>
           </div>
         </div>
       </motion.div>

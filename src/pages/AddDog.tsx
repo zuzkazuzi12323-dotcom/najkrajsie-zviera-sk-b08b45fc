@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Upload, ArrowRight, Check } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const steps = ["Základné info", "Fotka", "Platba"];
 
@@ -15,21 +18,105 @@ const AddDog = () => {
     age: "",
     description: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setImageFile(file);
       setPreview(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = () => {
-    toast.success("Pes bol úspešne pridaný do súťaže! 🎉");
-    setStep(0);
-    setForm({ name: "", breed: "", age: "", description: "" });
-    setPreview(null);
+  const handleSubmit = async () => {
+    if (!user) {
+      toast.error("Pre pridanie psa sa musíte prihlásiť");
+      navigate("/prihlasenie");
+      return;
+    }
+    if (!imageFile) {
+      toast.error("Nahrajte fotku psa");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Upload image
+      const fileExt = imageFile.name.split(".").pop();
+      const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage
+        .from("dog-images")
+        .upload(filePath, imageFile);
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage
+        .from("dog-images")
+        .getPublicUrl(filePath);
+
+      // Insert dog
+      const { data: dogData, error: insertError } = await supabase
+        .from("dogs")
+        .insert({
+          owner_id: user.id,
+          name: form.name,
+          breed: form.breed,
+          age: form.age,
+          description: form.description,
+          image_url: urlData.publicUrl,
+        })
+        .select("id, name")
+        .single();
+
+      if (insertError) throw insertError;
+
+      // Create checkout session
+      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke(
+        "create-checkout",
+        {
+          body: {
+            type: "registration",
+            dogId: dogData.id,
+            dogName: dogData.name,
+          },
+        }
+      );
+
+      if (checkoutError) throw checkoutError;
+
+      if (checkoutData?.url) {
+        window.location.href = checkoutData.url;
+      } else {
+        toast.success("Pes bol pridaný!");
+        navigate("/galeria");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Niečo sa pokazilo");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-2xl font-bold text-foreground mb-2">Musíte sa prihlásiť</p>
+            <p className="text-muted-foreground mb-4">Pre pridanie psa sa najprv prihláste.</p>
+            <a href="/prihlasenie" className="text-primary font-medium hover:underline">
+              Prihlásiť sa
+            </a>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -189,9 +276,10 @@ const AddDog = () => {
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={handleSubmit}
-                  className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold"
+                  disabled={loading}
+                  className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50"
                 >
-                  Zaplatiť 1 €
+                  {loading ? "Spracovávam..." : "Zaplatiť 1 €"}
                 </motion.button>
               </div>
             </div>

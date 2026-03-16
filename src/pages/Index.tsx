@@ -1,20 +1,80 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Heart, Users, Trophy, ArrowRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import heroImg from "@/assets/hero-dog.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DogCard from "@/components/DogCard";
-import { mockDogs } from "@/data/mockDogs";
-
-const stats = [
-  { icon: Heart, label: "Hlasov dnes", value: "1,248" },
-  { icon: Users, label: "Súťažiacich psov", value: "486" },
-  { icon: Trophy, label: "Aktívnych súťaží", value: "3" },
-];
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
-  const topDogs = [...mockDogs].sort((a, b) => b.votes - a.votes).slice(0, 3);
+  const { user } = useAuth();
+
+  const { data: dogs = [] } = useQuery({
+    queryKey: ["top-dogs"],
+    queryFn: async () => {
+      const { data: dogsData } = await supabase
+        .from("dogs")
+        .select("*, profiles!dogs_owner_id_fkey(display_name)")
+        .order("created_at", { ascending: false });
+      
+      if (!dogsData) return [];
+
+      // Get vote counts
+      const { data: voteCounts } = await supabase
+        .from("votes")
+        .select("dog_id");
+
+      const voteMap: Record<string, number> = {};
+      voteCounts?.forEach((v) => {
+        voteMap[v.dog_id] = (voteMap[v.dog_id] || 0) + 1;
+      });
+
+      return dogsData.map((d) => ({
+        id: d.id,
+        name: d.name,
+        breed: d.breed,
+        age: d.age,
+        image_url: d.image_url,
+        highlighted: d.highlighted,
+        owner_name: (d.profiles as any)?.display_name || "Neznámy",
+        votes: voteMap[d.id] || 0,
+      })).sort((a, b) => b.votes - a.votes).slice(0, 3);
+    },
+  });
+
+  const { data: userVotes = [] } = useQuery({
+    queryKey: ["user-votes", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase.from("votes").select("dog_id").eq("user_id", user!.id);
+      return data?.map((v) => v.dog_id) || [];
+    },
+  });
+
+  const { data: stats } = useQuery({
+    queryKey: ["stats"],
+    queryFn: async () => {
+      const [{ count: dogCount }, { count: voteCount }, { count: userCount }] = await Promise.all([
+        supabase.from("dogs").select("*", { count: "exact", head: true }),
+        supabase.from("votes").select("*", { count: "exact", head: true }),
+        supabase.from("profiles").select("*", { count: "exact", head: true }),
+      ]);
+      return {
+        dogs: dogCount || 0,
+        votes: voteCount || 0,
+        users: userCount || 0,
+      };
+    },
+  });
+
+  const statItems = [
+    { icon: Heart, label: "Celkom hlasov", value: stats?.votes?.toLocaleString() || "0" },
+    { icon: Users, label: "Súťažiacich psov", value: stats?.dogs?.toLocaleString() || "0" },
+    { icon: Trophy, label: "Registrovaných", value: stats?.users?.toLocaleString() || "0" },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -67,7 +127,7 @@ const Index = () => {
       {/* Stats */}
       <section className="container mx-auto px-4 -mt-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {stats.map((stat, i) => (
+          {statItems.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
@@ -101,11 +161,17 @@ const Index = () => {
             Zobraziť všetkých <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {topDogs.map((dog) => (
-            <DogCard key={dog.id} dog={dog} />
-          ))}
-        </div>
+        {dogs.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {dogs.map((dog) => (
+              <DogCard key={dog.id} dog={dog} userVoted={userVotes.includes(dog.id)} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground text-lg">Zatiaľ žiadni psy v súťaži. Buďte prvý!</p>
+          </div>
+        )}
         <Link
           to="/galeria"
           className="md:hidden flex items-center justify-center gap-2 mt-8 text-primary font-semibold"
