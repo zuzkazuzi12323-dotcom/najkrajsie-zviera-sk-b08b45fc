@@ -2,6 +2,3 @@ project_id = "pkejvzexmlijnoangerw"
 
 [functions.create-checkout]
 verify_jwt = false
-
-[functions.setup-admin]
-verify_jwt = false
