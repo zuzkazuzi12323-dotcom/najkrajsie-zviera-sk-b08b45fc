@@ -20,13 +20,16 @@ const Footer = () => {
             <div className="flex flex-col gap-2">
               <Link to="/galeria" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Galéria</Link>
               <Link to="/pridat" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pridať psa</Link>
-              <Link to="/registracia" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Registrácia</Link>
+              <Link to="/pravidla" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pravidlá súťaže</Link>
+              <Link to="/ako-funguje" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Ako funguje súťaž</Link>
+              <Link to="/vitazi" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Víťazi</Link>
+              <Link to="/ochrana-udajov" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Ochrana údajov</Link>
             </div>
           </div>
           <div>
             <h4 className="font-semibold mb-3 text-foreground">Kontakt</h4>
-            <p className="text-sm text-muted-foreground">info@najkrajsipes.sk</p>
-            <p className="text-sm text-muted-foreground mt-1">© 2025 NajkrajšíPes.sk</p>
+            <a href="mailto:infonajkrajsipes@gmail.com" className="text-sm text-primary hover:underline">infonajkrajsipes@gmail.com</a>
+            <p className="text-sm text-muted-foreground mt-3">© 2025 NajkrajšíPes.sk</p>
           </div>
         </div>
       </div>
