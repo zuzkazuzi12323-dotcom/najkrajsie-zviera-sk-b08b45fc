@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Heart, Users, Trophy, ArrowRight } from "lucide-react";
+import { Heart, Users, Trophy, ArrowRight, Award, Gift } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import heroImg from "@/assets/hero-dog.jpg";
 import Navbar from "@/components/Navbar";
@@ -17,27 +17,16 @@ const Index = () => {
     queryFn: async () => {
       const { data: dogsData } = await supabase.from("dogs").select("*").order("created_at", { ascending: false });
       if (!dogsData) return [];
-
-      // Get owner profiles
       const ownerIds = [...new Set(dogsData.map((d) => d.owner_id))];
       const { data: profiles } = await supabase.from("profiles").select("user_id, display_name").in("user_id", ownerIds);
       const profileMap: Record<string, string> = {};
       profiles?.forEach((p) => { profileMap[p.user_id] = p.display_name || "Neznámy"; });
-
-      // Get vote counts
       const { data: voteCounts } = await supabase.from("votes").select("dog_id");
       const voteMap: Record<string, number> = {};
       voteCounts?.forEach((v) => { voteMap[v.dog_id] = (voteMap[v.dog_id] || 0) + 1; });
-
       return dogsData.map((d) => ({
-        id: d.id,
-        name: d.name,
-        breed: d.breed,
-        age: d.age,
-        image_url: d.image_url,
-        highlighted: d.highlighted,
-        owner_name: profileMap[d.owner_id] || "Neznámy",
-        votes: voteMap[d.id] || 0,
+        id: d.id, name: d.name, breed: d.breed, age: d.age, image_url: d.image_url,
+        highlighted: d.highlighted, owner_name: profileMap[d.owner_id] || "Neznámy", votes: voteMap[d.id] || 0,
       })).sort((a, b) => b.votes - a.votes).slice(0, 3);
     },
   });
@@ -67,6 +56,12 @@ const Index = () => {
     { icon: Heart, label: "Celkom hlasov", value: stats?.votes?.toLocaleString() || "0" },
     { icon: Users, label: "Súťažiacich psov", value: stats?.dogs?.toLocaleString() || "0" },
     { icon: Trophy, label: "Registrovaných", value: stats?.users?.toLocaleString() || "0" },
+  ];
+
+  const prizes = [
+    { icon: Trophy, title: "Titul Najkrajší pes Slovenska", desc: "Prestížne ocenenie pre vášho miláčika" },
+    { icon: Award, title: "Digitálny diplom", desc: "Krásny certifikát na stiahnutie" },
+    { icon: Gift, title: "Darček pre psa", desc: "Hračka alebo pamlsky pre víťaza" },
   ];
 
   return (
@@ -113,7 +108,27 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 py-20">
+      {/* Prize section */}
+      <section className="container mx-auto px-4 py-16">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground">🏆 Čo môže pes vyhrať</h2>
+          <p className="text-muted-foreground mt-2">Víťaz súťaže každý mesiac získa</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          {prizes.map((prize, i) => (
+            <motion.div key={prize.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * i }}
+              className="bg-card rounded-2xl p-6 shadow-soft text-center">
+              <div className="w-14 h-14 rounded-xl gradient-golden flex items-center justify-center mx-auto mb-4">
+                <prize.icon className="w-7 h-7 text-primary-foreground" />
+              </div>
+              <h3 className="font-bold text-foreground mb-1">{prize.title}</h3>
+              <p className="text-sm text-muted-foreground">{prize.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <section className="container mx-auto px-4 pb-20">
         <div className="flex items-end justify-between mb-10">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">Najobľúbenejší psy</h2>
@@ -128,9 +143,7 @@ const Index = () => {
             {dogs.map((dog) => <DogCard key={dog.id} dog={dog} userVoted={userVotes.includes(dog.id)} />)}
           </div>
         ) : (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground text-lg">Zatiaľ žiadni psy v súťaži. Buďte prvý!</p>
-          </div>
+          <div className="text-center py-16"><p className="text-muted-foreground text-lg">Zatiaľ žiadni psy v súťaži. Buďte prvý!</p></div>
         )}
         <Link to="/galeria" className="md:hidden flex items-center justify-center gap-2 mt-8 text-primary font-semibold">
           Zobraziť všetkých <ArrowRight className="w-4 h-4" />

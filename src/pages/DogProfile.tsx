@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send } from "lucide-react";
+import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send, Share2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,16 +16,15 @@ const DogProfile = () => {
   const [newComment, setNewComment] = useState("");
   const [voted, setVoted] = useState(false);
   const [voteCount, setVoteCount] = useState(0);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const { data: dog, isLoading } = useQuery({
     queryKey: ["dog", id],
     queryFn: async () => {
       const { data } = await supabase.from("dogs").select("*").eq("id", id!).single();
       if (!data) return null;
-
       const { data: profile } = await supabase.from("profiles").select("display_name").eq("user_id", data.owner_id).single();
       const { count } = await supabase.from("votes").select("*", { count: "exact", head: true }).eq("dog_id", id!);
-
       return { ...data, owner_name: profile?.display_name || "Neznámy", votes: count || 0 };
     },
   });
@@ -35,12 +34,10 @@ const DogProfile = () => {
     queryFn: async () => {
       const { data } = await supabase.from("comments").select("*").eq("dog_id", id!).order("created_at", { ascending: false });
       if (!data) return [];
-      
       const userIds = [...new Set(data.map((c) => c.user_id))];
       const { data: profiles } = await supabase.from("profiles").select("user_id, display_name").in("user_id", userIds);
       const profileMap: Record<string, string> = {};
       profiles?.forEach((p) => { profileMap[p.user_id] = p.display_name || "Neznámy"; });
-
       return data.map((c) => ({ ...c, user_name: profileMap[c.user_id] || "Neznámy" }));
     },
   });
@@ -54,18 +51,12 @@ const DogProfile = () => {
     },
   });
 
-  useEffect(() => {
-    if (dog) setVoteCount(dog.votes);
-  }, [dog]);
-
-  useEffect(() => {
-    if (userVoted !== undefined) setVoted(userVoted);
-  }, [userVoted]);
+  useEffect(() => { if (dog) setVoteCount(dog.votes); }, [dog]);
+  useEffect(() => { if (userVoted !== undefined) setVoted(userVoted); }, [userVoted]);
 
   if (isLoading) {
     return <div className="min-h-screen flex flex-col"><Navbar /><div className="flex-1 flex items-center justify-center"><p className="text-muted-foreground">Načítavam...</p></div></div>;
   }
-
   if (!dog) {
     return <div className="min-h-screen flex flex-col"><Navbar /><div className="flex-1 flex items-center justify-center"><div className="text-center"><p className="text-2xl font-bold text-foreground mb-2">Pes nebol nájdený</p><Link to="/galeria" className="text-primary font-medium">Späť na galériu</Link></div></div></div>;
   }
@@ -92,6 +83,26 @@ const DogProfile = () => {
     toast.success("Komentár pridaný!");
   };
 
+  const dogUrl = window.location.href;
+  const shareText = `Hlasuj za ${dog.name} v súťaži NajkrajšíPes.sk! 🐾`;
+
+  const shareLinks = [
+    { name: "Facebook", url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(dogUrl)}&quote=${encodeURIComponent(shareText)}`, color: "bg-[#1877F2]" },
+    { name: "Instagram", url: null, color: "bg-gradient-to-br from-[#f09433] via-[#e6683c] to-[#bc1888]" },
+    { name: "TikTok", url: null, color: "bg-[#000000]" },
+  ];
+
+  const handleShare = (link: typeof shareLinks[0]) => {
+    if (link.url) {
+      window.open(link.url, "_blank", "width=600,height=400");
+    } else {
+      // Instagram & TikTok don't support direct URL sharing - copy link instead
+      navigator.clipboard.writeText(`${shareText}\n${dogUrl}`);
+      toast.success(`Odkaz skopírovaný! Zdieľajte na ${link.name}.`);
+    }
+    setShareOpen(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -102,7 +113,7 @@ const DogProfile = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="relative">
-            <img src={dog.image_url} alt={dog.name} className="w-full aspect-[4/5] object-cover rounded-3xl shadow-elevated" />
+            <img src={dog.image_url} alt={dog.name} className="w-full aspect-[3/4] object-cover rounded-3xl shadow-elevated" />
             {dog.highlighted && (
               <div className="absolute top-4 left-4 flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-golden">
                 <Award className="w-4 h-4" /> Top Kandidát
@@ -115,7 +126,7 @@ const DogProfile = () => {
             <p className="text-lg text-muted-foreground mb-6">{dog.breed} · {dog.age}</p>
             <p className="text-foreground/80 text-pretty mb-8 leading-relaxed">{dog.description}</p>
 
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center gap-4 mb-6">
               <motion.button onClick={handleVote} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }}
                 className={`flex items-center gap-2 px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-colors ${
                   voted ? "gradient-golden text-primary-foreground shadow-golden" : "bg-card text-card-foreground border border-border hover:border-primary"
@@ -130,6 +141,27 @@ const DogProfile = () => {
               </div>
             </div>
 
+            {/* Share button */}
+            <div className="relative mb-8">
+              <motion.button whileTap={{ scale: 0.95 }} onClick={() => setShareOpen(!shareOpen)}
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-secondary text-secondary-foreground font-medium hover:bg-secondary/80 transition-colors">
+                <Share2 className="w-4 h-4" /> Zdieľať psa
+              </motion.button>
+              <AnimatePresence>
+                {shareOpen && (
+                  <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
+                    className="absolute top-full left-0 mt-2 flex gap-2 z-10">
+                    {shareLinks.map((link) => (
+                      <button key={link.name} onClick={() => handleShare(link)}
+                        className={`${link.color} text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity`}>
+                        {link.name}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <div className="flex items-center gap-4 text-sm text-muted-foreground mb-8">
               <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Pridaný {new Date(dog.created_at).toLocaleDateString("sk")}</span>
               <span>Majiteľ: {dog.owner_name}</span>
@@ -139,7 +171,6 @@ const DogProfile = () => {
               <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                 <MessageCircle className="w-5 h-5" /> Komentáre ({comments.length})
               </h3>
-
               {user ? (
                 <div className="flex gap-2 mb-6">
                   <input type="text" placeholder="Napíšte komentár..." value={newComment} onChange={(e) => setNewComment(e.target.value)}
@@ -152,7 +183,6 @@ const DogProfile = () => {
               ) : (
                 <p className="text-sm text-muted-foreground mb-6"><Link to="/prihlasenie" className="text-primary hover:underline">Prihláste sa</Link> pre pridanie komentára.</p>
               )}
-
               <div className="space-y-3">
                 {comments.map((comment) => (
                   <motion.div key={comment.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-secondary/50 rounded-xl p-4">
