@@ -10,6 +10,11 @@ import AddDog from "./pages/AddDog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import Rules from "./pages/Rules";
+import HowItWorks from "./pages/HowItWorks";
+import Winners from "./pages/Winners";
+import Privacy from "./pages/Privacy";
+import Contact from "./pages/Contact";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
@@ -34,6 +39,11 @@ const App = () => (
             <Route path="/prihlasenie" element={<Login />} />
             <Route path="/registracia" element={<Register />} />
             <Route path="/platba-uspesna" element={<PaymentSuccess />} />
+            <Route path="/pravidla" element={<Rules />} />
+            <Route path="/ako-funguje" element={<HowItWorks />} />
+            <Route path="/vitazi" element={<Winners />} />
+            <Route path="/ochrana-udajov" element={<Privacy />} />
+            <Route path="/kontakt" element={<Contact />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
