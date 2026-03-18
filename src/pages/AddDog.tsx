@@ -87,12 +87,12 @@ const AddDog = () => {
 
       if (checkoutError) throw checkoutError;
 
-      if (checkoutData?.url) {
-        window.location.href = checkoutData.url;
-      } else {
-        toast.success("Pes bol pridaný!");
-        navigate("/galeria");
+      const checkoutUrl = checkoutData?.url;
+      if (!checkoutUrl || typeof checkoutUrl !== "string" || !/^https?:\/\//.test(checkoutUrl)) {
+        throw new Error("Nepodarilo sa spustiť platobný formulár. Skúste to prosím znova.");
       }
+
+      window.location.assign(checkoutUrl);
     } catch (error: any) {
       toast.error(error.message || "Niečo sa pokazilo");
     } finally {
