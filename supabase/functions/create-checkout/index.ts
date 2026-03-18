@@ -7,51 +7,81 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const jsonResponse = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+
+const getSiteOrigin = (req: Request) => {
+  const origin = req.headers.get("origin");
+  if (origin) return origin;
+
+  const referer = req.headers.get("referer");
+  if (referer) {
+    try {
+      return new URL(referer).origin;
+    } catch {
+      // ignore invalid referer
+    }
+  }
+
+  return "https://najkrajsie-zviera-sk.lovable.app";
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+      return jsonResponse({ error: "Unauthorized" }, 401);
     }
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
-    );
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+
+    if (!supabaseUrl || !anonKey || !serviceRoleKey || !stripeKey) {
+      return jsonResponse({ error: "Server configuration error" }, 500);
+    }
+
+    const supabase = createClient(supabaseUrl, anonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
 
     const token = authHeader.replace("Bearer ", "");
     const { data: userData, error: userError } = await supabase.auth.getUser(token);
-    if (userError || !userData?.user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+    if (userError || !userData?.user?.email) {
+      return jsonResponse({ error: "Unauthorized" }, 401);
     }
 
-    const userId = userData.user.id;
-    const email = userData.user.email as string;
+    const payload = await req.json();
+    const type = payload?.type as "registration" | "highlight" | undefined;
+    const dogId = typeof payload?.dogId === "string" ? payload.dogId : "";
+    const dogName = typeof payload?.dogName === "string" ? payload.dogName : "Pes";
 
-    const { type, dogId, dogName } = await req.json();
-
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-      apiVersion: "2025-08-27.basil",
-    });
-
-    // Check existing customer
-    const customers = await stripe.customers.list({ email, limit: 1 });
-    let customerId: string | undefined;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
+    if (!type || (type !== "registration" && type !== "highlight")) {
+      return jsonResponse({ error: "Invalid payment type" }, 400);
     }
 
     const isHighlight = type === "highlight";
-    const amount = isHighlight ? 200 : 100; // cents
+    const amount = isHighlight ? 200 : 100;
+    const siteOrigin = getSiteOrigin(req);
+
+    const stripe = new Stripe(stripeKey, {
+      apiVersion: "2025-08-27.basil",
+    });
+
+    const customers = await stripe.customers.list({ email: userData.user.email, limit: 1 });
+    const customerId = customers.data[0]?.id;
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      customer_email: customerId ? undefined : email,
+      customer_email: customerId ? undefined : userData.user.email,
       line_items: [
         {
           price_data: {
@@ -68,23 +98,22 @@ serve(async (req) => {
         },
       ],
       mode: "payment",
-      success_url: `${req.headers.get("origin")}/platba-uspesna?session_id={CHECKOUT_SESSION_ID}&type=${type}&dog_id=${dogId || ""}`,
-      cancel_url: `${req.headers.get("origin")}/pridat`,
+      success_url: `${siteOrigin}/platba-uspesna?session_id={CHECKOUT_SESSION_ID}&type=${type}&dog_id=${dogId}`,
+      cancel_url: `${siteOrigin}/pridat`,
       metadata: {
-        userId,
-        dogId: dogId || "",
+        userId: userData.user.id,
+        dogId,
         type,
       },
     });
 
-    // Record pending payment
-    const adminClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
+    if (!session.url) {
+      return jsonResponse({ error: "Nepodarilo sa vytvoriť Stripe checkout URL" }, 500);
+    }
 
-    await adminClient.from("payments").insert({
-      user_id: userId,
+    const adminClient = createClient(supabaseUrl, serviceRoleKey);
+    const { error: paymentInsertError } = await adminClient.from("payments").insert({
+      user_id: userData.user.id,
       dog_id: dogId || null,
       type: isHighlight ? "highlight" : "registration",
       amount,
@@ -92,14 +121,15 @@ serve(async (req) => {
       status: "pending",
     });
 
-    return new Response(JSON.stringify({ url: session.url }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    if (paymentInsertError) {
+      console.error("Payment insert error:", paymentInsertError);
+      return jsonResponse({ error: "Nepodarilo sa pripraviť platbu" }, 500);
+    }
+
+    return jsonResponse({ url: session.url, sessionId: session.id });
   } catch (error) {
-    console.error("Checkout error:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 500,
-    });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("Checkout error:", message);
+    return jsonResponse({ error: message }, 500);
   }
 });
