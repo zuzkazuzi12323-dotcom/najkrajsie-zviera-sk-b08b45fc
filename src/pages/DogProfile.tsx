@@ -83,7 +83,8 @@ const DogProfile = () => {
     toast.success("Komentár pridaný!");
   };
 
-  const dogUrl = window.location.href;
+  const publishedDomain = "https://najkrajsie-zviera-sk.lovable.app";
+  const dogUrl = `${publishedDomain}/pes/${dog.id}`;
   const shareText = `Hlasuj za ${dog.name} v súťaži NajkrajšíPes.sk! 🐾`;
 
   const shareLinks = [
