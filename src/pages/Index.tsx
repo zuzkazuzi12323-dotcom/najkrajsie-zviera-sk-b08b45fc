@@ -128,6 +128,16 @@ const Index = () => {
         </div>
       </section>
 
+      {/* E-shop banner */}
+      <section className="container mx-auto px-4 pb-8">
+        <Link to="/eshop">
+          <motion.div whileHover={{ scale: 1.01 }} className="bg-card rounded-2xl p-8 shadow-soft text-center border-2 border-primary/20 hover:border-primary/40 transition-colors cursor-pointer">
+            <p className="text-2xl md:text-3xl font-bold text-foreground mb-2">🛒 Navštívte náš e-shop a podporte útulky!</p>
+            <p className="text-muted-foreground">Časť výťažku z každého nákupu venujeme útulkom pre zvieratá ❤️</p>
+          </motion.div>
+        </Link>
+      </section>
+
       <section className="container mx-auto px-4 pb-20">
         <div className="flex items-end justify-between mb-10">
           <div>
