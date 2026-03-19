@@ -24,6 +24,7 @@ import AdminDogs from "./pages/admin/AdminDogs";
 import AdminComments from "./pages/admin/AdminComments";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminProducts from "./pages/admin/AdminProducts";
+import MyOrders from "./pages/MyOrders";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
