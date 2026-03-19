@@ -13,6 +13,7 @@ const Navbar = () => {
   const mainLinks = [
     { to: "/galeria", label: "Galéria" },
     { to: "/pridat", label: "Pridať psa" },
+    { to: "/eshop", label: "E-shop 🛒" },
     { to: "/vitazi", label: "Víťazi" },
   ];
 

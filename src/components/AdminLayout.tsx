@@ -12,6 +12,7 @@ const navItems = [
   { to: "/admin/psy", icon: Dog, label: "Správa psov" },
   { to: "/admin/komentare", icon: MessageCircle, label: "Komentáre" },
   { to: "/admin/platby", icon: CreditCard, label: "Platby" },
+  { to: "/admin/produkty", icon: ShoppingBag, label: "E-shop produkty" },
 ];
 
 const AdminLayout = () => {
