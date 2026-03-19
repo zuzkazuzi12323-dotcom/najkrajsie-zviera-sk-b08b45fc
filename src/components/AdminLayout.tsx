@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, Outlet, Navigate } from "react-router-dom";
 import { 
   LayoutDashboard, Users, Dog, MessageCircle, CreditCard, 
-  LogOut, Heart, ChevronLeft, Menu 
+  LogOut, Heart, ChevronLeft, Menu, ShoppingBag 
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
