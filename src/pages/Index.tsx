@@ -128,6 +128,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Donation counter */}
+      <DonationCounter />
+
       {/* E-shop banner */}
       <section className="container mx-auto px-4 pb-8">
         <Link to="/eshop">

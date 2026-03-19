@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Plus, Trash2, Search, Pencil } from "lucide-react";
+import { useState, useRef } from "react";
+import { Plus, Trash2, Search, Pencil, Upload, X } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -9,6 +9,8 @@ const AdminProducts = () => {
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", description: "", price: "", category: "dog", image_url: "", active: true });
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
   const { data: products = [] } = useQuery({
@@ -25,6 +27,24 @@ const AdminProducts = () => {
     setForm({ name: "", description: "", price: "", category: "dog", image_url: "", active: true });
     setEditId(null);
     setShowForm(false);
+  };
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const ext = file.name.split(".").pop();
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    if (error) {
+      toast.error("Chyba pri nahrávaní obrázku");
+      setUploading(false);
+      return;
+    }
+    const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
+    setForm((f) => ({ ...f, image_url: urlData.publicUrl }));
+    setUploading(false);
+    toast.success("Obrázok nahraný");
   };
 
   const handleSave = async () => {
@@ -79,7 +99,27 @@ const AdminProducts = () => {
               <option value="dog">🐶 Psíky</option>
               <option value="cat">🐱 Mačky</option>
             </select>
-            <input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="URL obrázku (voliteľné)" className="px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm" />
+            {/* Image upload */}
+            <div className="flex items-center gap-2">
+              <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} className="hidden" />
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                disabled={uploading}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm hover:bg-secondary transition-colors disabled:opacity-50 flex-1"
+              >
+                <Upload className="w-4 h-4" />
+                {uploading ? "Nahrávam..." : form.image_url ? "Zmeniť obrázok" : "Nahrať obrázok"}
+              </button>
+              {form.image_url && (
+                <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-border shrink-0">
+                  <img src={form.image_url} alt="" className="w-full h-full object-cover" />
+                  <button onClick={() => setForm({ ...form, image_url: "" })} className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground rounded-full w-4 h-4 flex items-center justify-center">
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
           <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Popis" rows={2} className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm" />
           <label className="flex items-center gap-2 text-sm text-foreground">
@@ -105,7 +145,10 @@ const AdminProducts = () => {
           <tbody>
             {filtered.map((p) => (
               <tr key={p.id} className="border-b border-border last:border-0">
-                <td className="px-4 py-3 font-medium text-foreground">{p.name}</td>
+                <td className="px-4 py-3 font-medium text-foreground flex items-center gap-2">
+                  {p.image_url && <img src={p.image_url} alt="" className="w-8 h-8 rounded object-cover" />}
+                  {p.name}
+                </td>
                 <td className="px-4 py-3 text-muted-foreground">{p.category === "cat" ? "🐱 Mačky" : "🐶 Psíky"}</td>
                 <td className="px-4 py-3 text-foreground">{(p.price / 100).toFixed(2)} €</td>
                 <td className="px-4 py-3"><span className={`px-2 py-1 rounded-full text-xs ${p.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{p.active ? "Aktívny" : "Neaktívny"}</span></td>
