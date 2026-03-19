@@ -48,6 +48,8 @@ const App = () => (
             <Route path="/vitazi" element={<Winners />} />
             <Route path="/ochrana-udajov" element={<Privacy />} />
             <Route path="/kontakt" element={<Contact />} />
+            <Route path="/eshop" element={<EShop />} />
+            <Route path="/eshop-dakujeme" element={<EShopSuccess />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
