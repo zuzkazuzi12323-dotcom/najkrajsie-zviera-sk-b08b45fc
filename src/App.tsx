@@ -15,12 +15,15 @@ import HowItWorks from "./pages/HowItWorks";
 import Winners from "./pages/Winners";
 import Privacy from "./pages/Privacy";
 import Contact from "./pages/Contact";
+import EShop from "./pages/EShop";
+import EShopSuccess from "./pages/EShopSuccess";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminDogs from "./pages/admin/AdminDogs";
 import AdminComments from "./pages/admin/AdminComments";
 import AdminPayments from "./pages/admin/AdminPayments";
+import AdminProducts from "./pages/admin/AdminProducts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +47,8 @@ const App = () => (
             <Route path="/vitazi" element={<Winners />} />
             <Route path="/ochrana-udajov" element={<Privacy />} />
             <Route path="/kontakt" element={<Contact />} />
+            <Route path="/eshop" element={<EShop />} />
+            <Route path="/eshop-dakujeme" element={<EShopSuccess />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
@@ -52,6 +57,7 @@ const App = () => (
               <Route path="psy" element={<AdminDogs />} />
               <Route path="komentare" element={<AdminComments />} />
               <Route path="platby" element={<AdminPayments />} />
+              <Route path="produkty" element={<AdminProducts />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

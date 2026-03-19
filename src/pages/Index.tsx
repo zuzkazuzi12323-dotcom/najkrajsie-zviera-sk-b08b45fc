@@ -128,6 +128,16 @@ const Index = () => {
         </div>
       </section>
 
+      {/* E-shop banner */}
+      <section className="container mx-auto px-4 pb-8">
+        <Link to="/eshop">
+          <motion.div whileHover={{ scale: 1.01 }} className="bg-card rounded-2xl p-8 shadow-soft text-center border-2 border-primary/20 hover:border-primary/40 transition-colors cursor-pointer">
+            <p className="text-2xl md:text-3xl font-bold text-foreground mb-2">🛒 Navštívte náš e-shop a podporte útulky!</p>
+            <p className="text-muted-foreground">Časť výťažku z každého nákupu venujeme útulkom pre zvieratá ❤️</p>
+          </motion.div>
+        </Link>
+      </section>
+
       <section className="container mx-auto px-4 pb-20">
         <div className="flex items-end justify-between mb-10">
           <div>
@@ -153,7 +163,7 @@ const Index = () => {
       <section className="container mx-auto px-4 pb-20">
         <div className="gradient-golden rounded-3xl p-10 md:p-16 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojiť sa do súťaže</h2>
-          <p className="text-primary-foreground/80 mb-8 max-w-md mx-auto text-pretty">Pridajte profil vášho psa za pouhý 1 € a získajte šancu vyhrať titul Najkrajší pes Slovenska.</p>
+          <p className="text-primary-foreground/80 mb-8 max-w-lg mx-auto text-pretty">Pridajte profil vášho psa za 1 € a zapojte sa do súťaže o najkrajšieho psa. Z každého príspevku pomáhate aj útulkom pre zvieratá ❤️ Po ukončení súťaže zverejníme sumu, ktorú venujeme útulkom.</p>
           <Link to="/pridat">
             <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} className="bg-card text-card-foreground px-8 py-4 rounded-full font-bold shadow-elevated text-lg hover:shadow-golden transition-shadow">
               Pridať psa za 1 €
