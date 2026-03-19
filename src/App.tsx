@@ -24,6 +24,7 @@ import AdminDogs from "./pages/admin/AdminDogs";
 import AdminComments from "./pages/admin/AdminComments";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminProducts from "./pages/admin/AdminProducts";
+import MyOrders from "./pages/MyOrders";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/kontakt" element={<Contact />} />
             <Route path="/eshop" element={<EShop />} />
             <Route path="/eshop-dakujeme" element={<EShopSuccess />} />
+            <Route path="/moje-objednavky" element={<MyOrders />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>

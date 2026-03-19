@@ -6,6 +6,7 @@ import heroImg from "@/assets/hero-dog.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DogCard from "@/components/DogCard";
+import DonationCounter from "@/components/DonationCounter";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -127,6 +128,9 @@ const Index = () => {
           ))}
         </div>
       </section>
+
+      {/* Donation counter */}
+      <DonationCounter />
 
       {/* E-shop banner */}
       <section className="container mx-auto px-4 pb-8">
