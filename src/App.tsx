@@ -17,6 +17,7 @@ import Privacy from "./pages/Privacy";
 import Contact from "./pages/Contact";
 import EShop from "./pages/EShop";
 import EShopSuccess from "./pages/EShopSuccess";
+import ProductDetail from "./pages/ProductDetail";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
