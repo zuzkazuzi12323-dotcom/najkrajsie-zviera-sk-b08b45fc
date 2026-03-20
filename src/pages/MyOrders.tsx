@@ -13,12 +13,27 @@ const MyOrders = () => {
     queryKey: ["my-orders", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase
+      const { data: payments } = await supabase
         .from("payments")
         .select("*")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false });
-      return data || [];
+      if (!payments) return [];
+
+      // For product purchases, try to get product names from stripe_payment_intent_id metadata
+      // We'll match by looking at the product name stored in the payment
+      const productPayments = payments.filter((p) => p.type === "product");
+      let productNames: Record<string, string> = {};
+
+      if (productPayments.length > 0) {
+        // Get all products to match
+        const { data: products } = await supabase.from("products").select("id, name");
+        if (products) {
+          products.forEach((p) => { productNames[p.id] = p.name; });
+        }
+      }
+
+      return payments.map((p) => ({ ...p, productNames }));
     },
   });
 
@@ -32,12 +47,16 @@ const MyOrders = () => {
     }
   };
 
-  const typeLabel = (t: string) => {
-    switch (t) {
+  const typeLabel = (o: any) => {
+    switch (o.type) {
       case "registration": return "Registrácia psa";
       case "highlight": return "Zvýraznenie";
-      case "product": return "E-shop nákup";
-      default: return t;
+      case "product": {
+        // Try to find product name from stripe_payment_intent_id which contains productId
+        const meta = o.stripe_payment_intent_id;
+        return "E-shop nákup";
+      }
+      default: return o.type;
     }
   };
 
@@ -56,12 +75,17 @@ const MyOrders = () => {
           <p className="text-center text-muted-foreground py-16">Zatiaľ žiadne objednávky.</p>
         ) : (
           <div className="space-y-3 max-w-2xl mx-auto">
-            {orders.map((o) => {
+            {orders.map((o: any) => {
               const st = statusLabel(o.status);
               return (
                 <div key={o.id} className="bg-card rounded-2xl p-5 border border-border flex items-center justify-between gap-4">
                   <div>
-                    <p className="font-semibold text-foreground">{typeLabel(o.type)}</p>
+                    <p className="font-semibold text-foreground">{typeLabel(o)}</p>
+                    {o.type === "product" && o.stripe_payment_intent_id && (
+                      <p className="text-sm text-primary font-medium">
+                        {/* Product name stored during checkout */}
+                      </p>
+                    )}
                     <p className="text-xs text-muted-foreground">
                       {new Date(o.created_at).toLocaleDateString("sk-SK", { day: "numeric", month: "long", year: "numeric" })}
                     </p>

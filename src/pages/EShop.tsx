@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag, Dog, Cat } from "lucide-react";
+import { ShoppingBag, AlertTriangle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -29,8 +30,14 @@ const EShop = () => {
   });
 
   const filtered = category === "all" ? products : products.filter((p) => p.category === category);
+  // Show in-stock first, then out-of-stock
+  const sorted = [...filtered].sort((a, b) => (b.in_stock ? 1 : 0) - (a.in_stock ? 1 : 0));
 
   const handleBuy = async (product: (typeof products)[0]) => {
+    if (!product.in_stock) {
+      toast.error("Tento produkt momentálne nie je skladom a nie je možné ho objednať.");
+      return;
+    }
     if (!user) {
       toast.error("Pre nákup sa musíte prihlásiť.");
       return;
@@ -53,7 +60,7 @@ const EShop = () => {
     }
   };
 
-  const categories: { key: Category; label: string; icon?: string }[] = [
+  const categories: { key: Category; label: string }[] = [
     { key: "all", label: "Všetko" },
     { key: "dog", label: "Psíky 🐶" },
     { key: "cat", label: "Mačky 🐱" },
@@ -63,7 +70,6 @@ const EShop = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* Hero banner */}
       <section className="gradient-golden py-12 text-center">
         <div className="container mx-auto px-4">
           <ShoppingBag className="w-12 h-12 text-primary-foreground mx-auto mb-4" />
@@ -76,7 +82,6 @@ const EShop = () => {
         </div>
       </section>
 
-      {/* Category filter */}
       <section className="container mx-auto px-4 py-8">
         <div className="flex justify-center gap-2 mb-8">
           {categories.map((c) => (
@@ -94,32 +99,43 @@ const EShop = () => {
           ))}
         </div>
 
-        {filtered.length === 0 ? (
+        {sorted.length === 0 ? (
           <p className="text-center text-muted-foreground py-16">Zatiaľ žiadne produkty v tejto kategórii.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filtered.map((product, i) => (
+            {sorted.map((product, i) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="bg-card rounded-2xl shadow-soft overflow-hidden flex flex-col"
+                className={`bg-card rounded-2xl shadow-soft overflow-hidden flex flex-col ${
+                  !product.in_stock ? "opacity-70" : ""
+                }`}
               >
-                {product.image_url ? (
-                  <img src={product.image_url} alt={product.name} className="w-full h-48 object-cover" />
-                ) : (
-                  <div className="w-full h-48 bg-secondary flex items-center justify-center text-4xl">
-                    {product.category === "cat" ? "🐱" : "🐶"}
-                  </div>
-                )}
+                <Link to={`/eshop/${product.id}`} className="block">
+                  {product.image_url ? (
+                    <img src={product.image_url} alt={product.name} className="w-full h-48 object-cover" />
+                  ) : (
+                    <div className="w-full h-48 bg-secondary flex items-center justify-center text-4xl">
+                      {product.category === "cat" ? "🐱" : "🐶"}
+                    </div>
+                  )}
+                </Link>
                 <div className="p-5 flex flex-col flex-1">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
                     {product.category === "cat" ? "🐱 Mačky" : "🐶 Psíky"}
                   </span>
-                  <h3 className="font-bold text-foreground text-lg mb-1">{product.name}</h3>
+                  <Link to={`/eshop/${product.id}`}>
+                    <h3 className="font-bold text-foreground text-lg mb-1 hover:text-primary transition-colors">{product.name}</h3>
+                  </Link>
                   {product.description && (
-                    <p className="text-sm text-muted-foreground mb-4 flex-1">{product.description}</p>
+                    <p className="text-sm text-muted-foreground mb-4 flex-1 line-clamp-2">{product.description}</p>
+                  )}
+                  {!product.in_stock && (
+                    <div className="flex items-center gap-1.5 text-destructive text-xs font-medium mb-3">
+                      <AlertTriangle className="w-3.5 h-3.5" /> Nie je skladom
+                    </div>
                   )}
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-xl font-bold text-foreground">
@@ -127,10 +143,10 @@ const EShop = () => {
                     </span>
                     <button
                       onClick={() => handleBuy(product)}
-                      disabled={loadingId === product.id}
+                      disabled={loadingId === product.id || !product.in_stock}
                       className="gradient-golden text-primary-foreground px-5 py-2.5 rounded-full font-semibold text-sm shadow-golden hover:scale-105 transition-transform disabled:opacity-50"
                     >
-                      {loadingId === product.id ? "..." : "Kúpiť"}
+                      {!product.in_stock ? "Vypredané" : loadingId === product.id ? "..." : "Kúpiť"}
                     </button>
                   </div>
                 </div>
