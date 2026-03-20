@@ -91,6 +91,7 @@ export type Database = {
           created_at: string
           dog_id: string | null
           id: string
+          product_name: string | null
           status: string
           stripe_payment_intent_id: string | null
           type: string
@@ -101,6 +102,7 @@ export type Database = {
           created_at?: string
           dog_id?: string | null
           id?: string
+          product_name?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
           type: string
@@ -111,6 +113,7 @@ export type Database = {
           created_at?: string
           dog_id?: string | null
           id?: string
+          product_name?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
           type?: string
