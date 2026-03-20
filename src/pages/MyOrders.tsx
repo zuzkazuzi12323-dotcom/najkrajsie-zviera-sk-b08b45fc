@@ -32,12 +32,12 @@ const MyOrders = () => {
     }
   };
 
-  const typeLabel = (t: string) => {
-    switch (t) {
+  const typeLabel = (o: any) => {
+    switch (o.type) {
       case "registration": return "Registrácia psa";
       case "highlight": return "Zvýraznenie";
-      case "product": return "E-shop nákup";
-      default: return t;
+      case "product": return o.product_name ? `E-shop: ${o.product_name}` : "E-shop nákup";
+      default: return o.type;
     }
   };
 
@@ -56,12 +56,12 @@ const MyOrders = () => {
           <p className="text-center text-muted-foreground py-16">Zatiaľ žiadne objednávky.</p>
         ) : (
           <div className="space-y-3 max-w-2xl mx-auto">
-            {orders.map((o) => {
+            {orders.map((o: any) => {
               const st = statusLabel(o.status);
               return (
                 <div key={o.id} className="bg-card rounded-2xl p-5 border border-border flex items-center justify-between gap-4">
                   <div>
-                    <p className="font-semibold text-foreground">{typeLabel(o.type)}</p>
+                    <p className="font-semibold text-foreground">{typeLabel(o)}</p>
                     <p className="text-xs text-muted-foreground">
                       {new Date(o.created_at).toLocaleDateString("sk-SK", { day: "numeric", month: "long", year: "numeric" })}
                     </p>

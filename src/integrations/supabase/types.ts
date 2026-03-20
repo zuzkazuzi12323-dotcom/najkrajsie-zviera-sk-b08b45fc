@@ -91,6 +91,7 @@ export type Database = {
           created_at: string
           dog_id: string | null
           id: string
+          product_name: string | null
           status: string
           stripe_payment_intent_id: string | null
           type: string
@@ -101,6 +102,7 @@ export type Database = {
           created_at?: string
           dog_id?: string | null
           id?: string
+          product_name?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
           type: string
@@ -111,6 +113,7 @@ export type Database = {
           created_at?: string
           dog_id?: string | null
           id?: string
+          product_name?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
           type?: string
@@ -126,6 +129,38 @@ export type Database = {
           },
         ]
       }
+      product_images: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          product_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          product_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          product_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           active: boolean
@@ -134,6 +169,7 @@ export type Database = {
           description: string | null
           id: string
           image_url: string | null
+          in_stock: boolean
           name: string
           price: number
           updated_at: string
@@ -145,6 +181,7 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          in_stock?: boolean
           name: string
           price: number
           updated_at?: string
@@ -156,6 +193,7 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          in_stock?: boolean
           name?: string
           price?: number
           updated_at?: string
