@@ -26,6 +26,8 @@ import AdminComments from "./pages/admin/AdminComments";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminProducts from "./pages/admin/AdminProducts";
 import MyOrders from "./pages/MyOrders";
+import Donate from "./pages/Donate";
+import DonateSuccess from "./pages/DonateSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
