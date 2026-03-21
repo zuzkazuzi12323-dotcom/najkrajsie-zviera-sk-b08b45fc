@@ -142,6 +142,16 @@ const Index = () => {
         </Link>
       </section>
 
+      {/* Donate CTA */}
+      <section className="container mx-auto px-4 pb-8">
+        <Link to="/podporit">
+          <motion.div whileHover={{ scale: 1.01 }} className="gradient-golden rounded-2xl p-8 shadow-golden text-center cursor-pointer">
+            <p className="text-2xl md:text-3xl font-bold text-primary-foreground mb-2">Podporiť útulky ❤️</p>
+            <p className="text-primary-foreground/80">Nemáte psíka? Aj tak môžete pomôcť jednorazovým príspevkom 1 €, 3 € alebo 5 € 🐶❤️</p>
+          </motion.div>
+        </Link>
+      </section>
+
       <section className="container mx-auto px-4 pb-20">
         <div className="flex items-end justify-between mb-10">
           <div>

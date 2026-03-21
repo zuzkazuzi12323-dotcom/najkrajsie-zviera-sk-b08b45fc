@@ -55,6 +55,8 @@ const App = () => (
             <Route path="/eshop/:id" element={<ProductDetail />} />
             <Route path="/eshop-dakujeme" element={<EShopSuccess />} />
             <Route path="/moje-objednavky" element={<MyOrders />} />
+            <Route path="/podporit" element={<Donate />} />
+            <Route path="/dakujeme-za-prispevok" element={<DonateSuccess />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
