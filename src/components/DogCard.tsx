@@ -69,7 +69,7 @@ const DogCard = ({ dog, userVoted = false }: DogCardProps) => {
             <span className="text-xs text-muted-foreground">{dog.owner_name}</span>
           </div>
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 };
