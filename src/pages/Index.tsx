@@ -16,7 +16,7 @@ const Index = () => {
   const { data: dogs = [] } = useQuery({
     queryKey: ["top-dogs"],
     queryFn: async () => {
-      const { data: dogsData } = await supabase.from("dogs").select("*").order("created_at", { ascending: false });
+      const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).order("created_at", { ascending: false });
       if (!dogsData) return [];
       const ownerIds = [...new Set(dogsData.map((d) => d.owner_id))];
       const { data: profiles } = await supabase.from("profiles").select("user_id, display_name").in("user_id", ownerIds);

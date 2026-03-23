@@ -16,7 +16,7 @@ const Gallery = () => {
   const { data: dogs = [] } = useQuery({
     queryKey: ["dogs"],
     queryFn: async () => {
-      const { data: dogsData } = await supabase.from("dogs").select("*");
+      const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true);
       if (!dogsData) return [];
 
       const ownerIds = [...new Set(dogsData.map((d) => d.owner_id))];

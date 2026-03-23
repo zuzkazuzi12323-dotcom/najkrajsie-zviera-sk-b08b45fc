@@ -89,8 +89,9 @@ const DogProfile = () => {
 
   const shareLinks = [
     { name: "Facebook", url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(dogUrl)}&quote=${encodeURIComponent(shareText)}`, color: "bg-[#1877F2]" },
-    { name: "Instagram", url: null, color: "bg-gradient-to-br from-[#f09433] via-[#e6683c] to-[#bc1888]" },
-    { name: "TikTok", url: null, color: "bg-[#000000]" },
+    { name: "Messenger", url: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(dogUrl)}&app_id=966242223397117&redirect_uri=${encodeURIComponent(dogUrl)}`, color: "bg-[#0099FF]" },
+    { name: "WhatsApp", url: `https://wa.me/?text=${encodeURIComponent(shareText + "\n" + dogUrl)}`, color: "bg-[#25D366]" },
+    { name: "Kopírovať", url: null, color: "bg-secondary text-secondary-foreground" },
   ];
 
   const handleShare = (link: typeof shareLinks[0]) => {
