@@ -1,5 +1,4 @@
 import { Heart, Award } from "lucide-react";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
