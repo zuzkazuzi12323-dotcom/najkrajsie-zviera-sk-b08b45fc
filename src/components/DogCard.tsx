@@ -41,8 +41,8 @@ const DogCard = ({ dog, userVoted = false }: DogCardProps) => {
 
   return (
     <Link to={`/pes/${dog.id}`}>
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }}
-        className={`group relative bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-shadow duration-300 ${dog.highlighted ? "ring-2 ring-primary" : ""}`}>
+      <div
+        className={`group relative bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 ${dog.highlighted ? "ring-2 ring-primary" : ""}`}>
         <div className="relative aspect-[3/4] overflow-hidden rounded-t-2xl">
           <img src={dog.image_url} alt={dog.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div className="absolute inset-0 gradient-hero opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
