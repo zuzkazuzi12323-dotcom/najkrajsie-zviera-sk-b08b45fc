@@ -56,16 +56,54 @@ serve(async (req) => {
     const session = event.data.object as Stripe.Checkout.Session;
     const { userId, dogId, type } = session.metadata || {};
 
-    // Update payment status
-    const { error: paymentError } = await supabase
+    // Update payment status - check if already completed to prevent duplicates
+    const { data: existingPayment } = await supabase
       .from("payments")
-      .update({ status: "completed" })
-      .eq("stripe_payment_intent_id", session.id);
+      .select("id, status, amount")
+      .eq("stripe_payment_intent_id", session.id)
+      .single();
 
-    if (paymentError) {
-      console.error("Payment update error:", paymentError);
-    } else {
-      console.log("Payment marked completed for session:", session.id);
+    if (existingPayment && existingPayment.status !== "completed") {
+      const { error: paymentError } = await supabase
+        .from("payments")
+        .update({ status: "completed" })
+        .eq("stripe_payment_intent_id", session.id);
+
+      if (paymentError) {
+        console.error("Payment update error:", paymentError);
+      } else {
+        console.log("Payment marked completed for session:", session.id);
+
+        // Add 20% to donations total (prevent duplicate by only doing this on status change)
+        const { error: donationError } = await supabase.rpc("add_donation", {
+          payment_amount: existingPayment.amount,
+        });
+        if (donationError) {
+          console.error("Donation update error:", donationError);
+        } else {
+          console.log("Added 20% of", existingPayment.amount, "to donations total");
+        }
+      }
+    }
+
+    // Handle direct donation payments (no payment record exists)
+    if (type === "donation") {
+      const amountCents = session.amount_total || parseInt(session.metadata?.amount || "0");
+      if (amountCents > 0) {
+        // For direct donations, 100% goes to shelters, so pass amount * 5 to get full amount from the 20% function
+        // Actually simpler: just manually update
+        const { data: current } = await supabase
+          .from("donations_total")
+          .select("total_cents")
+          .eq("id", "00000000-0000-0000-0000-000000000001")
+          .single();
+        
+        await supabase
+          .from("donations_total")
+          .update({ total_cents: (current?.total_cents || 0) + amountCents, updated_at: new Date().toISOString() })
+          .eq("id", "00000000-0000-0000-0000-000000000001");
+        console.log("Direct donation of", amountCents, "cents added to total");
+      }
     }
 
     // If highlight payment, update dog

@@ -102,14 +102,14 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Image gallery */}
           <div className="space-y-3">
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-secondary">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-secondary">
               <AnimatePresence mode="wait">
                 {allImages[currentImg] ? (
                   <motion.img
                     key={currentImg}
                     src={allImages[currentImg]}
                     alt={product.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}

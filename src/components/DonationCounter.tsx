@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,18 +29,34 @@ const AnimatedNumber = ({ target }: { target: number }) => {
 };
 
 const DonationCounter = () => {
+  const queryClient = useQueryClient();
+
   const { data: totalDonated = 0 } = useQuery({
     queryKey: ["donation-total"],
     queryFn: async () => {
       const { data } = await supabase
-        .from("payments")
-        .select("amount")
-        .eq("status", "completed");
-      if (!data) return 0;
-      const total = data.reduce((sum, p) => sum + p.amount, 0);
-      return Math.round(total * 0.2);
+        .from("donations_total")
+        .select("total_cents")
+        .eq("id", "00000000-0000-0000-0000-000000000001")
+        .single();
+      return data?.total_cents || 0;
     },
   });
+
+  // Realtime subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel("donations-realtime")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "donations_total" },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ["donation-total"] });
+        }
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [queryClient]);
 
   return (
     <section className="container mx-auto px-4 pb-8">
