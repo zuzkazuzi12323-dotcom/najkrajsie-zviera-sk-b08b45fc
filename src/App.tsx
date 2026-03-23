@@ -59,6 +59,7 @@ const App = () => (
             <Route path="/moje-objednavky" element={<MyOrders />} />
             <Route path="/podporit" element={<Donate />} />
             <Route path="/dakujeme-za-prispevok" element={<DonateSuccess />} />
+            <Route path="/nastavenia" element={<AccountSettings />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
