@@ -86,22 +86,23 @@ serve(async (req) => {
       }
     }
 
-    // Also handle donation payments (no payment record exists for those)
+    // Handle direct donation payments (no payment record exists)
     if (type === "donation") {
       const amountCents = session.amount_total || parseInt(session.metadata?.amount || "0");
       if (amountCents > 0) {
-        // For donations, add the FULL amount (not 20%) since it's all for shelters
-        const { error: donationError } = await supabase
+        // For direct donations, 100% goes to shelters, so pass amount * 5 to get full amount from the 20% function
+        // Actually simpler: just manually update
+        const { data: current } = await supabase
           .from("donations_total")
-          .update({
-            total_cents: amountCents,
-            updated_at: new Date().toISOString(),
-          })
+          .select("total_cents")
+          .eq("id", "00000000-0000-0000-0000-000000000001")
+          .single();
+        
+        await supabase
+          .from("donations_total")
+          .update({ total_cents: (current?.total_cents || 0) + amountCents, updated_at: new Date().toISOString() })
           .eq("id", "00000000-0000-0000-0000-000000000001");
-
-        // Actually use RPC to ADD, not set
-        await supabase.rpc("add_donation", { payment_amount: amountCents });
-        console.log("Donation of", amountCents, "added to total");
+        console.log("Direct donation of", amountCents, "cents added to total");
       }
     }
 
