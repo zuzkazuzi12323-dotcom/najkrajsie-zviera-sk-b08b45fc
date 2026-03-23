@@ -85,6 +85,24 @@ export type Database = {
         }
         Relationships: []
       }
+      donations_total: {
+        Row: {
+          id: string
+          total_cents: number
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          total_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          total_cents?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
@@ -282,6 +300,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_donation: { Args: { payment_amount: number }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
