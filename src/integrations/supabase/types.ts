@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          read: boolean
+          reference_id: string | null
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          read?: boolean
+          reference_id?: string | null
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          read?: boolean
+          reference_id?: string | null
+          type?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           created_at: string
@@ -46,9 +73,31 @@ export type Database = {
           },
         ]
       }
+      contest_settings: {
+        Row: {
+          active: boolean
+          end_date: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          end_date?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          end_date?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       dogs: {
         Row: {
           age: string
+          approved: boolean
           breed: string
           created_at: string
           description: string | null
@@ -61,6 +110,7 @@ export type Database = {
         }
         Insert: {
           age: string
+          approved?: boolean
           breed: string
           created_at?: string
           description?: string | null
@@ -73,6 +123,7 @@ export type Database = {
         }
         Update: {
           age?: string
+          approved?: boolean
           breed?: string
           created_at?: string
           description?: string | null
