@@ -146,7 +146,7 @@ const EShop = () => {
                     </button>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}
