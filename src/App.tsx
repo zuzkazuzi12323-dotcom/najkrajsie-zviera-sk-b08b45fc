@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
+import CookieConsent from "@/components/CookieConsent";
 import Index from "./pages/Index";
 import Gallery from "./pages/Gallery";
 import DogProfile from "./pages/DogProfile";
@@ -28,6 +29,7 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import MyOrders from "./pages/MyOrders";
 import Donate from "./pages/Donate";
 import DonateSuccess from "./pages/DonateSuccess";
+import AccountSettings from "./pages/AccountSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
