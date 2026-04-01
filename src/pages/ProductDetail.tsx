@@ -65,6 +65,19 @@ const ProductDetail = () => {
     allImages.push(""); // placeholder
   }
 
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(productUrl);
+    setCopied(true);
+    toast.success("Odkaz skopírovaný!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const shareLinks = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`,
+    messenger: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(productUrl)}&app_id=0&redirect_uri=${encodeURIComponent(productUrl)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent((product?.name || "Produkt") + " – " + productUrl)}`,
+  };
+
   const handleBuy = async () => {
     if (!product) return;
     if (!user) { toast.error("Pre nákup sa musíte prihlásiť."); return; }
