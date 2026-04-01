@@ -75,9 +75,11 @@ const ProductDetail = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const ogUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/og-product?id=${id}`;
+
   const shareLinks = {
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`,
-    messenger: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(productUrl)}&app_id=0&redirect_uri=${encodeURIComponent(productUrl)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ogUrl)}`,
+    messenger: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(ogUrl)}&app_id=0&redirect_uri=${encodeURIComponent(productUrl)}`,
     whatsapp: `https://wa.me/?text=${encodeURIComponent((product?.name || "Produkt") + " – " + productUrl)}`,
   };
 
