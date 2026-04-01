@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -9,6 +10,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+const SITE_URL = "https://najkrajsie-zviera-sk.lovable.app";
+
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -16,7 +19,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const productUrl = `${window.location.origin}/eshop/${id}`;
+  const productUrl = `${SITE_URL}/eshop/${id}`;
 
   const { data: product } = useQuery({
     queryKey: ["product", id],
