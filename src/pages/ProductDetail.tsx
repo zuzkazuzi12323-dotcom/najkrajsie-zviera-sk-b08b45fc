@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -9,6 +10,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+const SITE_URL = "https://najkrajsie-zviera-sk.lovable.app";
+
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -16,7 +19,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const productUrl = `${window.location.origin}/eshop/${id}`;
+  const productUrl = `${SITE_URL}/eshop/${id}`;
 
   const { data: product } = useQuery({
     queryKey: ["product", id],
@@ -109,6 +112,16 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>{product.name} | E-shop NajkrajšíPes.sk</title>
+        <meta property="og:type" content="product" />
+        <meta property="og:title" content={`${product.name} – E-shop NajkrajšíPes.sk`} />
+        <meta property="og:description" content={product.description || `${product.name} – kúpou podporíte útulky ❤️`} />
+        <meta property="og:url" content={productUrl} />
+        <meta property="og:image" content={product.image_url || `${SITE_URL}/placeholder.svg`} />
+        <meta property="og:site_name" content="NajkrajšíPes.sk" />
+        <link rel="canonical" href={productUrl} />
+      </Helmet>
       <Navbar />
       <section className="container mx-auto px-4 py-8">
         <Link to="/eshop" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
@@ -188,12 +201,12 @@ const ProductDetail = () => {
             {/* Share buttons */}
             <div className="flex items-center gap-2 mb-6 flex-wrap">
               <span className="text-sm text-muted-foreground flex items-center gap-1"><Share2 className="w-4 h-4" /> Zdieľať:</span>
-              <a href={shareLinks.facebook} target="_blank" rel="noopener noreferrer"
-                className="bg-[#1877F2] text-white px-3 py-1.5 rounded-full text-xs font-medium hover:opacity-90 transition-opacity">Facebook</a>
-              <a href={shareLinks.messenger} target="_blank" rel="noopener noreferrer"
-                className="bg-[#0099FF] text-white px-3 py-1.5 rounded-full text-xs font-medium hover:opacity-90 transition-opacity">Messenger</a>
-              <a href={shareLinks.whatsapp} target="_blank" rel="noopener noreferrer"
-                className="bg-[#25D366] text-white px-3 py-1.5 rounded-full text-xs font-medium hover:opacity-90 transition-opacity">WhatsApp</a>
+              <button onClick={() => window.open(shareLinks.facebook, '_blank', 'width=600,height=400')}
+                className="bg-[#1877F2] text-white px-3 py-1.5 rounded-full text-xs font-medium hover:opacity-90 transition-opacity">Facebook</button>
+              <button onClick={() => window.open(shareLinks.messenger, '_blank', 'width=600,height=400')}
+                className="bg-[#0099FF] text-white px-3 py-1.5 rounded-full text-xs font-medium hover:opacity-90 transition-opacity">Messenger</button>
+              <button onClick={() => window.open(shareLinks.whatsapp, '_blank', 'width=600,height=400')}
+                className="bg-[#25D366] text-white px-3 py-1.5 rounded-full text-xs font-medium hover:opacity-90 transition-opacity">WhatsApp</button>
               <button onClick={handleCopy}
                 className="bg-muted text-muted-foreground px-3 py-1.5 rounded-full text-xs font-medium hover:bg-muted/80 transition-colors flex items-center gap-1">
                 {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
