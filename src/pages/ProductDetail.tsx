@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingBag, AlertTriangle } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingBag, AlertTriangle, Share2, Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
