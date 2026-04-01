@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Users, Dog, Heart, CreditCard, Bell, Trophy, TrendingUp, Calendar, Power, RotateCcw } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Users, Dog, Heart, CreditCard, Bell, Trophy, TrendingUp, Calendar, Power, RotateCcw, BarChart3 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -51,6 +51,52 @@ const AdminDashboard = () => {
       };
     },
   });
+
+  // Voting analytics - last 14 days
+  const { data: votingData = [] } = useQuery({
+    queryKey: ["admin-voting-analytics"],
+    queryFn: async () => {
+      const fourteenDaysAgo = new Date();
+      fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 13);
+      fourteenDaysAgo.setHours(0, 0, 0, 0);
+
+      const { data: votes } = await supabase
+        .from("votes")
+        .select("created_at, dog_id, user_id")
+        .gte("created_at", fourteenDaysAgo.toISOString())
+        .order("created_at", { ascending: true });
+
+      if (!votes) return [];
+
+      // Group by day
+      const dayMap: Record<string, { total: number; uniqueUsers: Set<string>; uniqueDogs: Set<string> }> = {};
+      for (let i = 0; i < 14; i++) {
+        const d = new Date(fourteenDaysAgo);
+        d.setDate(d.getDate() + i);
+        const key = d.toISOString().slice(0, 10);
+        dayMap[key] = { total: 0, uniqueUsers: new Set(), uniqueDogs: new Set() };
+      }
+
+      votes.forEach((v) => {
+        const key = v.created_at.slice(0, 10);
+        if (dayMap[key]) {
+          dayMap[key].total++;
+          dayMap[key].uniqueUsers.add(v.user_id);
+          dayMap[key].uniqueDogs.add(v.dog_id);
+        }
+      });
+
+      return Object.entries(dayMap).map(([date, data]) => ({
+        date,
+        label: new Date(date).toLocaleDateString("sk", { day: "numeric", month: "short" }),
+        total: data.total,
+        uniqueUsers: data.uniqueUsers.size,
+        uniqueDogs: data.uniqueDogs.size,
+      }));
+    },
+  });
+
+  const maxVotes = useMemo(() => Math.max(...votingData.map(d => d.total), 1), [votingData]);
 
   // Notifications
   const { data: notifications = [] } = useQuery({
@@ -130,9 +176,32 @@ const AdminDashboard = () => {
         ))}
       </div>
 
+      {/* Voting Analytics Chart */}
+      <div className="bg-card rounded-2xl shadow-soft p-5">
+        <h3 className="font-bold text-foreground flex items-center gap-2 mb-4">
+          <BarChart3 className="w-5 h-5 text-primary" /> Hlasovanie – posledných 14 dní
+        </h3>
+        <div className="flex items-end gap-1 h-48">
+          {votingData.map((day) => (
+            <div key={day.date} className="flex-1 flex flex-col items-center gap-1 min-w-0">
+              <span className="text-xs font-bold tabular-nums text-foreground">{day.total}</span>
+              <div
+                className="w-full rounded-t-md gradient-golden transition-all"
+                style={{ height: `${Math.max((day.total / maxVotes) * 140, 4)}px` }}
+                title={`${day.label}: ${day.total} hlasov, ${day.uniqueUsers} používateľov, ${day.uniqueDogs} psov`}
+              />
+              <span className="text-[10px] text-muted-foreground truncate w-full text-center">{day.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-6 mt-4 text-xs text-muted-foreground">
+          <span>Priemer: <strong className="text-foreground">{votingData.length ? Math.round(votingData.reduce((s, d) => s + d.total, 0) / votingData.length) : 0}</strong> hlasov/deň</span>
+          <span>Max: <strong className="text-foreground">{maxVotes}</strong> hlasov</span>
+        </div>
+      </div>
+
       {/* Top dog & Contest controls */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Top dog */}
         {stats?.topDog && (
           <div className="bg-card rounded-2xl shadow-soft p-5">
             <h3 className="font-bold text-foreground flex items-center gap-2 mb-4">
@@ -148,7 +217,6 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Contest controls */}
         <div className="bg-card rounded-2xl shadow-soft p-5">
           <h3 className="font-bold text-foreground flex items-center gap-2 mb-4">
             <Trophy className="w-5 h-5 text-primary" /> Správa súťaže
