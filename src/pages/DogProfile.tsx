@@ -84,13 +84,14 @@ const DogProfile = () => {
   };
 
   const publishedDomain = "https://najkrajsie-zviera-sk.lovable.app";
+  const ogDogUrl = `${publishedDomain}/functions/v1/og-dog?id=${dog.id}`;
   const dogUrl = `${publishedDomain}/pes/${dog.id}`;
   const shareText = `Hlasuj za ${dog.name} v súťaži NajkrajšíPes.sk! 🐾`;
 
   const shareLinks = [
-    { name: "Facebook", url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(dogUrl)}&quote=${encodeURIComponent(shareText)}`, color: "bg-[#1877F2]" },
-    { name: "Messenger", url: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(dogUrl)}&app_id=966242223397117&redirect_uri=${encodeURIComponent(dogUrl)}`, color: "bg-[#0099FF]" },
-    { name: "WhatsApp", url: `https://wa.me/?text=${encodeURIComponent(shareText + "\n" + dogUrl)}`, color: "bg-[#25D366]" },
+    { name: "Facebook", url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ogDogUrl)}&quote=${encodeURIComponent(shareText)}`, color: "bg-[#1877F2]" },
+    { name: "Messenger", url: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(ogDogUrl)}&app_id=966242223397117&redirect_uri=${encodeURIComponent(dogUrl)}`, color: "bg-[#0099FF]" },
+    { name: "WhatsApp", url: `https://wa.me/?text=${encodeURIComponent(shareText + "\n" + ogDogUrl)}`, color: "bg-[#25D366]" },
     { name: "Kopírovať", url: null, color: "bg-secondary text-secondary-foreground" },
   ];
 
