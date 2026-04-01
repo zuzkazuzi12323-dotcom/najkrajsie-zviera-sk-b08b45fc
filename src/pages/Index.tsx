@@ -177,7 +177,7 @@ const Index = () => {
       <section className="container mx-auto px-4 pb-20">
         <div className="gradient-golden rounded-3xl p-10 md:p-16 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojiť sa do súťaže</h2>
-          <p className="text-primary-foreground/80 mb-8 max-w-lg mx-auto text-pretty">Pridajte profil vášho psa za 1 € a zapojte sa do súťaže o najkrajšieho psa. Z každého príspevku pomáhate aj útulkom pre zvieratá ❤️ Po ukončení súťaže zverejníme sumu, ktorú venujeme útulkom.</p>
+          <p className="text-primary-foreground/80 mb-8 max-w-lg mx-auto text-pretty">Pridajte profil vášho psa za 1 € a zapojte sa do súťaže o najkrajšieho psa. Môžete pridať aj viac psíkov – každý za 1 €! Z každého príspevku pomáhame útulkom pre zvieratá ❤️</p>
           <Link to="/pridat">
             <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} className="bg-card text-card-foreground px-8 py-4 rounded-full font-bold shadow-elevated text-lg hover:shadow-golden transition-shadow">
               Pridať psa za 1 €
