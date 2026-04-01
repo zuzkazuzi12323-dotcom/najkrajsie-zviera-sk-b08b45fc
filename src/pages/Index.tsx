@@ -75,12 +75,12 @@ const Index = () => {
         </div>
         <div className="relative container mx-auto px-4 py-24 md:py-40">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-xl">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-6">Ktorý pes si dnes získa vaše srdce?</h1>
-            <p className="text-lg md:text-xl text-background/80 mb-8 text-pretty">Pridajte svojho miláčika do súťaže a získajte hlasy od tisícov milovníkov psov po celom Slovensku.</p>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-6">Zapojte svojho psa do najväčšej súťaže krásy na Slovensku!</h1>
+            <p className="text-lg md:text-xl text-background/80 mb-8 text-pretty">Stačí 1 € a váš miláčik súťaží o titul Najkrajší pes Slovenska. Každý príspevok pomáha útulkom pre zvieratá ❤️</p>
             <div className="flex flex-wrap gap-3">
-              <Link to="/galeria">
+              <Link to="/podporit">
                 <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg">
-                  Preskúmať galériu <ArrowRight className="w-5 h-5" />
+                  Podporiť útulky ❤️ <Heart className="w-5 h-5" />
                 </motion.button>
               </Link>
               <Link to="/pridat">
