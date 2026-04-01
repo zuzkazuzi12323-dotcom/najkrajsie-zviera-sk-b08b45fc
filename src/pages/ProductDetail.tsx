@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingBag, AlertTriangle } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingBag, AlertTriangle, Share2, Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -14,6 +14,9 @@ const ProductDetail = () => {
   const { user } = useAuth();
   const [currentImg, setCurrentImg] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const productUrl = `${window.location.origin}/eshop/${id}`;
 
   const { data: product } = useQuery({
     queryKey: ["product", id],
@@ -61,6 +64,19 @@ const ProductDetail = () => {
   if (allImages.length === 0 && product) {
     allImages.push(""); // placeholder
   }
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(productUrl);
+    setCopied(true);
+    toast.success("Odkaz skopírovaný!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const shareLinks = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`,
+    messenger: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(productUrl)}&app_id=0&redirect_uri=${encodeURIComponent(productUrl)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent((product?.name || "Produkt") + " – " + productUrl)}`,
+  };
 
   const handleBuy = async () => {
     if (!product) return;
@@ -168,6 +184,22 @@ const ProductDetail = () => {
             <p className="text-xs text-muted-foreground mb-6">
               Z toho {((product.price * 0.2) / 100).toFixed(2)} € poputuje útulkom ❤️
             </p>
+
+            {/* Share buttons */}
+            <div className="flex items-center gap-2 mb-6 flex-wrap">
+              <span className="text-sm text-muted-foreground flex items-center gap-1"><Share2 className="w-4 h-4" /> Zdieľať:</span>
+              <a href={shareLinks.facebook} target="_blank" rel="noopener noreferrer"
+                className="bg-[#1877F2] text-white px-3 py-1.5 rounded-full text-xs font-medium hover:opacity-90 transition-opacity">Facebook</a>
+              <a href={shareLinks.messenger} target="_blank" rel="noopener noreferrer"
+                className="bg-[#0099FF] text-white px-3 py-1.5 rounded-full text-xs font-medium hover:opacity-90 transition-opacity">Messenger</a>
+              <a href={shareLinks.whatsapp} target="_blank" rel="noopener noreferrer"
+                className="bg-[#25D366] text-white px-3 py-1.5 rounded-full text-xs font-medium hover:opacity-90 transition-opacity">WhatsApp</a>
+              <button onClick={handleCopy}
+                className="bg-muted text-muted-foreground px-3 py-1.5 rounded-full text-xs font-medium hover:bg-muted/80 transition-colors flex items-center gap-1">
+                {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                {copied ? "Skopírované" : "Kopírovať"}
+              </button>
+            </div>
 
             {!product.in_stock ? (
               <div className="space-y-4">
