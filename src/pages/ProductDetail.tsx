@@ -14,6 +14,22 @@ const ProductDetail = () => {
   const { user } = useAuth();
   const [currentImg, setCurrentImg] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const productUrl = `${window.location.origin}/eshop/${id}`;
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(productUrl);
+    setCopied(true);
+    toast.success("Odkaz skopírovaný!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const shareLinks = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`,
+    messenger: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(productUrl)}&app_id=0&redirect_uri=${encodeURIComponent(productUrl)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent((product?.name || "Produkt") + " – " + productUrl)}`,
+  };
 
   const { data: product } = useQuery({
     queryKey: ["product", id],
