@@ -112,6 +112,16 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>{product.name} | E-shop NajkrajšíPes.sk</title>
+        <meta property="og:type" content="product" />
+        <meta property="og:title" content={`${product.name} – E-shop NajkrajšíPes.sk`} />
+        <meta property="og:description" content={product.description || `${product.name} – kúpou podporíte útulky ❤️`} />
+        <meta property="og:url" content={productUrl} />
+        <meta property="og:image" content={product.image_url || `${SITE_URL}/placeholder.svg`} />
+        <meta property="og:site_name" content="NajkrajšíPes.sk" />
+        <link rel="canonical" href={productUrl} />
+      </Helmet>
       <Navbar />
       <section className="container mx-auto px-4 py-8">
         <Link to="/eshop" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
