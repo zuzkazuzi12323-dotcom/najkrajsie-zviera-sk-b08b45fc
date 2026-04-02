@@ -106,6 +106,17 @@ serve(async (req) => {
       }
     }
 
+    // If registration payment, approve dog
+    if (type === "registration" && dogId) {
+      const { error: approveError } = await supabase
+        .from("dogs")
+        .update({ approved: true })
+        .eq("id", dogId);
+
+      if (approveError) console.error("Dog approve error:", approveError);
+      else console.log("Dog approved after payment:", dogId);
+    }
+
     // If highlight payment, update dog
     if (type === "highlight" && dogId) {
       const { error: dogError } = await supabase
