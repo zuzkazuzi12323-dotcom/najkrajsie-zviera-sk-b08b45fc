@@ -55,6 +55,7 @@ const AdminUsers = () => {
             <thead>
               <tr className="border-b border-border">
                 <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Meno</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">E-mail</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Registrácia</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Stav</th>
                 <th className="text-right px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Akcie</th>
