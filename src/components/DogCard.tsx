@@ -42,7 +42,7 @@ const DogCard = ({ dog, userVoted = false }: DogCardProps) => {
     <Link to={`/pes/${dog.id}`}>
       <div
         className={`group relative bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 ${dog.highlighted ? "ring-2 ring-primary" : ""}`}>
-        <div className="relative aspect-[3/4] overflow-hidden rounded-t-2xl">
+        <div className="relative aspect-square overflow-hidden rounded-t-2xl">
           <img src={dog.image_url} alt={dog.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div className="absolute inset-0 gradient-hero opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <button onClick={handleVote}

@@ -55,6 +55,7 @@ const AdminUsers = () => {
             <thead>
               <tr className="border-b border-border">
                 <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Meno</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">E-mail</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Registrácia</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Stav</th>
                 <th className="text-right px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Akcie</th>
@@ -64,6 +65,7 @@ const AdminUsers = () => {
               {filtered.map((user) => (
                 <tr key={user.id} className="group hover:bg-secondary/30 transition-colors">
                   <td className="px-5 py-3 text-sm font-medium text-foreground">{user.display_name || "Bez mena"}</td>
+                  <td className="px-5 py-3 text-sm text-muted-foreground">{(user as any).email || "—"}</td>
                   <td className="px-5 py-3 text-sm text-muted-foreground">
                     {new Date(user.created_at).toLocaleDateString("sk")}
                   </td>
