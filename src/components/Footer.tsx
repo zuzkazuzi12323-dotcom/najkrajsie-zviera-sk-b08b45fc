@@ -16,7 +16,7 @@ const Footer = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-3">
             {shelters.map((s) => (
               <div key={s.name} title={s.name}
-                className="transition-transform hover:scale-110 cursor-default">
+                className="transition-transform duration-300 hover:scale-[2.5] cursor-default z-10 relative">
                 <img src={s.logo} alt={s.name} className="w-20 md:w-24 h-auto rounded-lg" />
               </div>
             ))}
