@@ -15,10 +15,10 @@ const Footer = () => {
           <h4 className="font-semibold text-foreground mb-4">Podporujeme útulky</h4>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-3">
             {shelters.map((s) => (
-              <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" title={s.name}
-                className="transition-transform hover:scale-110">
+              <div key={s.name} title={s.name}
+                className="transition-transform hover:scale-110 cursor-default">
                 <img src={s.logo} alt={s.name} className="w-20 md:w-24 h-auto rounded-lg" />
-              </a>
+              </div>
             ))}
           </div>
           <p className="text-sm text-muted-foreground">Podporujeme útulky a pomáhame zvieratkám ❤️</p>
