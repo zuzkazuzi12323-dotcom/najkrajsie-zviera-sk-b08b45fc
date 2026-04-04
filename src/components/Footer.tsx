@@ -1,10 +1,29 @@
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
+import utulokTrnava from "@/assets/utulok-trnava.png";
+
+const shelters = [
+  { name: "Útulok pri kaplnke Trnava", logo: utulokTrnava, url: "https://www.trnava.utulok.sk" },
+];
 
 const Footer = () => {
   return (
     <footer className="border-t border-border bg-secondary/30 mt-auto">
       <div className="container mx-auto px-4 py-12">
+        {/* Shelter logos */}
+        <div className="mb-10 text-center">
+          <h4 className="font-semibold text-foreground mb-4">Podporujeme útulky</h4>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-3">
+            {shelters.map((s) => (
+              <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" title={s.name}
+                className="transition-transform hover:scale-110">
+                <img src={s.logo} alt={s.name} className="w-20 md:w-24 h-auto rounded-lg" />
+              </a>
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground">Podporujeme útulky a pomáhame zvieratkám ❤️</p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
