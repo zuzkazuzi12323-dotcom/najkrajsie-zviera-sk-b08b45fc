@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send, Share2 } from "lucide-react";
+import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send, Share2, Reply } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -7,13 +7,16 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useContestActive } from "@/hooks/useContestActive";
 import { toast } from "sonner";
 
 const DogProfile = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const contestActive = useContestActive();
   const [newComment, setNewComment] = useState("");
+  const [replyTo, setReplyTo] = useState<{ id: string; name: string } | null>(null);
   const [voted, setVoted] = useState(false);
   const [voteCount, setVoteCount] = useState(0);
   const [shareOpen, setShareOpen] = useState(false);
@@ -62,6 +65,7 @@ const DogProfile = () => {
   }
 
   const handleVote = async () => {
+    if (!contestActive) { toast.error("Súťaž je momentálne ukončená"); return; }
     if (!user) { toast.error("Pre hlasovanie sa musíte prihlásiť"); return; }
     if (voted) {
       await supabase.from("votes").delete().eq("user_id", user.id).eq("dog_id", dog.id);
@@ -76,9 +80,11 @@ const DogProfile = () => {
   const handleComment = async () => {
     if (!newComment.trim()) return;
     if (!user) { toast.error("Pre komentovanie sa musíte prihlásiť"); return; }
-    const { error } = await supabase.from("comments").insert({ dog_id: dog.id, user_id: user.id, text: newComment.trim() });
+    const text = replyTo ? `@${replyTo.name} ${newComment.trim()}` : newComment.trim();
+    const { error } = await supabase.from("comments").insert({ dog_id: dog.id, user_id: user.id, text });
     if (error) { toast.error("Nepodarilo sa pridať komentár"); return; }
     setNewComment("");
+    setReplyTo(null);
     queryClient.invalidateQueries({ queryKey: ["comments", id] });
     toast.success("Komentár pridaný!");
   };
@@ -99,11 +105,18 @@ const DogProfile = () => {
     if (link.url) {
       window.open(link.url, "_blank", "width=600,height=400");
     } else {
-      // Instagram & TikTok don't support direct URL sharing - copy link instead
       navigator.clipboard.writeText(`${shareText}\n${dogUrl}`);
-      toast.success(`Odkaz skopírovaný! Zdieľajte na ${link.name}.`);
+      toast.success("Odkaz skopírovaný!");
     }
     setShareOpen(false);
+  };
+
+  const renderCommentText = (text: string) => {
+    const mentionRegex = /(@\S+)/g;
+    const parts = text.split(mentionRegex);
+    return parts.map((part, i) =>
+      mentionRegex.test(part) ? <span key={i} className="text-primary font-semibold">{part}</span> : part
+    );
   };
 
   return (
@@ -131,10 +144,12 @@ const DogProfile = () => {
 
             <div className="flex items-center gap-4 mb-6">
               <motion.button onClick={handleVote} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }}
+                disabled={!contestActive}
                 className={`flex items-center gap-2 px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-colors ${
+                  !contestActive ? "bg-muted text-muted-foreground cursor-not-allowed" :
                   voted ? "gradient-golden text-primary-foreground shadow-golden" : "bg-card text-card-foreground border border-border hover:border-primary"
                 }`}>
-                <Heart className={`w-5 h-5 ${voted ? "fill-current" : ""}`} /> Hlasovať
+                <Heart className={`w-5 h-5 ${voted ? "fill-current" : ""}`} /> {contestActive ? "Hlasovať" : "Ukončená"}
               </motion.button>
               <div className="text-center">
                 <AnimatePresence mode="wait">
@@ -153,7 +168,7 @@ const DogProfile = () => {
               <AnimatePresence>
                 {shareOpen && (
                   <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
-                    className="absolute top-full left-0 mt-2 flex gap-2 z-10">
+                    className="absolute top-full left-0 mt-2 flex flex-wrap gap-2 z-10">
                     {shareLinks.map((link) => (
                       <button key={link.name} onClick={() => handleShare(link)}
                         className={`${link.color} text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity`}>
@@ -175,13 +190,22 @@ const DogProfile = () => {
                 <MessageCircle className="w-5 h-5" /> Komentáre ({comments.length})
               </h3>
               {user ? (
-                <div className="flex gap-2 mb-6">
-                  <input type="text" placeholder="Napíšte komentár..." value={newComment} onChange={(e) => setNewComment(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleComment()}
-                    className="flex-1 px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-shadow" maxLength={500} />
-                  <motion.button whileTap={{ scale: 0.95 }} onClick={handleComment} className="px-4 py-3 rounded-xl gradient-golden text-primary-foreground">
-                    <Send className="w-4 h-4" />
-                  </motion.button>
+                <div className="mb-6">
+                  {replyTo && (
+                    <div className="flex items-center gap-2 mb-2 text-sm text-primary">
+                      <Reply className="w-3.5 h-3.5" />
+                      <span>Odpovedáte používateľovi <strong>{replyTo.name}</strong></span>
+                      <button onClick={() => setReplyTo(null)} className="text-muted-foreground hover:text-foreground ml-1">✕</button>
+                    </div>
+                  )}
+                  <div className="flex gap-2">
+                    <input type="text" placeholder={replyTo ? `Odpoveď pre @${replyTo.name}...` : "Napíšte komentár..."} value={newComment} onChange={(e) => setNewComment(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleComment()}
+                      className="flex-1 px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-shadow" maxLength={500} />
+                    <motion.button whileTap={{ scale: 0.95 }} onClick={handleComment} className="px-4 py-3 rounded-xl gradient-golden text-primary-foreground">
+                      <Send className="w-4 h-4" />
+                    </motion.button>
+                  </div>
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground mb-6"><Link to="/prihlasenie" className="text-primary hover:underline">Prihláste sa</Link> pre pridanie komentára.</p>
@@ -191,9 +215,17 @@ const DogProfile = () => {
                   <motion.div key={comment.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-secondary/50 rounded-xl p-4">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-semibold text-sm text-foreground">{comment.user_name}</span>
-                      <span className="text-xs text-muted-foreground">{new Date(comment.created_at).toLocaleDateString("sk")}</span>
+                      <div className="flex items-center gap-2">
+                        {user && (
+                          <button onClick={() => setReplyTo({ id: comment.id, name: comment.user_name })}
+                            className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
+                            <Reply className="w-3 h-3" /> Odpovedať
+                          </button>
+                        )}
+                        <span className="text-xs text-muted-foreground">{new Date(comment.created_at).toLocaleDateString("sk")}</span>
+                      </div>
                     </div>
-                    <p className="text-sm text-foreground/80">{comment.text}</p>
+                    <p className="text-sm text-foreground/80">{renderCommentText(comment.text)}</p>
                   </motion.div>
                 ))}
                 {comments.length === 0 && <p className="text-muted-foreground text-sm">Zatiaľ žiadne komentáre. Buďte prvý!</p>}

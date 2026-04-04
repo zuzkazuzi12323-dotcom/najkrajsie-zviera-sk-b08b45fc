@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, Outlet, Navigate } from "react-router-dom";
 import { 
   LayoutDashboard, Users, Dog, MessageCircle, CreditCard, 
-  LogOut, Heart, ChevronLeft, Menu, ShoppingBag 
+  LogOut, Heart, ChevronLeft, Menu, ShoppingBag, Bell 
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const navItems = [
   { to: "/admin", icon: LayoutDashboard, label: "Dashboard" },
@@ -18,8 +20,42 @@ const navItems = [
 const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
   const location = useLocation();
   const { user, isAdmin, loading } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { data: notifications = [] } = useQuery({
+    queryKey: ["admin-header-notifications"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("admin_notifications")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(8);
+      return data || [];
+    },
+  });
+
+  const unreadCount = notifications.filter((n: any) => !n.read).length;
+
+  const markAllRead = async () => {
+    const unread = notifications.filter((n: any) => !n.read).map((n: any) => n.id);
+    if (unread.length === 0) return;
+    await supabase.from("admin_notifications").update({ read: true }).in("id", unread);
+    queryClient.invalidateQueries({ queryKey: ["admin-header-notifications"] });
+    queryClient.invalidateQueries({ queryKey: ["admin-notifications"] });
+  };
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-header-notifs")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "admin_notifications" }, () => {
+        queryClient.invalidateQueries({ queryKey: ["admin-header-notifications"] });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [queryClient]);
 
   if (loading) {
     return (
@@ -93,18 +129,57 @@ const AdminLayout = () => {
         <div className="fixed inset-0 bg-foreground/20 z-30 md:hidden" onClick={() => setMobileOpen(false)} />
       )}
 
+      {/* Notification dropdown overlay */}
+      {notifOpen && <div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />}
+
       {/* Content */}
       <main className={`flex-1 transition-all duration-300 ${collapsed ? "md:ml-16" : "md:ml-64"}`}>
-        <header className="h-16 border-b border-border flex items-center px-4 md:px-6 bg-card sticky top-0 z-20">
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="md:hidden p-2 rounded-lg hover:bg-secondary mr-2"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-          <h2 className="font-semibold text-foreground">
-            {navItems.find((n) => n.to === location.pathname)?.label || "Admin"}
-          </h2>
+        <header className="h-16 border-b border-border flex items-center justify-between px-4 md:px-6 bg-card sticky top-0 z-20">
+          <div className="flex items-center">
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="md:hidden p-2 rounded-lg hover:bg-secondary mr-2"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <h2 className="font-semibold text-foreground">
+              {navItems.find((n) => n.to === location.pathname)?.label || "Admin"}
+            </h2>
+          </div>
+
+          {/* Notification bell - top right */}
+          <div className="relative">
+            <button onClick={() => setNotifOpen(!notifOpen)} className="relative p-2 rounded-lg hover:bg-secondary transition-colors">
+              <Bell className="w-5 h-5 text-muted-foreground" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {notifOpen && (
+              <div className="absolute right-0 top-full mt-2 w-80 bg-card rounded-xl shadow-elevated border border-border z-50 overflow-hidden">
+                <div className="p-3 border-b border-border flex items-center justify-between">
+                  <span className="font-semibold text-sm text-foreground">Notifikácie</span>
+                  {unreadCount > 0 && (
+                    <button onClick={markAllRead} className="text-xs text-primary hover:underline">Označiť prečítané</button>
+                  )}
+                </div>
+                <div className="max-h-72 overflow-y-auto divide-y divide-border">
+                  {notifications.map((n: any) => (
+                    <div key={n.id} className={`px-3 py-2.5 ${!n.read ? "bg-primary/5" : ""}`}>
+                      <p className="text-sm text-foreground">{n.message}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">
+                        {new Date(n.created_at).toLocaleDateString("sk")} {new Date(n.created_at).toLocaleTimeString("sk", { hour: "2-digit", minute: "2-digit" })}
+                      </p>
+                    </div>
+                  ))}
+                  {notifications.length === 0 && <p className="px-3 py-6 text-center text-muted-foreground text-sm">Žiadne notifikácie</p>}
+                </div>
+              </div>
+            )}
+          </div>
         </header>
         <div className="p-4 md:p-6">
           <Outlet />
