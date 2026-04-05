@@ -162,7 +162,7 @@ const DogProfile = () => {
             <p className="text-lg text-muted-foreground mb-6">{dog.breed} · {dog.age}</p>
             <p className="text-foreground/80 text-pretty mb-8 leading-relaxed">{dog.description}</p>
 
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 mb-4">
               <motion.button onClick={handleVote} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }}
                 disabled={!contestActive}
                 className={`flex items-center gap-2 px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-colors ${
@@ -173,11 +173,21 @@ const DogProfile = () => {
               </motion.button>
               <div className="text-center">
                 <AnimatePresence mode="wait">
-                  <motion.p key={voteCount} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-3xl font-bold tabular-nums text-foreground">{voteCount}</motion.p>
+                  <motion.p key={totalVotes} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-3xl font-bold tabular-nums text-foreground">{totalVotes}</motion.p>
                 </AnimatePresence>
                 <p className="text-sm text-muted-foreground">hlasov</p>
               </div>
             </div>
+
+            {/* Boost button */}
+            {contestActive && (
+              <motion.button onClick={handleBoost} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }}
+                disabled={boostLoading}
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold shadow-lg hover:shadow-xl transition-all mb-6 disabled:opacity-50">
+                <Rocket className="w-5 h-5" />
+                {boostLoading ? "Načítavam..." : "🚀 Boost +100 hlasov za 5 €"}
+              </motion.button>
+            )}
 
             {/* Share button */}
             <div className="relative mb-8">
