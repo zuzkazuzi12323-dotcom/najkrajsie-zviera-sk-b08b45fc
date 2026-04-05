@@ -132,6 +132,7 @@ const AdminPayments = () => {
                       payment.type === "highlight" ? "bg-primary/10 text-primary" :
                       payment.type === "product" ? "bg-blue-100 text-blue-700" :
                       payment.type === "donation" ? "bg-pink-100 text-pink-700" :
+                      payment.type === "boost" ? "bg-purple-100 text-purple-700" :
                       "bg-secondary text-secondary-foreground"
                     }`}>
                       {typeLabels[payment.type] || payment.type}
