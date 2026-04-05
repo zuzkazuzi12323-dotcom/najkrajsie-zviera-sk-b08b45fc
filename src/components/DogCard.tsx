@@ -16,6 +16,7 @@ interface DogCardProps {
     highlighted: boolean;
     owner_name?: string | null;
     votes: number;
+    boost_votes?: number;
   };
   userVoted?: boolean;
 }
