@@ -28,7 +28,8 @@ const DogProfile = () => {
       if (!data) return null;
       const { data: profile } = await supabase.from("profiles").select("display_name").eq("user_id", data.owner_id).single();
       const { count } = await supabase.from("votes").select("*", { count: "exact", head: true }).eq("dog_id", id!);
-      return { ...data, owner_name: profile?.display_name || "Neznámy", votes: count || 0 };
+      const boostVotes = (data as any).boost_votes || 0;
+      return { ...data, owner_name: profile?.display_name || "Neznámy", votes: count || 0, boost_votes: boostVotes };
     },
   });
 
