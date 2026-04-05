@@ -55,8 +55,27 @@ const DogProfile = () => {
     },
   });
 
+  const totalVotes = voteCount + (dog?.boost_votes || 0);
   useEffect(() => { if (dog) setVoteCount(dog.votes); }, [dog]);
   useEffect(() => { if (userVoted !== undefined) setVoted(userVoted); }, [userVoted]);
+
+  const [boostLoading, setBoostLoading] = useState(false);
+
+  const handleBoost = async () => {
+    if (!user) { toast.error("Pre boost sa musíte prihlásiť"); return; }
+    setBoostLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-boost-checkout", {
+        body: { dogId: dog?.id, dogName: dog?.name },
+      });
+      if (error) throw error;
+      if (data?.url) window.location.href = data.url;
+    } catch (e: any) {
+      toast.error("Nepodarilo sa vytvoriť platbu");
+    } finally {
+      setBoostLoading(false);
+    }
+  };
 
   if (isLoading) {
     return <div className="min-h-screen flex flex-col"><Navbar /><div className="flex-1 flex items-center justify-center"><p className="text-muted-foreground">Načítavam...</p></div></div>;
