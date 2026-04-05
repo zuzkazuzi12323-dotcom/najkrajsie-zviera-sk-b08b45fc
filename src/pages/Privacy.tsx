@@ -40,7 +40,8 @@ const Privacy = () => {
             <ul className="list-disc list-inside space-y-1 mt-1">
               <li>Organizáciu a prevádzku súťaže</li>
               <li>Kontaktovanie víťaza pre doručenie výhry</li>
-              <li>Spracovanie platby za registráciu psa a nákupy v e-shope</li>
+              <li>Spracovanie platby za registráciu psa, boost hlasov a nákupy v e-shope</li>
+              <li>Evidenciu platených boost hlasov (100 hlasov za 5 €) a ich priradenie k profilu psa</li>
               <li>Zlepšovanie služieb (analytické cookies, ak ste udelili súhlas)</li>
             </ul>
           </div>
