@@ -25,7 +25,7 @@ const fetchDogsWithVotes = async () => {
   return dogsData.map((d) => ({
     id: d.id, name: d.name, breed: d.breed, age: d.age, image_url: d.image_url,
     highlighted: d.highlighted, owner_name: profileMap[d.owner_id] || "Neznámy",
-    votes: voteMap[d.id] || 0, created_at: d.created_at,
+    votes: (voteMap[d.id] || 0) + ((d as any).boost_votes || 0), created_at: d.created_at,
   }));
 };
 

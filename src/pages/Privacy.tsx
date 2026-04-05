@@ -31,6 +31,7 @@ const Privacy = () => {
               <li>Meno alebo prezývka (pre zobrazenie v súťaži)</li>
               <li>Fotografie a informácie o psovi (pre profil psa v galérii)</li>
               <li>Platobné údaje (spracúvané zabezpečene cez platobnú bránu Stripe)</li>
+              <li>Informácie o zakúpených boost hlasoch (priradené k vášmu účtu a profilu psa)</li>
             </ul>
           </div>
 
