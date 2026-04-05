@@ -126,6 +126,26 @@ serve(async (req) => {
 
       if (dogError) console.error("Dog highlight error:", dogError);
     }
+
+    // If boost payment, add boost votes to dog
+    if (type === "boost" && dogId) {
+      const boostAmount = parseInt(session.metadata?.boostVotes || "100");
+      const { data: currentDog } = await supabase
+        .from("dogs")
+        .select("boost_votes")
+        .eq("id", dogId)
+        .single();
+
+      if (currentDog) {
+        const { error: boostError } = await supabase
+          .from("dogs")
+          .update({ boost_votes: (currentDog.boost_votes || 0) + boostAmount })
+          .eq("id", dogId);
+
+        if (boostError) console.error("Boost votes error:", boostError);
+        else console.log(`Added ${boostAmount} boost votes to dog ${dogId}`);
+      }
+    }
   }
 
   return new Response(JSON.stringify({ received: true }), {
