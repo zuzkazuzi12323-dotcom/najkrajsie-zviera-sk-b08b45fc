@@ -71,6 +71,7 @@ const AdminPayments = () => {
     registration: "Registrácia",
     product: "E-shop",
     donation: "Príspevok",
+    boost: "Boost hlasy",
   };
 
   return (
