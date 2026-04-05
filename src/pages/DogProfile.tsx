@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send, Share2, Reply } from "lucide-react";
+import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send, Share2, Reply, Rocket } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -28,7 +28,8 @@ const DogProfile = () => {
       if (!data) return null;
       const { data: profile } = await supabase.from("profiles").select("display_name").eq("user_id", data.owner_id).single();
       const { count } = await supabase.from("votes").select("*", { count: "exact", head: true }).eq("dog_id", id!);
-      return { ...data, owner_name: profile?.display_name || "Neznámy", votes: count || 0 };
+      const boostVotes = (data as any).boost_votes || 0;
+      return { ...data, owner_name: profile?.display_name || "Neznámy", votes: count || 0, boost_votes: boostVotes };
     },
   });
 
@@ -54,8 +55,27 @@ const DogProfile = () => {
     },
   });
 
+  const totalVotes = voteCount + (dog?.boost_votes || 0);
   useEffect(() => { if (dog) setVoteCount(dog.votes); }, [dog]);
   useEffect(() => { if (userVoted !== undefined) setVoted(userVoted); }, [userVoted]);
+
+  const [boostLoading, setBoostLoading] = useState(false);
+
+  const handleBoost = async () => {
+    if (!user) { toast.error("Pre boost sa musíte prihlásiť"); return; }
+    setBoostLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-boost-checkout", {
+        body: { dogId: dog?.id, dogName: dog?.name },
+      });
+      if (error) throw error;
+      if (data?.url) window.location.href = data.url;
+    } catch (e: any) {
+      toast.error("Nepodarilo sa vytvoriť platbu");
+    } finally {
+      setBoostLoading(false);
+    }
+  };
 
   if (isLoading) {
     return <div className="min-h-screen flex flex-col"><Navbar /><div className="flex-1 flex items-center justify-center"><p className="text-muted-foreground">Načítavam...</p></div></div>;
@@ -142,7 +162,7 @@ const DogProfile = () => {
             <p className="text-lg text-muted-foreground mb-6">{dog.breed} · {dog.age}</p>
             <p className="text-foreground/80 text-pretty mb-8 leading-relaxed">{dog.description}</p>
 
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 mb-4">
               <motion.button onClick={handleVote} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }}
                 disabled={!contestActive}
                 className={`flex items-center gap-2 px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-colors ${
@@ -153,11 +173,21 @@ const DogProfile = () => {
               </motion.button>
               <div className="text-center">
                 <AnimatePresence mode="wait">
-                  <motion.p key={voteCount} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-3xl font-bold tabular-nums text-foreground">{voteCount}</motion.p>
+                  <motion.p key={totalVotes} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-3xl font-bold tabular-nums text-foreground">{totalVotes}</motion.p>
                 </AnimatePresence>
                 <p className="text-sm text-muted-foreground">hlasov</p>
               </div>
             </div>
+
+            {/* Boost button */}
+            {contestActive && (
+              <motion.button onClick={handleBoost} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }}
+                disabled={boostLoading}
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold shadow-lg hover:shadow-xl transition-all mb-6 disabled:opacity-50">
+                <Rocket className="w-5 h-5" />
+                {boostLoading ? "Načítavam..." : "🚀 Boost +100 hlasov za 5 €"}
+              </motion.button>
+            )}
 
             {/* Share button */}
             <div className="relative mb-8">

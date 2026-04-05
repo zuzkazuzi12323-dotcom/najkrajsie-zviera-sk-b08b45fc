@@ -98,6 +98,7 @@ export type Database = {
         Row: {
           age: string
           approved: boolean
+          boost_votes: number
           breed: string
           created_at: string
           description: string | null
@@ -111,6 +112,7 @@ export type Database = {
         Insert: {
           age: string
           approved?: boolean
+          boost_votes?: number
           breed: string
           created_at?: string
           description?: string | null
@@ -124,6 +126,7 @@ export type Database = {
         Update: {
           age?: string
           approved?: boolean
+          boost_votes?: number
           breed?: string
           created_at?: string
           description?: string | null

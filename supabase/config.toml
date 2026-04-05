@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.og-dog]
 verify_jwt = false
+
+[functions.create-boost-checkout]
+verify_jwt = false

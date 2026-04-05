@@ -31,6 +31,7 @@ const Privacy = () => {
               <li>Meno alebo prezývka (pre zobrazenie v súťaži)</li>
               <li>Fotografie a informácie o psovi (pre profil psa v galérii)</li>
               <li>Platobné údaje (spracúvané zabezpečene cez platobnú bránu Stripe)</li>
+              <li>Informácie o zakúpených boost hlasoch (priradené k vášmu účtu a profilu psa)</li>
             </ul>
           </div>
 
@@ -40,7 +41,8 @@ const Privacy = () => {
             <ul className="list-disc list-inside space-y-1 mt-1">
               <li>Organizáciu a prevádzku súťaže</li>
               <li>Kontaktovanie víťaza pre doručenie výhry</li>
-              <li>Spracovanie platby za registráciu psa a nákupy v e-shope</li>
+              <li>Spracovanie platby za registráciu psa, boost hlasov a nákupy v e-shope</li>
+              <li>Evidenciu platených boost hlasov (100 hlasov za 5 €) a ich priradenie k profilu psa</li>
               <li>Zlepšovanie služieb (analytické cookies, ak ste udelili súhlas)</li>
             </ul>
           </div>

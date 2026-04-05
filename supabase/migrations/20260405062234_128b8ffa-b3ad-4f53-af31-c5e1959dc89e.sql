@@ -1,0 +1,1 @@
+ALTER TABLE public.dogs ADD COLUMN boost_votes integer NOT NULL DEFAULT 0;
