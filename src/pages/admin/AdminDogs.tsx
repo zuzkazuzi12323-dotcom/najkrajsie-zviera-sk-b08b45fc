@@ -129,6 +129,19 @@ const AdminDogs = () => {
                   <td className="px-4 py-3 text-sm text-muted-foreground">{dog.breed}</td>
                   <td className="px-4 py-3 text-sm tabular-nums font-medium text-foreground">{dog.votes}</td>
                   <td className="px-4 py-3">
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm tabular-nums font-medium text-foreground">{dog.boost_votes}</span>
+                      <button onClick={() => addBoost(dog.id, dog.boost_votes)} className="p-1 rounded hover:bg-green-100 text-green-600" title="Pridať boost">
+                        <Plus className="w-3.5 h-3.5" />
+                      </button>
+                      {dog.boost_votes > 0 && (
+                        <button onClick={() => removeBoost(dog.id, dog.boost_votes)} className="p-1 rounded hover:bg-red-100 text-red-600" title="Odobrať boost">
+                          <Minus className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
                     <span className={`text-xs font-medium px-2 py-1 rounded-full ${dog.approved ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
                       {dog.approved ? "Schválený" : "Čaká"}
                     </span>
