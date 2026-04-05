@@ -110,6 +110,7 @@ const AdminDogs = () => {
                 <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Meno</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Plemeno</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Hlasy</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Boost</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Stav</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Majiteľ</th>
                 <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Akcie</th>
