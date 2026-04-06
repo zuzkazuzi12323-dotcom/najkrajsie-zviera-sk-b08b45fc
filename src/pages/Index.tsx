@@ -92,15 +92,15 @@ const Index = () => {
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-6 leading-tight">
               Každý pes si zaslúži <span className="text-primary">svoju chvíľu slávy</span>
             </h1>
-            <p className="text-lg md:text-xl text-background/80 mb-8 text-pretty">
-              Pridajte svojho miláčika za 1 € a zapojte sa do súťaže. Každý príspevok pomáha útulkom pre zvieratá ❤️ Môžete pridať aj viac psíkov!
+             <p className="text-lg md:text-xl text-background/80 mb-8 text-pretty">
+              Pridajte svojho miláčika úplne zadarmo a zapojte sa do súťaže o najkrajšieho psa Slovenska! Každý hlas a príspevok pomáha útulkom ❤️
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/podporit" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
                 Podporiť útulky ❤️ <Heart className="w-5 h-5" />
               </Link>
               <Link to="/pridat" className="bg-background/20 backdrop-blur-sm text-background border border-background/30 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg hover:bg-background/30 active:scale-95 transition-all">
-                <PawPrint className="w-5 h-5" /> Pridať psa za 1 €
+                <PawPrint className="w-5 h-5" /> Pridať psa do súťaže zadarmo
               </Link>
             </div>
           </div>
@@ -133,8 +133,8 @@ const Index = () => {
           <PawPrint className="w-10 h-10 text-primary mx-auto mb-3" />
           <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">Prečo sa zapojiť?</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty mb-6">
-            Každý zaregistrovaný psík dostáva šancu získať titul <strong className="text-foreground">Najkrajší pes Slovenska</strong>. 
-            Z každého 1 € venujeme 20 % na pomoc opusteným zvieratkám v útulkoch. Spolu tvoríme lepší svet pre naše štvornohé kamarátstva. 🐾
+            Registrácia je úplne zadarmo! Každý zaregistrovaný psík dostáva šancu získať titul <strong className="text-foreground">Najkrajší pes Slovenska</strong>. 
+            Časť výťažku z boost hlasov a e-shopu venujeme na pomoc opusteným zvieratkám v útulkoch. 🐾
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
@@ -242,12 +242,12 @@ const Index = () => {
       {/* Final CTA */}
       <section className="container mx-auto px-4 pb-20">
         <div className="gradient-golden rounded-3xl p-10 md:p-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojiť sa do súťaže</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojiť sa do súťaže zadarmo</h2>
           <p className="text-primary-foreground/80 mb-8 max-w-lg mx-auto text-pretty">
-            Pridajte profil vášho psa za 1 € a zapojte sa do súťaže o najkrajšieho psa. Môžete pridať aj viac psíkov – každý za 1 €! Z každého príspevku pomáhame útulkom pre zvieratá ❤️
+            Pridajte svojho miláčika úplne zadarmo a súťažte o titul najkrajšieho psa. Môžete pridať aj viac psíkov! Podporíte tým útulky pre zvieratá ❤️
           </p>
           <Link to="/pridat" className="inline-block bg-card text-card-foreground px-8 py-4 rounded-full font-bold shadow-elevated text-lg hover:shadow-golden active:scale-95 transition-all">
-            Pridať psa za 1 €
+            Pridať psa zadarmo 🐾
           </Link>
         </div>
       </section>

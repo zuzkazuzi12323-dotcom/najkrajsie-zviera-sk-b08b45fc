@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send, Share2, Reply, Rocket } from "lucide-react";
+import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send, Share2, Reply, Rocket, BadgeCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +9,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useContestActive } from "@/hooks/useContestActive";
 import { toast } from "sonner";
+
+const BOOST_PACKAGES = [
+  { amount: 100, votes: 30, label: "1 €" },
+  { amount: 300, votes: 90, label: "3 €" },
+  { amount: 500, votes: 120, label: "5 €" },
+  { amount: 1000, votes: 500, label: "10 €" },
+];
 
 const DogProfile = () => {
   const { id } = useParams();
@@ -20,6 +27,7 @@ const DogProfile = () => {
   const [voted, setVoted] = useState(false);
   const [voteCount, setVoteCount] = useState(0);
   const [shareOpen, setShareOpen] = useState(false);
+  const [boostOpen, setBoostOpen] = useState(false);
 
   const { data: dog, isLoading } = useQuery({
     queryKey: ["dog", id],
@@ -39,10 +47,15 @@ const DogProfile = () => {
       const { data } = await supabase.from("comments").select("*").eq("dog_id", id!).order("created_at", { ascending: false });
       if (!data) return [];
       const userIds = [...new Set(data.map((c) => c.user_id))];
-      const { data: profiles } = await supabase.from("profiles").select("user_id, display_name").in("user_id", userIds);
+      const [{ data: profiles }, { data: roles }] = await Promise.all([
+        supabase.from("profiles").select("user_id, display_name").in("user_id", userIds),
+        supabase.from("user_roles").select("user_id, role").in("user_id", userIds),
+      ]);
       const profileMap: Record<string, string> = {};
       profiles?.forEach((p) => { profileMap[p.user_id] = p.display_name || "Neznámy"; });
-      return data.map((c) => ({ ...c, user_name: profileMap[c.user_id] || "Neznámy" }));
+      const adminSet = new Set<string>();
+      roles?.forEach((r) => { if (r.role === "admin") adminSet.add(r.user_id); });
+      return data.map((c) => ({ ...c, user_name: profileMap[c.user_id] || "Neznámy", is_admin: adminSet.has(c.user_id) }));
     },
   });
 
@@ -61,16 +74,16 @@ const DogProfile = () => {
 
   const [boostLoading, setBoostLoading] = useState(false);
 
-  const handleBoost = async () => {
+  const handleBoost = async (pkg: typeof BOOST_PACKAGES[0]) => {
     if (!user) { toast.error("Pre boost sa musíte prihlásiť"); return; }
     setBoostLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-boost-checkout", {
-        body: { dogId: dog?.id, dogName: dog?.name },
+        body: { dogId: dog?.id, dogName: dog?.name, amount: pkg.amount },
       });
       if (error) throw error;
       if (data?.url) window.location.href = data.url;
-    } catch (e: any) {
+    } catch {
       toast.error("Nepodarilo sa vytvoriť platbu");
     } finally {
       setBoostLoading(false);
@@ -179,14 +192,29 @@ const DogProfile = () => {
               </div>
             </div>
 
-            {/* Boost button */}
+            {/* Boost packages */}
             {contestActive && (
-              <motion.button onClick={handleBoost} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }}
-                disabled={boostLoading}
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold shadow-lg hover:shadow-xl transition-all mb-6 disabled:opacity-50">
-                <Rocket className="w-5 h-5" />
-                {boostLoading ? "Načítavam..." : "🚀 Boost +100 hlasov za 5 €"}
-              </motion.button>
+              <div className="mb-6">
+                <motion.button onClick={() => setBoostOpen(!boostOpen)} whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold shadow-lg hover:shadow-xl transition-all">
+                  <Rocket className="w-5 h-5" /> 🚀 Boost hlasy pre {dog.name}
+                </motion.button>
+                <AnimatePresence>
+                  {boostOpen && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
+                      className="mt-3 grid grid-cols-2 gap-2 overflow-hidden">
+                      {BOOST_PACKAGES.map((pkg) => (
+                        <motion.button key={pkg.amount} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
+                          onClick={() => handleBoost(pkg)} disabled={boostLoading}
+                          className="flex flex-col items-center p-4 rounded-xl border border-border bg-card hover:border-primary/50 transition-all disabled:opacity-50">
+                          <span className="text-lg font-bold text-foreground">{pkg.label}</span>
+                          <span className="text-sm text-primary font-semibold">+{pkg.votes} hlasov</span>
+                        </motion.button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             )}
 
             {/* Share button */}
@@ -244,7 +272,12 @@ const DogProfile = () => {
                 {comments.map((comment) => (
                   <motion.div key={comment.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-secondary/50 rounded-xl p-4">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-semibold text-sm text-foreground">{comment.user_name}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-sm text-foreground">{comment.user_name}</span>
+                        {comment.is_admin && (
+                          <BadgeCheck className="w-4 h-4 text-primary" />
+                        )}
+                      </div>
                       <div className="flex items-center gap-2">
                         {user && (
                           <button onClick={() => setReplyTo({ id: comment.id, name: comment.user_name })}

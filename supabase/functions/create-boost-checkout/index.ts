@@ -23,6 +23,13 @@ const getSiteOrigin = (req: Request) => {
   return "https://najkrajsie-zviera-sk.lovable.app";
 };
 
+const BOOST_PACKAGES: Record<number, number> = {
+  100: 30,   // 1€ → 30 votes
+  300: 90,   // 3€ → 90 votes
+  500: 120,  // 5€ → 120 votes
+  1000: 500, // 10€ → 500 votes
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -56,15 +63,18 @@ serve(async (req) => {
     const payload = await req.json();
     const dogId = typeof payload?.dogId === "string" ? payload.dogId : "";
     const dogName = typeof payload?.dogName === "string" ? payload.dogName : "Pes";
+    const amountCents = typeof payload?.amount === "number" ? payload.amount : 500;
 
     if (!dogId) {
       return jsonResponse({ error: "Missing dogId" }, 400);
     }
 
-    const amount = 500; // 5€ in cents
-    const boostVotes = 100;
-    const siteOrigin = getSiteOrigin(req);
+    const boostVotes = BOOST_PACKAGES[amountCents];
+    if (!boostVotes) {
+      return jsonResponse({ error: "Invalid boost package" }, 400);
+    }
 
+    const siteOrigin = getSiteOrigin(req);
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
 
     const customers = await stripe.customers.list({ email: userData.user.email, limit: 1 });
@@ -78,10 +88,10 @@ serve(async (req) => {
           price_data: {
             currency: "eur",
             product_data: {
-              name: `Boost 100 hlasov: ${dogName}`,
-              description: `100 extra hlasov pre psa ${dogName} v súťaži NajkrajšíPes.sk`,
+              name: `Boost ${boostVotes} hlasov: ${dogName}`,
+              description: `${boostVotes} extra hlasov pre psa ${dogName} v súťaži NajkrajšíPes.sk`,
             },
-            unit_amount: amount,
+            unit_amount: amountCents,
           },
           quantity: 1,
         },
@@ -106,10 +116,10 @@ serve(async (req) => {
       user_id: userData.user.id,
       dog_id: dogId,
       type: "boost",
-      amount,
+      amount: amountCents,
       stripe_payment_intent_id: session.id,
       status: "pending",
-      product_name: `Boost 100 hlasov: ${dogName}`,
+      product_name: `Boost ${boostVotes} hlasov: ${dogName}`,
     });
 
     return jsonResponse({ url: session.url, sessionId: session.id });

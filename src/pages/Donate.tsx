@@ -6,17 +6,30 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
-const amounts = [
+const presetAmounts = [
   { value: 100, label: "1 €" },
   { value: 300, label: "3 €" },
   { value: 500, label: "5 €" },
 ];
 
 const Donate = () => {
-  const [selected, setSelected] = useState(100);
+  const [selected, setSelected] = useState<number | null>(100);
+  const [customAmount, setCustomAmount] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const getAmountCents = () => {
+    if (selected) return selected;
+    const parsed = parseFloat(customAmount.replace(",", "."));
+    if (!isNaN(parsed) && parsed >= 1) return Math.round(parsed * 100);
+    return 0;
+  };
+
   const handleDonate = async () => {
+    const amountCents = getAmountCents();
+    if (amountCents < 100) {
+      toast.error("Minimálna suma je 1 €");
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch(
@@ -24,7 +37,7 @@ const Donate = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: selected }),
+          body: JSON.stringify({ amount: amountCents }),
         }
       );
       const data = await res.json();
@@ -38,6 +51,13 @@ const Donate = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const displayAmount = () => {
+    if (selected) return presetAmounts.find((a) => a.value === selected)?.label;
+    const cents = getAmountCents();
+    if (cents > 0) return `${(cents / 100).toFixed(2).replace(".", ",")} €`;
+    return "—";
   };
 
   return (
@@ -61,13 +81,13 @@ const Donate = () => {
             Jednorazovým príspevkom podporíte útulky pre opustené zvieratá. Celá suma z vášho príspevku poputuje priamo na pomoc zvieratkám v núdzi.
           </p>
 
-          <div className="flex justify-center gap-4 mb-8">
-            {amounts.map((a) => (
+          <div className="flex justify-center gap-3 mb-4">
+            {presetAmounts.map((a) => (
               <motion.button
                 key={a.value}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setSelected(a.value)}
+                onClick={() => { setSelected(a.value); setCustomAmount(""); }}
                 className={`w-24 h-24 rounded-2xl text-xl font-bold transition-all ${
                   selected === a.value
                     ? "gradient-golden text-primary-foreground shadow-golden"
@@ -79,19 +99,39 @@ const Donate = () => {
             ))}
           </div>
 
+          {/* Custom amount */}
+          <div className="mb-8">
+            <p className="text-sm text-muted-foreground mb-2">alebo zadajte vlastnú sumu</p>
+            <div className="flex items-center justify-center gap-2">
+              <input
+                type="text"
+                inputMode="decimal"
+                placeholder="napr. 10"
+                value={customAmount}
+                onChange={(e) => {
+                  setCustomAmount(e.target.value);
+                  setSelected(null);
+                }}
+                onFocus={() => setSelected(null)}
+                className="w-32 px-4 py-3 rounded-xl bg-input text-foreground text-center font-bold text-lg placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <span className="text-lg font-bold text-foreground">€</span>
+            </div>
+          </div>
+
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleDonate}
-            disabled={loading}
+            disabled={loading || getAmountCents() < 100}
             className="gradient-golden text-primary-foreground px-10 py-4 rounded-full font-bold shadow-golden text-lg disabled:opacity-50 flex items-center gap-2 mx-auto"
           >
             <Heart className="w-5 h-5" />
-            {loading ? "Spracovávam..." : `Prispieť ${amounts.find((a) => a.value === selected)?.label}`}
+            {loading ? "Spracovávam..." : `Prispieť ${displayAmount()}`}
           </motion.button>
 
           <p className="text-xs text-muted-foreground mt-6">
-            Platba prebieha bezpečne cez Stripe. Nie je potrebná registrácia.
+            Platba prebieha bezpečne cez Stripe. Nie je potrebná registrácia. Minimálna suma je 1 €.
           </p>
         </motion.div>
       </main>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Upload, ArrowRight, Check } from "lucide-react";
+import { Upload, ArrowRight, Check, PawPrint } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-const steps = ["Základné info", "Fotka", "Platba"];
+const steps = ["Základné info", "Fotka", "Odoslať"];
 
 const AddDog = () => {
   const [step, setStep] = useState(0);
@@ -45,7 +45,6 @@ const AddDog = () => {
 
     setLoading(true);
     try {
-      // Upload image
       const fileExt = imageFile.name.split(".").pop();
       const filePath = `${user.id}/${Date.now()}.${fileExt}`;
       const { error: uploadError } = await supabase.storage
@@ -57,7 +56,6 @@ const AddDog = () => {
         .from("dog-images")
         .getPublicUrl(filePath);
 
-      // Insert dog
       const { data: dogData, error: insertError } = await supabase
         .from("dogs")
         .insert({
@@ -67,32 +65,15 @@ const AddDog = () => {
           age: form.age,
           description: form.description,
           image_url: urlData.publicUrl,
+          approved: true,
         })
-        .select("id, name")
+        .select("id")
         .single();
 
       if (insertError) throw insertError;
 
-      // Create checkout session
-      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke(
-        "create-checkout",
-        {
-          body: {
-            type: "registration",
-            dogId: dogData.id,
-            dogName: dogData.name,
-          },
-        }
-      );
-
-      if (checkoutError) throw checkoutError;
-
-      const checkoutUrl = checkoutData?.url;
-      if (!checkoutUrl || typeof checkoutUrl !== "string" || !/^https?:\/\//.test(checkoutUrl)) {
-        throw new Error("Nepodarilo sa spustiť platobný formulár. Skúste to prosím znova.");
-      }
-
-      window.location.assign(checkoutUrl);
+      toast.success("Pes bol úspešne pridaný do súťaže! 🎉");
+      navigate(`/pes/${dogData.id}`);
     } catch (error: any) {
       toast.error(error.message || "Niečo sa pokazilo");
     } finally {
@@ -123,7 +104,7 @@ const AddDog = () => {
       <Navbar />
       <div className="container mx-auto px-4 py-10 max-w-2xl">
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Pridať psa do súťaže</h1>
-        <p className="text-muted-foreground mb-8">Zapojiť sa stojí iba 1 €. Vyplňte formulár a pridajte fotku.</p>
+        <p className="text-muted-foreground mb-8">Registrácia je úplne zadarmo 🐾 Vyplňte formulár a pridajte fotku.</p>
 
         {/* Stepper */}
         <div className="flex items-center gap-2 mb-10">
@@ -156,53 +137,28 @@ const AddDog = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">Meno psa</label>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="napr. Luna"
-                  className="w-full px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  maxLength={50}
-                />
+                <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="napr. Luna" className="w-full px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary" maxLength={50} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">Plemeno</label>
-                <input
-                  type="text"
-                  value={form.breed}
-                  onChange={(e) => setForm({ ...form, breed: e.target.value })}
-                  placeholder="napr. Sibírsky husky"
-                  className="w-full px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  maxLength={50}
-                />
+                <input type="text" value={form.breed} onChange={(e) => setForm({ ...form, breed: e.target.value })}
+                  placeholder="napr. Sibírsky husky" className="w-full px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary" maxLength={50} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">Vek</label>
-                <input
-                  type="text"
-                  value={form.age}
-                  onChange={(e) => setForm({ ...form, age: e.target.value })}
-                  placeholder="napr. 2 roky"
-                  className="w-full px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  maxLength={20}
-                />
+                <input type="text" value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })}
+                  placeholder="napr. 2 roky" className="w-full px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary" maxLength={20} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">Popis</label>
-                <textarea
-                  value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  placeholder="Povedzte nám niečo o vašom psovi..."
-                  rows={4}
-                  className="w-full px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                  maxLength={500}
-                />
+                <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  placeholder="Povedzte nám niečo o vašom psovi..." rows={4}
+                  className="w-full px-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none" maxLength={500} />
               </div>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
+              <motion.button whileTap={{ scale: 0.95 }}
                 onClick={() => form.name && form.breed ? setStep(1) : toast.error("Vyplňte meno a plemeno")}
-                className="w-full gradient-golden text-primary-foreground py-3 rounded-xl font-bold flex items-center justify-center gap-2"
-              >
+                className="w-full gradient-golden text-primary-foreground py-3 rounded-xl font-bold flex items-center justify-center gap-2">
                 Pokračovať <ArrowRight className="w-4 h-4" />
               </motion.button>
             </div>
@@ -225,17 +181,13 @@ const AddDog = () => {
                 <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
               </label>
               <div className="flex gap-3">
-                <button
-                  onClick={() => setStep(0)}
-                  className="flex-1 py-3 rounded-xl border border-border font-medium text-muted-foreground hover:bg-secondary transition-colors"
-                >
+                <button onClick={() => setStep(0)}
+                  className="flex-1 py-3 rounded-xl border border-border font-medium text-muted-foreground hover:bg-secondary transition-colors">
                   Späť
                 </button>
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
+                <motion.button whileTap={{ scale: 0.95 }}
                   onClick={() => preview ? setStep(2) : toast.error("Nahrajte fotku")}
-                  className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold flex items-center justify-center gap-2"
-                >
+                  className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold flex items-center justify-center gap-2">
                   Pokračovať <ArrowRight className="w-4 h-4" />
                 </motion.button>
               </div>
@@ -245,11 +197,11 @@ const AddDog = () => {
           {step === 2 && (
             <div className="text-center space-y-6">
               <div className="gradient-golden w-20 h-20 rounded-full flex items-center justify-center mx-auto">
-                <span className="text-3xl font-bold text-primary-foreground">1€</span>
+                <PawPrint className="w-10 h-10 text-primary-foreground" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-foreground">Poplatok za registráciu</h3>
-                <p className="text-muted-foreground mt-1">Jednorazový poplatok za pridanie psa do súťaže</p>
+                <h3 className="text-xl font-bold text-foreground">Všetko je pripravené! 🎉</h3>
+                <p className="text-muted-foreground mt-1">Registrácia psa je úplne zadarmo</p>
               </div>
               <div className="bg-secondary/50 rounded-xl p-4 text-left space-y-2">
                 <div className="flex justify-between text-sm">
@@ -262,24 +214,18 @@ const AddDog = () => {
                 </div>
                 <div className="h-px bg-border" />
                 <div className="flex justify-between font-bold">
-                  <span className="text-foreground">Celkom:</span>
-                  <span className="text-primary">1,00 €</span>
+                  <span className="text-foreground">Cena:</span>
+                  <span className="text-green-500">Zadarmo ✓</span>
                 </div>
               </div>
               <div className="flex gap-3">
-                <button
-                  onClick={() => setStep(1)}
-                  className="flex-1 py-3 rounded-xl border border-border font-medium text-muted-foreground hover:bg-secondary transition-colors"
-                >
+                <button onClick={() => setStep(1)}
+                  className="flex-1 py-3 rounded-xl border border-border font-medium text-muted-foreground hover:bg-secondary transition-colors">
                   Späť
                 </button>
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleSubmit}
-                  disabled={loading}
-                  className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50"
-                >
-                  {loading ? "Spracovávam..." : "Zaplatiť 1 €"}
+                <motion.button whileTap={{ scale: 0.95 }} onClick={handleSubmit} disabled={loading}
+                  className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50">
+                  {loading ? "Pridávam..." : "Pridať psa zadarmo 🐾"}
                 </motion.button>
               </div>
             </div>
