@@ -133,8 +133,8 @@ const Index = () => {
           <PawPrint className="w-10 h-10 text-primary mx-auto mb-3" />
           <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">Prečo sa zapojiť?</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty mb-6">
-            Každý zaregistrovaný psík dostáva šancu získať titul <strong className="text-foreground">Najkrajší pes Slovenska</strong>. 
-            Z každého 1 € venujeme 20 % na pomoc opusteným zvieratkám v útulkoch. Spolu tvoríme lepší svet pre naše štvornohé kamarátstva. 🐾
+            Registrácia je úplne zadarmo! Každý zaregistrovaný psík dostáva šancu získať titul <strong className="text-foreground">Najkrajší pes Slovenska</strong>. 
+            Časť výťažku z boost hlasov a e-shopu venujeme na pomoc opusteným zvieratkám v útulkoch. 🐾
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
