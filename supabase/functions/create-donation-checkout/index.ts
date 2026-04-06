@@ -32,12 +32,12 @@ serve(async (req) => {
     if (!stripeKey) return jsonResponse({ error: "Server configuration error" }, 500);
 
     const { amount } = await req.json();
-    const validAmounts = [100, 300, 500];
-    if (!validAmounts.includes(amount)) {
-      return jsonResponse({ error: "Neplatná suma" }, 400);
+    // Accept any amount >= 100 cents (1€)
+    if (typeof amount !== "number" || amount < 100 || amount > 100000) {
+      return jsonResponse({ error: "Neplatná suma (min 1 €, max 1000 €)" }, 400);
     }
 
-    const label = `${(amount / 100).toFixed(0)} €`;
+    const label = `${(amount / 100).toFixed(2).replace(".", ",")} €`;
     const siteOrigin = getSiteOrigin(req);
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
