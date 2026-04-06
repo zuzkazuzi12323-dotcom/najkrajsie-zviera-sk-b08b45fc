@@ -100,7 +100,7 @@ const Index = () => {
                 Podporiť útulky ❤️ <Heart className="w-5 h-5" />
               </Link>
               <Link to="/pridat" className="bg-background/20 backdrop-blur-sm text-background border border-background/30 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg hover:bg-background/30 active:scale-95 transition-all">
-                <PawPrint className="w-5 h-5" /> Pridať psa za 1 €
+                <PawPrint className="w-5 h-5" /> Pridať psa do súťaže zadarmo
               </Link>
             </div>
           </div>
