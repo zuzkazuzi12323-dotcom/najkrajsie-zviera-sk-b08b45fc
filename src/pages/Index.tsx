@@ -92,8 +92,8 @@ const Index = () => {
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-6 leading-tight">
               Každý pes si zaslúži <span className="text-primary">svoju chvíľu slávy</span>
             </h1>
-            <p className="text-lg md:text-xl text-background/80 mb-8 text-pretty">
-              Pridajte svojho miláčika za 1 € a zapojte sa do súťaže. Každý príspevok pomáha útulkom pre zvieratá ❤️ Môžete pridať aj viac psíkov!
+             <p className="text-lg md:text-xl text-background/80 mb-8 text-pretty">
+              Pridajte svojho miláčika úplne zadarmo a zapojte sa do súťaže o najkrajšieho psa Slovenska! Každý hlas a príspevok pomáha útulkom ❤️
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/podporit" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
