@@ -62,6 +62,8 @@ const App = () => (
             <Route path="/podporit" element={<Donate />} />
             <Route path="/dakujeme-za-prispevok" element={<DonateSuccess />} />
             <Route path="/nastavenia" element={<AccountSettings />} />
+            <Route path="/rebricek" element={<Leaderboard />} />
+            <Route path="/moj-profil" element={<MyProfile />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
