@@ -30,6 +30,8 @@ import MyOrders from "./pages/MyOrders";
 import Donate from "./pages/Donate";
 import DonateSuccess from "./pages/DonateSuccess";
 import AccountSettings from "./pages/AccountSettings";
+import Leaderboard from "./pages/Leaderboard";
+import MyProfile from "./pages/MyProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
