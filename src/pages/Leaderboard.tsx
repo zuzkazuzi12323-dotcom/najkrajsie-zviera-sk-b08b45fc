@@ -10,7 +10,7 @@ const Leaderboard = () => {
   const { data: dogs = [], isLoading } = useQuery({
     queryKey: ["leaderboard"],
     queryFn: async () => {
-      const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true);
+      const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).eq("archived", false);
       if (!dogsData) return [];
 
       const { data: voteCounts } = await supabase.from("votes").select("dog_id");
