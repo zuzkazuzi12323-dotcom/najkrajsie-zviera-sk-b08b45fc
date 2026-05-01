@@ -188,6 +188,9 @@ const AdminDogs = () => {
                       <button onClick={() => toggleHighlight(dog.id, dog.highlighted)} className={`p-1.5 rounded-lg hover:bg-secondary ${dog.highlighted ? "text-primary" : "text-muted-foreground"}`} title="Top pes">
                         <Award className="w-4 h-4" />
                       </button>
+                      <button onClick={() => toggleArchive(dog.id, dog.archived)} className={`p-1.5 rounded-lg hover:bg-amber-100 ${dog.archived ? "text-amber-700" : "text-muted-foreground"}`} title={dog.archived ? "Obnoviť do súťaže" : "Archivovať (bez hlasov)"}>
+                        {dog.archived ? <ArchiveRestore className="w-4 h-4" /> : <Archive className="w-4 h-4" />}
+                      </button>
                       <button onClick={() => deleteDog(dog.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive" title="Vymazať">
                         <Trash2 className="w-4 h-4" />
                       </button>
