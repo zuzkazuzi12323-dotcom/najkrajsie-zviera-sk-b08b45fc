@@ -9,6 +9,7 @@ import DonationCounter from "@/components/DonationCounter";
 import ContestCountdown from "@/components/ContestCountdown";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const fetchDogsWithVotes = async () => {
   const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true);
@@ -32,6 +33,7 @@ const fetchDogsWithVotes = async () => {
 
 const Index = () => {
   const { user } = useAuth();
+  const t = useSiteContent();
 
   const { data: allDogs = [] } = useQuery({
     queryKey: ["all-dogs-home"],
@@ -92,17 +94,17 @@ const Index = () => {
               <span className="text-sm font-semibold text-primary uppercase tracking-wider">Najväčšia súťaž krásy psov</span>
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-6 leading-tight">
-              Každý pes si zaslúži <span className="text-primary">svoju chvíľu slávy</span>
+              {t("home.hero.title", "Najkrajší pes Slovenska")}
             </h1>
-             <p className="text-lg md:text-xl text-background/80 mb-8 text-pretty">
-              Pridajte svojho miláčika úplne zadarmo a zapojte sa do súťaže o najkrajšieho psa Slovenska! Každý hlas a príspevok pomáha útulkom ❤️
+             <p className="text-lg md:text-xl text-background/80 mb-8 text-pretty whitespace-pre-line">
+              {t("home.hero.subtitle", "Pridajte svojho miláčika úplne zadarmo a zapojte sa do súťaže o najkrajšieho psa Slovenska! Každý hlas a príspevok pomáha útulkom ❤️")}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/podporit" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
-                Podporiť útulky ❤️ <Heart className="w-5 h-5" />
+                {t("home.hero.cta_secondary", "Podporiť útulky ❤️")} <Heart className="w-5 h-5" />
               </Link>
               <Link to="/pridat" className="bg-background/20 backdrop-blur-sm text-background border border-background/30 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg hover:bg-background/30 active:scale-95 transition-all">
-                <PawPrint className="w-5 h-5" /> Pridať psa do súťaže zadarmo
+                <PawPrint className="w-5 h-5" /> {t("home.hero.cta_primary", "Pridať psa do súťaže zadarmo")}
               </Link>
             </div>
           </div>
