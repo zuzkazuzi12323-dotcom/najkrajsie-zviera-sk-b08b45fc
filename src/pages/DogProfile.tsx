@@ -98,6 +98,7 @@ const DogProfile = () => {
   }
 
   const handleVote = async () => {
+    if (dog.archived) { toast.info("Tento pes už súťažil v predchádzajúcom kole."); return; }
     if (!contestActive) { toast.error("Súťaž je momentálne ukončená"); return; }
     if (!user) { toast.error("Pre hlasovanie sa musíte prihlásiť"); return; }
     if (voted) {
@@ -105,7 +106,7 @@ const DogProfile = () => {
       setVoteCount((v) => v - 1); setVoted(false); toast.info("Hlas bol odobratý");
     } else {
       const { error } = await supabase.from("votes").insert({ user_id: user.id, dog_id: dog.id });
-      if (error) { toast.error("Nepodarilo sa hlasovať"); return; }
+      if (error) { toast.error(error.message || "Nepodarilo sa hlasovať"); return; }
       setVoteCount((v) => v + 1); setVoted(true); toast.success("Hlas započítaný! 🐾");
     }
   };
