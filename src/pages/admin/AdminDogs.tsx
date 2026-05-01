@@ -106,7 +106,7 @@ const AdminDogs = () => {
           <input type="text" placeholder="Hľadať psa..." value={search} onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
         </div>
-        <div className="flex gap-1">
+        <div className="flex flex-wrap gap-1">
           {filters.map((f) => (
             <button key={f.key} onClick={() => setFilter(f.key)}
               className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${filter === f.key ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground hover:text-foreground"}`}>
@@ -114,6 +114,13 @@ const AdminDogs = () => {
             </button>
           ))}
         </div>
+        <button
+          onClick={archiveAllApproved}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-100 text-amber-800 hover:bg-amber-200 text-xs font-semibold"
+          title="Archivovať všetkých schválených (po skončení ročníka)"
+        >
+          <Archive className="w-4 h-4" /> Archivovať všetkých
+        </button>
       </div>
 
       <div className="bg-card rounded-2xl shadow-soft overflow-hidden">
@@ -157,9 +164,13 @@ const AdminDogs = () => {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${dog.approved ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
-                      {dog.approved ? "Schválený" : "Čaká"}
-                    </span>
+                    {dog.archived ? (
+                      <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 text-gray-700">Archivovaný</span>
+                    ) : (
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${dog.approved ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
+                        {dog.approved ? "Schválený" : "Čaká"}
+                      </span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-sm text-muted-foreground">{dog.owner_name}</td>
                   <td className="px-4 py-3 text-right">
