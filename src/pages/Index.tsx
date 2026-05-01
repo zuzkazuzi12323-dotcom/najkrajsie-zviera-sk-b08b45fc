@@ -26,6 +26,7 @@ const fetchDogsWithVotes = async () => {
     id: d.id, name: d.name, breed: d.breed, age: d.age, image_url: d.image_url,
     highlighted: d.highlighted, owner_name: profileMap[d.owner_id] || "Neznámy",
     votes: (voteMap[d.id] || 0) + ((d as any).boost_votes || 0), created_at: d.created_at,
+    boost_votes: (d as any).boost_votes || 0, archived: (d as any).archived || false,
   }));
 };
 
@@ -37,8 +38,9 @@ const Index = () => {
     queryFn: fetchDogsWithVotes,
   });
 
-  const topDogs = [...allDogs].sort((a, b) => b.votes - a.votes).slice(0, 6);
-  const newestDogs = [...allDogs].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 6);
+  const activeDogs = allDogs.filter((d: any) => !d.archived);
+  const topDogs = [...activeDogs].sort((a, b) => b.votes - a.votes).slice(0, 6);
+  const newestDogs = [...activeDogs].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 6);
 
   const { data: userVotes = [] } = useQuery({
     queryKey: ["user-votes", user?.id],
