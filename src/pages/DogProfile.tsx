@@ -75,6 +75,7 @@ const DogProfile = () => {
   const [boostLoading, setBoostLoading] = useState(false);
 
   const handleBoost = async (pkg: typeof BOOST_PACKAGES[0]) => {
+    if ((dog as any)?.archived) { toast.info("Tento pes už súťažil v predchádzajúcom kole."); return; }
     if (!user) { toast.error("Pre boost sa musíte prihlásiť"); return; }
     setBoostLoading(true);
     try {
@@ -176,14 +177,24 @@ const DogProfile = () => {
             <p className="text-lg text-muted-foreground mb-6">{dog.breed} · {dog.age}</p>
             <p className="text-foreground/80 text-pretty mb-8 leading-relaxed">{dog.description}</p>
 
+            {dog.archived && (
+              <div className="mb-6 p-4 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 flex items-start gap-3">
+                <Award className="w-5 h-5 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-semibold">Tento pes už súťažil v predchádzajúcom kole.</p>
+                  <p className="text-sm">Profil je verejne dostupný v galérii, ale ďalšie hlasovanie ani boost už nie sú možné.</p>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center gap-4 mb-4">
               <motion.button onClick={handleVote} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }}
-                disabled={!contestActive}
+                disabled={!contestActive || dog.archived}
                 className={`flex items-center gap-2 px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-colors ${
-                  !contestActive ? "bg-muted text-muted-foreground cursor-not-allowed" :
+                  !contestActive || dog.archived ? "bg-muted text-muted-foreground cursor-not-allowed" :
                   voted ? "gradient-golden text-primary-foreground shadow-golden" : "bg-card text-card-foreground border border-border hover:border-primary"
                 }`}>
-                <Heart className={`w-5 h-5 ${voted ? "fill-current" : ""}`} /> {contestActive ? "Hlasovať" : "Ukončená"}
+                <Heart className={`w-5 h-5 ${voted ? "fill-current" : ""}`} /> {dog.archived ? "Archivovaný" : contestActive ? "Hlasovať" : "Ukončená"}
               </motion.button>
               <div className="text-center">
                 <AnimatePresence mode="wait">
@@ -194,7 +205,7 @@ const DogProfile = () => {
             </div>
 
             {/* Boost packages */}
-            {contestActive && (
+            {contestActive && !dog.archived && (
               <div className="mb-6">
                 <motion.button onClick={() => setBoostOpen(!boostOpen)} whileTap={{ scale: 0.95 }}
                   className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold shadow-lg hover:shadow-xl transition-all">
