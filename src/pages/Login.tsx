@@ -93,7 +93,18 @@ const Login = () => {
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••"
                   className="w-full pl-11 pr-4 py-3 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary" required minLength={6} />
               </div>
+              <div className="text-right mt-1.5">
+                <Link to="/zabudnute-heslo" className="text-xs text-primary hover:underline">Zabudli ste heslo?</Link>
+              </div>
             </div>
+            {needsConfirm && (
+              <div className="text-xs bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl p-3">
+                Váš email ešte nie je potvrdený. Skontrolujte schránku alebo
+                <button type="button" onClick={handleResendConfirm} className="ml-1 underline font-medium">
+                  pošlite potvrdzovací email znova
+                </button>.
+              </div>
+            )}
             <motion.button whileTap={{ scale: 0.95 }} type="submit" disabled={loading}
               className="w-full gradient-golden text-primary-foreground py-3 rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-50">
               <LogIn className="w-4 h-4" /> {loading ? "Prihlasujem..." : "Prihlásiť sa"}
