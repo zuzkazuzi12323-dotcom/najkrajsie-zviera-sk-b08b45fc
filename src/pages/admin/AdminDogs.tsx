@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Trash2, Search, Award, CheckCircle, XCircle, Rocket, Plus, Minus } from "lucide-react";
+import { Trash2, Search, Award, CheckCircle, XCircle, Rocket, Plus, Minus, Archive, ArchiveRestore } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const AdminDogs = () => {
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"all" | "pending" | "approved">("all");
+  const [filter, setFilter] = useState<"all" | "pending" | "approved" | "archived">("all");
   const queryClient = useQueryClient();
 
   const { data: dogs = [] } = useQuery({
@@ -34,7 +34,7 @@ const AdminDogs = () => {
 
   const filtered = dogs
     .filter((d) => d.name.toLowerCase().includes(search.toLowerCase()) || d.breed.toLowerCase().includes(search.toLowerCase()))
-    .filter((d) => filter === "all" ? true : filter === "approved" ? d.approved : !d.approved);
+    .filter((d) => filter === "all" ? true : filter === "approved" ? d.approved && !d.archived : filter === "archived" ? d.archived : !d.approved);
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["admin-dogs"] });
 
@@ -77,10 +77,25 @@ const AdminDogs = () => {
     if (error) toast.error("Chyba"); else { toast.success(`-${amount} boost hlasov odobratých`); invalidate(); }
   };
 
+  const toggleArchive = async (id: string, archived: boolean) => {
+    const { error } = await supabase.from("dogs").update({ archived: !archived }).eq("id", id);
+    if (error) toast.error("Chyba"); else { toast.success(archived ? "Pes obnovený do súťaže" : "Pes archivovaný (bez hlasov)"); invalidate(); }
+  };
+
+  const archiveAllApproved = async () => {
+    const eligible = dogs.filter((d) => d.approved && !d.archived);
+    if (eligible.length === 0) { toast.info("Niet koho archivovať"); return; }
+    if (!confirm(`Archivovať ${eligible.length} schválených psov? Zostanú v galérii bez možnosti hlasovania.`)) return;
+    const ids = eligible.map((d) => d.id);
+    const { error } = await supabase.from("dogs").update({ archived: true }).in("id", ids);
+    if (error) toast.error("Chyba"); else { toast.success(`Archivovaných ${ids.length} psov`); invalidate(); }
+  };
+
   const filters: { key: typeof filter; label: string }[] = [
     { key: "all", label: `Všetci (${dogs.length})` },
     { key: "pending", label: `Čakajú (${dogs.filter(d => !d.approved).length})` },
-    { key: "approved", label: `Schválení (${dogs.filter(d => d.approved).length})` },
+    { key: "approved", label: `Schválení (${dogs.filter(d => d.approved && !d.archived).length})` },
+    { key: "archived", label: `Archivovaní (${dogs.filter(d => d.archived).length})` },
   ];
 
   return (
