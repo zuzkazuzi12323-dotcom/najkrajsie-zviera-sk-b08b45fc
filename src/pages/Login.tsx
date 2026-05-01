@@ -10,19 +10,34 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [needsConfirm, setNeedsConfirm] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setNeedsConfirm(false);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
-      toast.error(error.message);
+      const msg = error.message?.toLowerCase() || "";
+      if (msg.includes("not confirmed") || msg.includes("email")) {
+        setNeedsConfirm(true);
+        toast.error("Najprv potvrďte svoj email kliknutím na odkaz, ktorý sme vám poslali.");
+      } else {
+        toast.error(error.message);
+      }
     } else {
       toast.success("Úspešne prihlásený!");
       navigate("/");
     }
+  };
+
+  const handleResendConfirm = async () => {
+    if (!email) { toast.error("Zadajte svoj email."); return; }
+    const { error } = await supabase.auth.resend({ type: "signup", email });
+    if (error) toast.error(error.message);
+    else toast.success("Potvrdzovací email bol znova odoslaný.");
   };
 
   const handleGoogleSignIn = async () => {
