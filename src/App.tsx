@@ -26,6 +26,9 @@ import AdminDogs from "./pages/admin/AdminDogs";
 import AdminComments from "./pages/admin/AdminComments";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminProducts from "./pages/admin/AdminProducts";
+import AdminContent from "./pages/admin/AdminContent";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import MyOrders from "./pages/MyOrders";
 import Donate from "./pages/Donate";
 import DonateSuccess from "./pages/DonateSuccess";
@@ -49,6 +52,8 @@ const App = () => (
             <Route path="/pridat" element={<AddDog />} />
             <Route path="/prihlasenie" element={<Login />} />
             <Route path="/registracia" element={<Register />} />
+            <Route path="/zabudnute-heslo" element={<ForgotPassword />} />
+            <Route path="/reset-hesla" element={<ResetPassword />} />
             <Route path="/platba-uspesna" element={<PaymentSuccess />} />
             <Route path="/pravidla" element={<Rules />} />
             <Route path="/ako-funguje" element={<HowItWorks />} />
@@ -73,6 +78,7 @@ const App = () => (
               <Route path="komentare" element={<AdminComments />} />
               <Route path="platby" element={<AdminPayments />} />
               <Route path="produkty" element={<AdminProducts />} />
+              <Route path="obsah" element={<AdminContent />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
