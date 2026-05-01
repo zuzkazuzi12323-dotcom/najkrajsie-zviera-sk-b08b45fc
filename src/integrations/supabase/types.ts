@@ -98,6 +98,7 @@ export type Database = {
         Row: {
           age: string
           approved: boolean
+          archived: boolean
           boost_votes: number
           breed: string
           created_at: string
@@ -112,6 +113,7 @@ export type Database = {
         Insert: {
           age: string
           approved?: boolean
+          archived?: boolean
           boost_votes?: number
           breed: string
           created_at?: string
@@ -126,6 +128,7 @@ export type Database = {
         Update: {
           age?: string
           approved?: boolean
+          archived?: boolean
           boost_votes?: number
           breed?: string
           created_at?: string
@@ -302,6 +305,36 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          key: string
+          label: string
+          page: string
+          sort_order: number
+          type: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          key: string
+          label: string
+          page: string
+          sort_order?: number
+          type?: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          key?: string
+          label?: string
+          page?: string
+          sort_order?: number
+          type?: string
+          updated_at?: string
+          value?: string
         }
         Relationships: []
       }

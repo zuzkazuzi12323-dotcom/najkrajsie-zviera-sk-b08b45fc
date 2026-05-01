@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, Outlet, Navigate } from "react-router-dom";
 import { 
   LayoutDashboard, Users, Dog, MessageCircle, CreditCard, 
-  LogOut, Heart, ChevronLeft, Menu, ShoppingBag, Bell 
+  LogOut, Heart, ChevronLeft, Menu, ShoppingBag, Bell, FileText
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,6 +15,7 @@ const navItems = [
   { to: "/admin/komentare", icon: MessageCircle, label: "Komentáre" },
   { to: "/admin/platby", icon: CreditCard, label: "Platby" },
   { to: "/admin/produkty", icon: ShoppingBag, label: "E-shop produkty" },
+  { to: "/admin/obsah", icon: FileText, label: "Obsah stránok" },
 ];
 
 const AdminLayout = () => {

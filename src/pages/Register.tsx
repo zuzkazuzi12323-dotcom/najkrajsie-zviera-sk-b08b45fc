@@ -23,7 +23,7 @@ const Register = () => {
       options: { data: { display_name: displayName || email.split("@")[0] }, emailRedirectTo: window.location.origin },
     });
     setLoading(false);
-    if (error) { toast.error(error.message); } else { toast.success("Účet vytvorený! Skontrolujte email pre potvrdenie."); navigate("/"); }
+    if (error) { toast.error(error.message); } else { toast.success("Účet vytvorený! Skontrolujte svoj email a kliknite na odkaz na potvrdenie. Bez potvrdenia sa nedáte prihlásiť."); navigate("/prihlasenie"); }
   };
 
   const handleGoogleSignIn = async () => {

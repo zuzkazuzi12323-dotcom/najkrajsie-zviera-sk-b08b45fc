@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Trash2, Search, Award, CheckCircle, XCircle, Rocket, Plus, Minus } from "lucide-react";
+import { Trash2, Search, Award, CheckCircle, XCircle, Rocket, Plus, Minus, Archive, ArchiveRestore } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const AdminDogs = () => {
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"all" | "pending" | "approved">("all");
+  const [filter, setFilter] = useState<"all" | "pending" | "approved" | "archived">("all");
   const queryClient = useQueryClient();
 
   const { data: dogs = [] } = useQuery({
@@ -34,7 +34,7 @@ const AdminDogs = () => {
 
   const filtered = dogs
     .filter((d) => d.name.toLowerCase().includes(search.toLowerCase()) || d.breed.toLowerCase().includes(search.toLowerCase()))
-    .filter((d) => filter === "all" ? true : filter === "approved" ? d.approved : !d.approved);
+    .filter((d) => filter === "all" ? true : filter === "approved" ? d.approved && !d.archived : filter === "archived" ? d.archived : !d.approved);
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["admin-dogs"] });
 
@@ -77,10 +77,25 @@ const AdminDogs = () => {
     if (error) toast.error("Chyba"); else { toast.success(`-${amount} boost hlasov odobratých`); invalidate(); }
   };
 
+  const toggleArchive = async (id: string, archived: boolean) => {
+    const { error } = await supabase.from("dogs").update({ archived: !archived }).eq("id", id);
+    if (error) toast.error("Chyba"); else { toast.success(archived ? "Pes obnovený do súťaže" : "Pes archivovaný (bez hlasov)"); invalidate(); }
+  };
+
+  const archiveAllApproved = async () => {
+    const eligible = dogs.filter((d) => d.approved && !d.archived);
+    if (eligible.length === 0) { toast.info("Niet koho archivovať"); return; }
+    if (!confirm(`Archivovať ${eligible.length} schválených psov? Zostanú v galérii bez možnosti hlasovania.`)) return;
+    const ids = eligible.map((d) => d.id);
+    const { error } = await supabase.from("dogs").update({ archived: true }).in("id", ids);
+    if (error) toast.error("Chyba"); else { toast.success(`Archivovaných ${ids.length} psov`); invalidate(); }
+  };
+
   const filters: { key: typeof filter; label: string }[] = [
     { key: "all", label: `Všetci (${dogs.length})` },
     { key: "pending", label: `Čakajú (${dogs.filter(d => !d.approved).length})` },
-    { key: "approved", label: `Schválení (${dogs.filter(d => d.approved).length})` },
+    { key: "approved", label: `Schválení (${dogs.filter(d => d.approved && !d.archived).length})` },
+    { key: "archived", label: `Archivovaní (${dogs.filter(d => d.archived).length})` },
   ];
 
   return (
@@ -91,7 +106,7 @@ const AdminDogs = () => {
           <input type="text" placeholder="Hľadať psa..." value={search} onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
         </div>
-        <div className="flex gap-1">
+        <div className="flex flex-wrap gap-1">
           {filters.map((f) => (
             <button key={f.key} onClick={() => setFilter(f.key)}
               className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${filter === f.key ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground hover:text-foreground"}`}>
@@ -99,6 +114,13 @@ const AdminDogs = () => {
             </button>
           ))}
         </div>
+        <button
+          onClick={archiveAllApproved}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-100 text-amber-800 hover:bg-amber-200 text-xs font-semibold"
+          title="Archivovať všetkých schválených (po skončení ročníka)"
+        >
+          <Archive className="w-4 h-4" /> Archivovať všetkých
+        </button>
       </div>
 
       <div className="bg-card rounded-2xl shadow-soft overflow-hidden">
@@ -142,9 +164,13 @@ const AdminDogs = () => {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${dog.approved ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
-                      {dog.approved ? "Schválený" : "Čaká"}
-                    </span>
+                    {dog.archived ? (
+                      <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 text-gray-700">Archivovaný</span>
+                    ) : (
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${dog.approved ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
+                        {dog.approved ? "Schválený" : "Čaká"}
+                      </span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-sm text-muted-foreground">{dog.owner_name}</td>
                   <td className="px-4 py-3 text-right">
@@ -161,6 +187,9 @@ const AdminDogs = () => {
                       )}
                       <button onClick={() => toggleHighlight(dog.id, dog.highlighted)} className={`p-1.5 rounded-lg hover:bg-secondary ${dog.highlighted ? "text-primary" : "text-muted-foreground"}`} title="Top pes">
                         <Award className="w-4 h-4" />
+                      </button>
+                      <button onClick={() => toggleArchive(dog.id, dog.archived)} className={`p-1.5 rounded-lg hover:bg-amber-100 ${dog.archived ? "text-amber-700" : "text-muted-foreground"}`} title={dog.archived ? "Obnoviť do súťaže" : "Archivovať (bez hlasov)"}>
+                        {dog.archived ? <ArchiveRestore className="w-4 h-4" /> : <Archive className="w-4 h-4" />}
                       </button>
                       <button onClick={() => deleteDog(dog.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive" title="Vymazať">
                         <Trash2 className="w-4 h-4" />

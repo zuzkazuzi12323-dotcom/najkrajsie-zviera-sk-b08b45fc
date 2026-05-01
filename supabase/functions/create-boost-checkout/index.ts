@@ -74,6 +74,17 @@ serve(async (req) => {
       return jsonResponse({ error: "Invalid boost package" }, 400);
     }
 
+    // Block boost for archived dogs
+    const adminClientCheck = createClient(supabaseUrl, serviceRoleKey);
+    const { data: dogRow } = await adminClientCheck
+      .from("dogs")
+      .select("archived")
+      .eq("id", dogId)
+      .single();
+    if (dogRow?.archived) {
+      return jsonResponse({ error: "Tento pes už súťažil v predchádzajúcom kole a nedá sa preň kúpiť boost." }, 400);
+    }
+
     const siteOrigin = getSiteOrigin(req);
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
 

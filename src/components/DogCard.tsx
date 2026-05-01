@@ -1,4 +1,4 @@
-import { Heart, Award, Rocket } from "lucide-react";
+import { Heart, Award, Rocket, Archive } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -17,6 +17,7 @@ interface DogCardProps {
     owner_name?: string | null;
     votes: number;
     boost_votes?: number;
+    archived?: boolean;
   };
   userVoted?: boolean;
 }
@@ -30,6 +31,7 @@ const DogCard = ({ dog, userVoted = false }: DogCardProps) => {
   const handleVote = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (dog.archived) { toast.info("Tento pes už súťažil v predchádzajúcom kole."); return; }
     if (!contestActive) { toast.error("Súťaž je momentálne ukončená"); return; }
     if (!user) { toast.error("Pre hlasovanie sa musíte prihlásiť"); return; }
     if (voted) {
@@ -37,7 +39,7 @@ const DogCard = ({ dog, userVoted = false }: DogCardProps) => {
       setVotes((v) => v - 1); setVoted(false); toast.info("Hlas bol odobratý");
     } else {
       const { error } = await supabase.from("votes").insert({ user_id: user.id, dog_id: dog.id });
-      if (error) { toast.error("Nepodarilo sa hlasovať"); return; }
+      if (error) { toast.error(error.message || "Nepodarilo sa hlasovať"); return; }
       setVotes((v) => v + 1); setVoted(true); toast.success("Hlas započítaný! 🐾");
     }
   };
@@ -49,19 +51,26 @@ const DogCard = ({ dog, userVoted = false }: DogCardProps) => {
         <div className="relative aspect-square overflow-hidden rounded-t-2xl">
           <img src={dog.image_url} alt={dog.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
           <div className="absolute inset-0 gradient-hero opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <button onClick={handleVote}
-            className={`absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-2 rounded-full font-semibold text-xs shadow-lg transition-all duration-300 active:scale-95 ${
-              voted ? "bg-primary text-primary-foreground" : "bg-card/90 backdrop-blur-sm text-foreground hover:bg-primary hover:text-primary-foreground"
-            } opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0`}>
-            <Heart className={`w-3.5 h-3.5 ${voted ? "fill-current" : ""}`} />
-            <span className="tabular-nums">{votes}</span>
-          </button>
+          {!dog.archived && (
+            <button onClick={handleVote}
+              className={`absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-2 rounded-full font-semibold text-xs shadow-lg transition-all duration-300 active:scale-95 ${
+                voted ? "bg-primary text-primary-foreground" : "bg-card/90 backdrop-blur-sm text-foreground hover:bg-primary hover:text-primary-foreground"
+              } opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0`}>
+              <Heart className={`w-3.5 h-3.5 ${voted ? "fill-current" : ""}`} />
+              <span className="tabular-nums">{votes}</span>
+            </button>
+          )}
+          {dog.archived && (
+            <div className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-2 rounded-full bg-muted text-muted-foreground text-[10px] font-semibold shadow-lg">
+              <Archive className="w-3 h-3" /> Archivovaný
+            </div>
+          )}
           {dog.highlighted && (
             <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold shadow-golden">
               <Award className="w-3 h-3" /> Top
             </div>
           )}
-          {(dog.boost_votes || 0) > 0 && (
+          {(dog.boost_votes || 0) > 0 && !dog.archived && (
             <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[10px] font-semibold shadow-lg">
               <Rocket className="w-3 h-3" /> Boost
             </div>
