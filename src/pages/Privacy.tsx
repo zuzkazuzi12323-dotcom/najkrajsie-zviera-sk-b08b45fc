@@ -47,38 +47,6 @@ const Privacy = () => {
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section4.title", "Vaše práva")}</h2>
             <p className="whitespace-pre-line">{t("privacy.section4.body", "Máte právo na prístup, opravu a vymazanie údajov.")}</p>
-          </div>
-            <p>Údaje slúžia výhradne na:</p>
-            <ul className="list-disc list-inside space-y-1 mt-1">
-              <li>Organizáciu a prevádzku súťaže</li>
-              <li>Kontaktovanie víťaza pre doručenie výhry</li>
-              <li>Registrácia psov do súťaže (zadarmo)</li>
-              <li>Spracovanie platby za boost hlasy a nákupy v e-shope</li>
-              <li>Evidenciu platených boost hlasov (balíčky: 1 € za 30 hlasov, 3 € za 90 hlasov, 5 € za 120 hlasov, 10 € za 500 hlasov)</li>
-              <li>Spracovanie jednorazových príspevkov pre útulky (vrátane vlastných súm)</li>
-              <li>Zlepšovanie služieb (analytické cookies, ak ste udelili súhlas)</li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 className="text-lg font-bold text-foreground mb-2">Cookies</h2>
-            <p>
-              Používame nevyhnutné cookies pre správne fungovanie stránky. Analytické cookies
-              používame len s vaším súhlasom. Súhlas môžete kedykoľvek zmeniť vymazaním cookies
-              vo vašom prehliadači.
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-lg font-bold text-foreground mb-2">Vaše práva (GDPR)</h2>
-            <p>Podľa nariadenia GDPR máte právo na:</p>
-            <ul className="list-disc list-inside space-y-1 mt-1">
-              <li><strong>Prístup k údajom</strong> – môžete si stiahnuť všetky vaše údaje</li>
-              <li><strong>Opravu údajov</strong> – môžete upraviť svoj profil kedykoľvek</li>
-              <li><strong>Výmaz údajov</strong> – môžete požiadať o vymazanie celého účtu</li>
-              <li><strong>Prenosnosť údajov</strong> – export údajov vo formáte JSON</li>
-              <li><strong>Námietku</strong> – kontaktujte nás emailom</li>
-            </ul>
             {user && (
               <div className="mt-4">
                 <Link to="/nastavenia" className="text-primary font-semibold hover:underline">
@@ -89,26 +57,17 @@ const Privacy = () => {
           </div>
 
           <div>
-            <h2 className="text-lg font-bold text-foreground mb-2">Ochrana údajov</h2>
+            <h2 className="text-lg font-bold text-foreground mb-2">Cookies</h2>
             <p>
-              Vaše údaje sú bezpečne uložené a nikdy ich neposkytujeme tretím stranám
-              na marketingové účely. Platobné údaje sú spracúvané výhradne cez zabezpečenú
-              platobnú bránu a nemáme k nim priamy prístup.
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-lg font-bold text-foreground mb-2">Doba uchovávania</h2>
-            <p>
-              Vaše údaje uchovávame po dobu existencie vášho účtu. Po vymazaní účtu budú
-              všetky údaje natrvalo odstránené do 30 dní.
+              Používame nevyhnutné cookies pre správne fungovanie stránky. Analytické cookies
+              používame len s vaším súhlasom.
             </p>
           </div>
 
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">Kontakt</h2>
             <p>
-              V prípade otázok ohľadom ochrany osobných údajov nás kontaktujte na{" "}
+              V prípade otázok nás kontaktujte na{" "}
               <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary hover:underline">
                 infonajkrajsipes@gmail.com
               </a>
