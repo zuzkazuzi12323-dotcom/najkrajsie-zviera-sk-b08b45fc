@@ -106,9 +106,11 @@ export type Database = {
           highlighted: boolean
           id: string
           image_url: string
+          is_winner: boolean
           name: string
           owner_id: string
           updated_at: string
+          winner_place: number | null
         }
         Insert: {
           age: string
@@ -121,9 +123,11 @@ export type Database = {
           highlighted?: boolean
           id?: string
           image_url: string
+          is_winner?: boolean
           name: string
           owner_id: string
           updated_at?: string
+          winner_place?: number | null
         }
         Update: {
           age?: string
@@ -136,9 +140,11 @@ export type Database = {
           highlighted?: boolean
           id?: string
           image_url?: string
+          is_winner?: boolean
           name?: string
           owner_id?: string
           updated_at?: string
+          winner_place?: number | null
         }
         Relationships: []
       }

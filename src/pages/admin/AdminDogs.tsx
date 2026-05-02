@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trash2, Search, Award, CheckCircle, XCircle, Rocket, Plus, Minus, Archive, ArchiveRestore } from "lucide-react";
+import { Trash2, Search, Award, CheckCircle, XCircle, Rocket, Plus, Minus, Archive, ArchiveRestore, Trophy } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -80,6 +80,19 @@ const AdminDogs = () => {
   const toggleArchive = async (id: string, archived: boolean) => {
     const { error } = await supabase.from("dogs").update({ archived: !archived }).eq("id", id);
     if (error) toast.error("Chyba"); else { toast.success(archived ? "Pes obnovený do súťaže" : "Pes archivovaný (bez hlasov)"); invalidate(); }
+  };
+
+  const setWinner = async (id: string, isWinner: boolean) => {
+    if (isWinner) {
+      const { error } = await supabase.from("dogs").update({ is_winner: false, winner_place: null }).eq("id", id);
+      if (error) toast.error("Chyba"); else { toast.success("Označenie víťaza zrušené"); invalidate(); }
+      return;
+    }
+    const placeStr = prompt("Umiestnenie víťaza (1, 2, 3...)", "1");
+    const place = parseInt(placeStr || "0");
+    if (!place || place < 1) return;
+    const { error } = await supabase.from("dogs").update({ is_winner: true, winner_place: place }).eq("id", id);
+    if (error) toast.error("Chyba"); else { toast.success(`Označený ako víťaz – ${place}. miesto 🏆`); invalidate(); }
   };
 
   const archiveAllApproved = async () => {
@@ -190,6 +203,9 @@ const AdminDogs = () => {
                       </button>
                       <button onClick={() => toggleArchive(dog.id, dog.archived)} className={`p-1.5 rounded-lg hover:bg-amber-100 ${dog.archived ? "text-amber-700" : "text-muted-foreground"}`} title={dog.archived ? "Obnoviť do súťaže" : "Archivovať (bez hlasov)"}>
                         {dog.archived ? <ArchiveRestore className="w-4 h-4" /> : <Archive className="w-4 h-4" />}
+                      </button>
+                      <button onClick={() => setWinner(dog.id, (dog as any).is_winner)} className={`p-1.5 rounded-lg hover:bg-yellow-100 ${(dog as any).is_winner ? "text-yellow-600" : "text-muted-foreground"}`} title={(dog as any).is_winner ? `Víťaz – ${(dog as any).winner_place}. miesto (klikni pre zrušenie)` : "Označiť ako víťaza"}>
+                        <Trophy className="w-4 h-4" />
                       </button>
                       <button onClick={() => deleteDog(dog.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive" title="Vymazať">
                         <Trash2 className="w-4 h-4" />

@@ -9,17 +9,19 @@ const Winners = () => {
   const { data: topDogs = [] } = useQuery({
     queryKey: ["winners"],
     queryFn: async () => {
-      const { data: dogsData } = await supabase.from("dogs").select("*");
-      if (!dogsData) return [];
+      const { data: dogsData } = await supabase
+        .from("dogs")
+        .select("*")
+        .eq("is_winner", true);
+      if (!dogsData || dogsData.length === 0) return [];
 
       const { data: voteCounts } = await supabase.from("votes").select("dog_id");
       const voteMap: Record<string, number> = {};
       voteCounts?.forEach((v) => { voteMap[v.dog_id] = (voteMap[v.dog_id] || 0) + 1; });
 
       return dogsData
-        .map((d) => ({ ...d, votes: voteMap[d.id] || 0 }))
-        .sort((a, b) => b.votes - a.votes)
-        .slice(0, 5);
+        .map((d: any) => ({ ...d, votes: voteMap[d.id] || 0 }))
+        .sort((a: any, b: any) => (a.winner_place || 99) - (b.winner_place || 99));
     },
   });
 
