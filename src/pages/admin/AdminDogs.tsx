@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trash2, Search, Award, CheckCircle, XCircle, Rocket, Plus, Minus, Archive, ArchiveRestore } from "lucide-react";
+import { Trash2, Search, Award, CheckCircle, XCircle, Rocket, Plus, Minus, Archive, ArchiveRestore, Trophy } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -82,7 +82,18 @@ const AdminDogs = () => {
     if (error) toast.error("Chyba"); else { toast.success(archived ? "Pes obnovený do súťaže" : "Pes archivovaný (bez hlasov)"); invalidate(); }
   };
 
-  const archiveAllApproved = async () => {
+  const setWinner = async (id: string, isWinner: boolean) => {
+    if (isWinner) {
+      const { error } = await supabase.from("dogs").update({ is_winner: false, winner_place: null }).eq("id", id);
+      if (error) toast.error("Chyba"); else { toast.success("Označenie víťaza zrušené"); invalidate(); }
+      return;
+    }
+    const placeStr = prompt("Umiestnenie víťaza (1, 2, 3...)", "1");
+    const place = parseInt(placeStr || "0");
+    if (!place || place < 1) return;
+    const { error } = await supabase.from("dogs").update({ is_winner: true, winner_place: place }).eq("id", id);
+    if (error) toast.error("Chyba"); else { toast.success(`Označený ako víťaz – ${place}. miesto 🏆`); invalidate(); }
+  };
     const eligible = dogs.filter((d) => d.approved && !d.archived);
     if (eligible.length === 0) { toast.info("Niet koho archivovať"); return; }
     if (!confirm(`Archivovať ${eligible.length} schválených psov? Zostanú v galérii bez možnosti hlasovania.`)) return;
