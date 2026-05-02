@@ -94,6 +94,8 @@ const AdminDogs = () => {
     const { error } = await supabase.from("dogs").update({ is_winner: true, winner_place: place }).eq("id", id);
     if (error) toast.error("Chyba"); else { toast.success(`Označený ako víťaz – ${place}. miesto 🏆`); invalidate(); }
   };
+
+  const archiveAllApproved = async () => {
     const eligible = dogs.filter((d) => d.approved && !d.archived);
     if (eligible.length === 0) { toast.info("Niet koho archivovať"); return; }
     if (!confirm(`Archivovať ${eligible.length} schválených psov? Zostanú v galérii bez možnosti hlasovania.`)) return;
@@ -201,6 +203,9 @@ const AdminDogs = () => {
                       </button>
                       <button onClick={() => toggleArchive(dog.id, dog.archived)} className={`p-1.5 rounded-lg hover:bg-amber-100 ${dog.archived ? "text-amber-700" : "text-muted-foreground"}`} title={dog.archived ? "Obnoviť do súťaže" : "Archivovať (bez hlasov)"}>
                         {dog.archived ? <ArchiveRestore className="w-4 h-4" /> : <Archive className="w-4 h-4" />}
+                      </button>
+                      <button onClick={() => setWinner(dog.id, (dog as any).is_winner)} className={`p-1.5 rounded-lg hover:bg-yellow-100 ${(dog as any).is_winner ? "text-yellow-600" : "text-muted-foreground"}`} title={(dog as any).is_winner ? `Víťaz – ${(dog as any).winner_place}. miesto (klikni pre zrušenie)` : "Označiť ako víťaza"}>
+                        <Trophy className="w-4 h-4" />
                       </button>
                       <button onClick={() => deleteDog(dog.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive" title="Vymazať">
                         <Trash2 className="w-4 h-4" />
