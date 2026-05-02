@@ -23,7 +23,17 @@ const Register = () => {
       options: { data: { display_name: displayName || email.split("@")[0] }, emailRedirectTo: window.location.origin },
     });
     setLoading(false);
-    if (error) { toast.error(error.message); } else { toast.success("Účet vytvorený! Skontrolujte svoj email a kliknite na odkaz na potvrdenie. Bez potvrdenia sa nedáte prihlásiť."); navigate("/prihlasenie"); }
+    if (error) {
+      toast.error(error.message);
+    } else {
+      // Send welcome email via Gmail (fire-and-forget, don't block UX)
+      supabase.functions.invoke("send-welcome-email", {
+        body: { email, displayName: displayName || email.split("@")[0] },
+      }).catch((err) => console.error("welcome email failed", err));
+
+      toast.success("Účet vytvorený! Skontrolujte svoj email a kliknite na odkaz na potvrdenie. Bez potvrdenia sa nedáte prihlásiť.");
+      navigate("/prihlasenie");
+    }
   };
 
   const handleGoogleSignIn = async () => {
