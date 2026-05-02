@@ -70,7 +70,7 @@ const DonationCounter = () => {
           Pre útulky sme zatiaľ vyzbierali: <AnimatedNumber target={totalDonated} /> € ❤️
         </p>
         <p className="text-muted-foreground max-w-xl mx-auto text-pretty">
-          Každým nákupom alebo registráciou 1 € venujeme 20 % na podporu útulkov pre zvieratá ❤️ Pomôžte nám spolu naplniť cieľ a potešiť opustené zvieratá.
+          Z každého nákupu a boostu venujeme 20 % a 100 % priamych príspevkov útulkom pre zvieratá ❤️ Pomôžte nám spolu naplniť cieľ a potešiť opustené zvieratá.
         </p>
       </motion.div>
     </section>

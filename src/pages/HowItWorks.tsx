@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 
 const steps = [
   { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
-  { icon: CreditCard, title: "Zaplaťte registračný poplatok 1 €", desc: "Jednoduchá platba cez zabezpečenú platobnú bránu." },
+  { icon: CreditCard, title: "Registrácia je zadarmo", desc: "Pridanie psa do súťaže nestojí nič – stačí sa zaregistrovať a vyplniť profil." },
   { icon: Users, title: "Získavajte hlasy od priateľov", desc: "Zdieľajte profil psa a zbierajte hlasy od rodiny a priateľov." },
   { icon: Trophy, title: "Pes s najviac hlasmi vyhrá", desc: "Víťaz získa titul Najkrajší pes Slovenska a darčeky!" },
 ];
@@ -44,7 +44,7 @@ const HowItWorks = () => {
           <div className="text-center mt-10">
             <Link to="/pridat">
               <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg">
-                Pridať psa za 1 €
+                Pridať psa zadarmo 🐾
               </motion.button>
             </Link>
           </div>
