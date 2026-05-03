@@ -26,12 +26,8 @@ const Register = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      // Send welcome email via Gmail (fire-and-forget, don't block UX)
-      supabase.functions.invoke("send-welcome-email", {
-        body: { email, displayName: displayName || email.split("@")[0] },
-      }).catch((err) => console.error("welcome email failed", err));
-
-      toast.success("Účet vytvorený! Skontrolujte svoj email a kliknite na odkaz na potvrdenie. Bez potvrdenia sa nedáte prihlásiť.");
+      // Welcome email is sent automatically AFTER user confirms their email (via AuthContext)
+      toast.success("Účet vytvorený! Skontrolujte svoj email a kliknite na odkaz na potvrdenie. Uvítací email vám príde až po potvrdení.");
       navigate("/prihlasenie");
     }
   };
