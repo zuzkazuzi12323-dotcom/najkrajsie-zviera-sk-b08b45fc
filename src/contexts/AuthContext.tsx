@@ -72,6 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setTimeout(() => {
           checkAdmin(session.user.id);
           fetchProfile(session.user.id);
+          maybeSendWelcomeEmail(session.user);
         }, 0);
       } else {
         setIsAdmin(false);
@@ -86,6 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (session?.user) {
         checkAdmin(session.user.id);
         fetchProfile(session.user.id);
+        maybeSendWelcomeEmail(session.user);
       }
       setLoading(false);
     });
