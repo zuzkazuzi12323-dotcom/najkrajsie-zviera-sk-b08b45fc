@@ -133,6 +133,63 @@ const Donate = () => {
           <p className="text-xs text-muted-foreground mt-6">
             Platba prebieha bezpečne cez Stripe. Nie je potrebná registrácia. Minimálna suma je 1 €.
           </p>
+
+          {/* Share section */}
+          <div className="mt-10 pt-8 border-t border-border">
+            <p className="text-sm font-semibold text-foreground mb-3 flex items-center justify-center gap-2">
+              <Share2 className="w-4 h-4" /> Zdieľaj a pomôž ešte viac útulkom
+            </p>
+            <p className="text-xs text-muted-foreground mb-4">
+              Po kliknutí sa otvorí stránka „Podporiť útulky" — návštevník si sám vyberie sumu.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {(() => {
+                const shareUrl = `${window.location.origin}/podporit`;
+                const shareText = "Pomôž útulkom pre opustených psíkov ❤️ Prispej, koľko môžeš na NajkrajšíPes.sk";
+                const copyLink = async () => {
+                  try {
+                    await navigator.clipboard.writeText(shareUrl);
+                    toast.success("Odkaz skopírovaný 📋");
+                  } catch {
+                    toast.error("Nepodarilo sa skopírovať odkaz");
+                  }
+                };
+                const shareNative = async () => {
+                  if (navigator.share) {
+                    try { await navigator.share({ title: "Podporiť útulky", text: shareText, url: shareUrl }); } catch {}
+                  } else {
+                    copyLink();
+                  }
+                };
+                const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+                const wa = `https://wa.me/?text=${encodeURIComponent(shareText + " " + shareUrl)}`;
+                const tg = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+                const x = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+                return (
+                  <>
+                    <a href={fb} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-[#1877F2] text-white text-sm font-semibold hover:opacity-90 transition flex items-center gap-2">
+                      <Facebook className="w-4 h-4" /> Facebook
+                    </a>
+                    <a href={wa} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-[#25D366] text-white text-sm font-semibold hover:opacity-90 transition">
+                      WhatsApp
+                    </a>
+                    <a href={tg} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-[#229ED9] text-white text-sm font-semibold hover:opacity-90 transition">
+                      Telegram
+                    </a>
+                    <a href={x} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-foreground text-background text-sm font-semibold hover:opacity-90 transition">
+                      X
+                    </a>
+                    <button onClick={copyLink} className="px-4 py-2 rounded-full bg-secondary text-foreground text-sm font-semibold hover:bg-secondary/80 transition flex items-center gap-2">
+                      <Copy className="w-4 h-4" /> Kopírovať odkaz
+                    </button>
+                    <button onClick={shareNative} className="px-4 py-2 rounded-full gradient-golden text-primary-foreground text-sm font-semibold hover:opacity-90 transition flex items-center gap-2">
+                      <Share2 className="w-4 h-4" /> Zdieľať
+                    </button>
+                  </>
+                );
+              })()}
+            </div>
+          </div>
         </motion.div>
       </main>
       <Footer />
