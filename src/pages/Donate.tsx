@@ -144,7 +144,8 @@ const Donate = () => {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-2">
               {(() => {
-                const shareUrl = `${window.location.origin}/podporit`;
+                // Always use the public production URL for sharing — preview/sandbox URLs require login
+                const shareUrl = "https://najkrajsipes.sk/podporit";
                 const shareText = "Pomôž útulkom pre opustených psíkov ❤️ Prispej, koľko môžeš na NajkrajšíPes.sk";
                 const copyLink = async () => {
                   try {
