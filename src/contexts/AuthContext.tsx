@@ -43,6 +43,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setProfile(data);
   };
 
+  // Send welcome email once after user has a confirmed email (first sign-in after verification)
+  const maybeSendWelcomeEmail = async (u: User) => {
+    if (!u.email_confirmed_at || !u.email) return;
+    const { data: prof } = await supabase
+      .from("profiles")
+      .select("welcome_email_sent, display_name")
+      .eq("user_id", u.id)
+      .single();
+    if (!prof || (prof as any).welcome_email_sent) return;
+    // Mark first to prevent duplicate sends across tabs
+    const { error: updateErr } = await supabase
+      .from("profiles")
+      .update({ welcome_email_sent: true } as any)
+      .eq("user_id", u.id)
+      .eq("welcome_email_sent", false);
+    if (updateErr) return;
+    supabase.functions.invoke("send-welcome-email", {
+      body: { email: u.email, displayName: (prof as any).display_name || u.email.split("@")[0] },
+    }).catch((err) => console.error("welcome email failed", err));
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -51,6 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setTimeout(() => {
           checkAdmin(session.user.id);
           fetchProfile(session.user.id);
+          maybeSendWelcomeEmail(session.user);
         }, 0);
       } else {
         setIsAdmin(false);
@@ -65,6 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (session?.user) {
         checkAdmin(session.user.id);
         fetchProfile(session.user.id);
+        maybeSendWelcomeEmail(session.user);
       }
       setLoading(false);
     });

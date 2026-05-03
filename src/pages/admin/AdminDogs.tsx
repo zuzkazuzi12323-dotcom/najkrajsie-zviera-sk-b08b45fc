@@ -92,7 +92,19 @@ const AdminDogs = () => {
     const place = parseInt(placeStr || "0");
     if (!place || place < 1) return;
     const { error } = await supabase.from("dogs").update({ is_winner: true, winner_place: place }).eq("id", id);
-    if (error) toast.error("Chyba"); else { toast.success(`Označený ako víťaz – ${place}. miesto 🏆`); invalidate(); }
+    if (error) { toast.error("Chyba"); return; }
+    toast.success(`Označený ako víťaz – ${place}. miesto 🏆 Posielam email...`);
+    invalidate();
+    // Send winner notification email (fire-and-forget)
+    supabase.functions.invoke("send-winner-email", { body: { dogId: id, place } })
+      .then(({ data, error: fnErr }) => {
+        if (fnErr || !(data as any)?.success) {
+          toast.error("Email víťazovi sa nepodarilo odoslať");
+          console.error("winner email failed", fnErr, data);
+        } else {
+          toast.success("Email víťazovi odoslaný ✉️");
+        }
+      });
   };
 
   const archiveAllApproved = async () => {
