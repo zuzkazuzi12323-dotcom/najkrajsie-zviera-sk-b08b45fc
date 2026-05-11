@@ -6,10 +6,11 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const SITE_URL = 'https://najkrajsipes.sk';
+const SITE_URL = 'https://najkrajsie-zviera-sk.lovable.app';
 const SITE_NAME = 'NajkrajšíPes.sk';
 const FROM_NAME = 'NajkrajšíPes.sk';
 const FROM_EMAIL = 'infonajkrajsipes@gmail.com';
+const REPLY_TO_EMAIL = 'infonajkrajsipes@gmail.com';
 const LOGO_URL = 'https://pkejvzexmlijnoangerw.supabase.co/storage/v1/object/public/dog-images/brand/logo-dog.png';
 
 function encodeRFC2047(text: string): string {
@@ -65,9 +66,12 @@ function buildEmail(to: string, displayName: string): string {
           </div>
         </td></tr>
         <tr><td style="padding:20px 32px 32px;border-top:1px solid #f1e7d4;">
-          <p style="margin:0;font-size:12px;color:#999;line-height:1.6;text-align:center;">
-            Tento email si dostal/a, lebo si práve potvrdil/a registráciu na <a href="${SITE_URL}" style="color:#c47b2a;text-decoration:none;">${SITE_URL}</a>.<br>
-            Otázky? Napíš nám na <a href="mailto:${FROM_EMAIL}" style="color:#c47b2a;text-decoration:none;">${FROM_EMAIL}</a>.
+          <p style="margin:0 0 10px;font-size:12px;color:#999;line-height:1.6;text-align:center;">
+            Tento email si dostal/a, lebo si práve potvrdil/a registráciu na <a href="${SITE_URL}" style="color:#c47b2a;text-decoration:none;">${SITE_NAME}</a>.
+          </p>
+          <p style="margin:0;font-size:11px;color:#b0b0b0;line-height:1.6;text-align:center;font-style:italic;">
+            Tento email bol vygenerovaný automaticky — prosím, neodpovedajte naň.<br>
+            Ak chcete odpovedať, napíšte nám na <a href="mailto:${REPLY_TO_EMAIL}" style="color:#c47b2a;text-decoration:none;">${REPLY_TO_EMAIL}</a>.
           </p>
         </td></tr>
       </table>
@@ -79,6 +83,7 @@ function buildEmail(to: string, displayName: string): string {
   const message = [
     `From: ${fromHeader}`,
     `To: ${to}`,
+    `Reply-To: ${REPLY_TO_EMAIL}`,
     `Subject: ${subject}`,
     'MIME-Version: 1.0',
     'Content-Type: text/html; charset="UTF-8"',
