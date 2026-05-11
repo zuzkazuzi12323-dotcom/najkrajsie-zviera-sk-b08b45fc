@@ -83,6 +83,7 @@ function buildEmail(to: string, displayName: string): string {
   const message = [
     `From: ${fromHeader}`,
     `To: ${to}`,
+    `Reply-To: ${REPLY_TO_EMAIL}`,
     `Subject: ${subject}`,
     'MIME-Version: 1.0',
     'Content-Type: text/html; charset="UTF-8"',
