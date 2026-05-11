@@ -69,9 +69,13 @@ function buildEmail(to: string, ownerName: string, dogName: string, place: numbe
           </p>
         </td></tr>
         <tr><td style="padding:20px 32px 32px;border-top:1px solid #f1e7d4;text-align:center;">
-          <p style="margin:0;font-size:12px;color:#999;line-height:1.6;">
+          <p style="margin:0 0 10px;font-size:12px;color:#999;line-height:1.6;">
             S láskou, tím <strong>${SITE_NAME}</strong> 🐾<br>
-            <a href="${SITE_URL}" style="color:#c47b2a;text-decoration:none;">${SITE_URL}</a>
+            <a href="${SITE_URL}" style="color:#c47b2a;text-decoration:none;">${SITE_NAME}</a>
+          </p>
+          <p style="margin:0;font-size:11px;color:#b0b0b0;line-height:1.6;font-style:italic;">
+            Tento email bol vygenerovaný automaticky — prosím, neodpovedajte naň.<br>
+            Ak chcete odpovedať, napíšte nám na <a href="mailto:${REPLY_TO_EMAIL}" style="color:#c47b2a;text-decoration:none;">${REPLY_TO_EMAIL}</a>.
           </p>
         </td></tr>
       </table>
@@ -80,7 +84,7 @@ function buildEmail(to: string, ownerName: string, dogName: string, place: numbe
 </body></html>`;
 
   const message = [
-    `From: ${fromHeader}`, `To: ${to}`, `Subject: ${subject}`,
+    `From: ${fromHeader}`, `To: ${to}`, `Reply-To: ${REPLY_TO_EMAIL}`, `Subject: ${subject}`,
     'MIME-Version: 1.0', 'Content-Type: text/html; charset="UTF-8"', 'Content-Transfer-Encoding: 8bit',
     '', html,
   ].join('\r\n');
