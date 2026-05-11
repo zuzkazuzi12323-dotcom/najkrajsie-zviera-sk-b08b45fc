@@ -6,10 +6,11 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const SITE_URL = 'https://najkrajsipes.sk';
+const SITE_URL = 'https://najkrajsie-zviera-sk.lovable.app';
 const SITE_NAME = 'NajkrajšíPes.sk';
 const FROM_NAME = 'NajkrajšíPes.sk';
 const FROM_EMAIL = 'infonajkrajsipes@gmail.com';
+const REPLY_TO_EMAIL = 'infonajkrajsipes@gmail.com';
 const LOGO_URL = 'https://pkejvzexmlijnoangerw.supabase.co/storage/v1/object/public/dog-images/brand/logo-dog.png';
 
 function encodeRFC2047(text: string): string {
