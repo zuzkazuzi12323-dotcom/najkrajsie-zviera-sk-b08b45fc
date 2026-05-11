@@ -137,7 +137,7 @@ const MyProfile = () => {
             <Dog className="w-12 h-12 mx-auto mb-3 text-muted-foreground" />
             <p className="text-muted-foreground mb-4">Zatiaľ ste nepridali žiadneho psa</p>
             <Link to="/pridat" className="gradient-golden text-primary-foreground px-6 py-3 rounded-full font-semibold inline-block">
-              Pridať psa do súťaže zadarmo 🐾
+              Pridať psa do súťaže (2,99 €) 🐾
             </Link>
           </div>
         ) : (

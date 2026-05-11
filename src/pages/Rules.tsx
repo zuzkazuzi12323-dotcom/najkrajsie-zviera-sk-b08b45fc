@@ -27,9 +27,9 @@ const Rules = () => {
               </h2>
               <ol className="space-y-3 text-foreground/80">
                 <li className="flex gap-3"><span className="font-bold text-primary">1.</span> Majiteľ psa pridá profil psa s fotkou.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">2.</span> Registrácia psa je úplne <strong>zadarmo</strong> ❤️</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">2.</span> Registrácia psa do súťaže stojí jednorazovo <strong>2,99 €</strong>. Z každej platby venujeme <strong>20 %</strong> útulkom pre opustené zvieratá ❤️</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">2a.</span> Hlasovať môžete <strong>1× za 24 hodín</strong> z jedného účtu.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">3.</span> Pes sa zobrazí v galérii a môže získavať hlasy od návštevníkov.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">3.</span> Po úspešnej platbe sa pes okamžite zobrazí v galérii a môže získavať hlasy od návštevníkov.</li>
               </ol>
             </div>
 
