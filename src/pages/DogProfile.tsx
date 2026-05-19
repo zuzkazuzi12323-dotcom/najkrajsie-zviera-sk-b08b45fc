@@ -204,30 +204,7 @@ const DogProfile = () => {
               </div>
             </div>
 
-            {/* Boost packages */}
-            {contestActive && !dog.archived && (
-              <div className="mb-6">
-                <motion.button onClick={() => setBoostOpen(!boostOpen)} whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold shadow-lg hover:shadow-xl transition-all">
-                  <Rocket className="w-5 h-5" /> 🚀 Boost hlasy pre {dog.name}
-                </motion.button>
-                <AnimatePresence>
-                  {boostOpen && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
-                      className="mt-3 grid grid-cols-2 gap-2 overflow-hidden">
-                      {BOOST_PACKAGES.map((pkg) => (
-                        <motion.button key={pkg.amount} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
-                          onClick={() => handleBoost(pkg)} disabled={boostLoading}
-                          className="flex flex-col items-center p-4 rounded-xl border border-border bg-card hover:border-primary/50 transition-all disabled:opacity-50">
-                          <span className="text-lg font-bold text-foreground">{pkg.label}</span>
-                          <span className="text-sm text-primary font-semibold">+{pkg.votes} hlasov</span>
-                        </motion.button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
+            {/* Boost packages removed */}
 
             {/* Share button */}
             <div className="relative mb-8">
