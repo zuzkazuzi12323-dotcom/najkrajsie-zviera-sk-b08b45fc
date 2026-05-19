@@ -11,6 +11,7 @@ import AddDog from "./pages/AddDog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import RegistrationCanceled from "./pages/RegistrationCanceled";
 import Rules from "./pages/Rules";
 import HowItWorks from "./pages/HowItWorks";
 import Winners from "./pages/Winners";
