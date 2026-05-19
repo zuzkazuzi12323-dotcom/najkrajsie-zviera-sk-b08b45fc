@@ -10,12 +10,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useContestActive } from "@/hooks/useContestActive";
 import { toast } from "sonner";
 
-const BOOST_PACKAGES = [
-  { amount: 100, votes: 30, label: "1 €" },
-  { amount: 300, votes: 90, label: "3 €" },
-  { amount: 500, votes: 120, label: "5 €" },
-  { amount: 1000, votes: 500, label: "10 €" },
-];
 
 const DogProfile = () => {
   const { id } = useParams();
