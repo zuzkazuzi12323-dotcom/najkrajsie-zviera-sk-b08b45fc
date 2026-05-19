@@ -203,9 +203,6 @@ const MyProfile = () => {
                             <span className="font-bold tabular-nums text-foreground">{dog.total}</span>
                             <span className="text-xs text-muted-foreground">hlasov</span>
                           </div>
-                          {dog.boost_votes > 0 && (
-                            <span className="text-xs text-purple-600 font-medium">🚀 {dog.boost_votes} boost</span>
-                          )}
                         </div>
                       </>
                     )}

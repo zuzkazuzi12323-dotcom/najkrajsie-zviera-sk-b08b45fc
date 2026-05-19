@@ -64,6 +64,12 @@ function buildEmail(to: string, displayName: string): string {
               <li>Podporiť útulky priamym darom alebo nákupom v e-shope</li>
             </ul>
           </div>
+          <div style="text-align:center;margin:24px 0 8px;padding:18px;background:#eff6ff;border-radius:12px;">
+            <p style="margin:0 0 10px;font-size:14px;color:#1e40af;">🐶 Chceš sledovať súťaž aj na Facebooku?</p>
+            <a href="https://www.facebook.com/profile.php?id=61573665324373" style="display:inline-block;background:#1877F2;color:#ffffff;text-decoration:none;padding:10px 24px;border-radius:999px;font-weight:600;font-size:14px;">
+              Sleduj nás na Facebooku
+            </a>
+          </div>
         </td></tr>
         <tr><td style="padding:20px 32px 32px;border-top:1px solid #f1e7d4;">
           <p style="margin:0 0 10px;font-size:12px;color:#999;line-height:1.6;text-align:center;">

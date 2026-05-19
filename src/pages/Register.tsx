@@ -12,6 +12,7 @@ const Register = () => {
   const [confirm, setConfirm] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,9 +27,8 @@ const Register = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      // Welcome email is sent automatically AFTER user confirms their email (via AuthContext)
-      toast.success("Účet vytvorený! Skontrolujte svoj email a kliknite na odkaz na potvrdenie. Uvítací email vám príde až po potvrdení.");
-      navigate("/prihlasenie");
+      setRegisteredEmail(email);
+      toast.success("Účet vytvorený! Skontrolujte svoj email.");
     }
   };
 
@@ -36,6 +36,45 @@ const Register = () => {
     const { error } = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
     if (error) toast.error("Nepodarilo sa prihlásiť cez Google");
   };
+
+  if (registeredEmail) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background px-4">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md text-center">
+          <Link to="/" className="inline-flex items-center gap-2 mb-6">
+            <Heart className="w-8 h-8 text-primary fill-primary" />
+            <span className="text-2xl font-bold text-foreground">NajkrajšíPes<span className="text-primary">.sk</span></span>
+          </Link>
+          <div className="bg-card rounded-2xl p-8 shadow-elevated">
+            <div className="w-16 h-16 rounded-full gradient-golden flex items-center justify-center mx-auto mb-4">
+              <Mail className="w-8 h-8 text-primary-foreground" />
+            </div>
+            <h1 className="text-2xl font-bold text-foreground mb-3">Skontrolujte svoj Gmail 📧</h1>
+            <p className="text-foreground/80 mb-2">
+              Poslali sme potvrdzovací odkaz na:
+            </p>
+            <p className="font-semibold text-primary mb-4 break-all">{registeredEmail}</p>
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 text-left text-sm text-foreground/80 mb-5">
+              <p className="font-semibold text-foreground mb-2">📩 Ako pokračovať:</p>
+              <ol className="list-decimal list-inside space-y-1">
+                <li>Otvorte si <strong>Gmail</strong> (alebo iný email)</li>
+                <li>Nájdite správu od <strong>NajkrajšíPes.sk</strong></li>
+                <li>Kliknite na odkaz <strong>„Potvrdiť registráciu"</strong></li>
+                <li>Po potvrdení sa môžete prihlásiť</li>
+              </ol>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Ak email nevidíte, skontrolujte priečinok <strong>Spam / Promo</strong>.
+              </p>
+            </div>
+            <button onClick={() => navigate("/prihlasenie")}
+              className="w-full gradient-golden text-primary-foreground py-3 rounded-xl font-bold">
+              Prejsť na prihlásenie
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">

@@ -106,15 +106,41 @@ serve(async (req) => {
       }
     }
 
-    // If registration payment, approve dog
+    // If registration payment, approve dog & send confirmation email
     if (type === "registration" && dogId) {
-      const { error: approveError } = await supabase
+      const { data: dogRow, error: approveError } = await supabase
         .from("dogs")
         .update({ approved: true })
-        .eq("id", dogId);
+        .eq("id", dogId)
+        .select("name, owner_id")
+        .single();
 
-      if (approveError) console.error("Dog approve error:", approveError);
-      else console.log("Dog approved after payment:", dogId);
+      if (approveError) {
+        console.error("Dog approve error:", approveError);
+      } else {
+        console.log("Dog approved after payment:", dogId);
+        // Send payment confirmation email
+        try {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("email")
+            .eq("user_id", dogRow?.owner_id)
+            .single();
+          const recipient = profile?.email || session.customer_details?.email;
+          if (recipient && dogRow) {
+            await fetch(`${supabaseUrl}/functions/v1/send-payment-confirmation`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${serviceKey}`,
+              },
+              body: JSON.stringify({ email: recipient, dogName: dogRow.name, dogId }),
+            });
+          }
+        } catch (e) {
+          console.error("Payment confirmation email error:", e);
+        }
+      }
     }
 
     // If highlight payment, update dog
@@ -125,26 +151,6 @@ serve(async (req) => {
         .eq("id", dogId);
 
       if (dogError) console.error("Dog highlight error:", dogError);
-    }
-
-    // If boost payment, add boost votes to dog
-    if (type === "boost" && dogId) {
-      const boostAmount = parseInt(session.metadata?.boostVotes || "100");
-      const { data: currentDog } = await supabase
-        .from("dogs")
-        .select("boost_votes")
-        .eq("id", dogId)
-        .single();
-
-      if (currentDog) {
-        const { error: boostError } = await supabase
-          .from("dogs")
-          .update({ boost_votes: (currentDog.boost_votes || 0) + boostAmount })
-          .eq("id", dogId);
-
-        if (boostError) console.error("Boost votes error:", boostError);
-        else console.log(`Added ${boostAmount} boost votes to dog ${dogId}`);
-      }
     }
   }
 

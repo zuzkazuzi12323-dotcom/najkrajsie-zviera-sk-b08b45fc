@@ -249,34 +249,7 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Notifications */}
-      <div className="bg-card rounded-2xl shadow-soft">
-        <div className="p-5 border-b border-border flex items-center justify-between">
-          <h3 className="font-bold text-foreground flex items-center gap-2">
-            <Bell className="w-5 h-5 text-primary" /> Notifikácie
-            {unreadCount > 0 && (
-              <span className="bg-destructive text-destructive-foreground text-xs font-bold px-2 py-0.5 rounded-full">{unreadCount}</span>
-            )}
-          </h3>
-          {unreadCount > 0 && (
-            <button onClick={markAllRead} className="text-xs text-primary hover:underline">Označiť ako prečítané</button>
-          )}
-        </div>
-        <div className="divide-y divide-border max-h-64 overflow-y-auto">
-          {notifications.map((n: any) => (
-            <div key={n.id} className={`px-5 py-3 flex items-center justify-between ${!n.read ? "bg-primary/5" : ""}`}>
-              <div className="flex items-center gap-3">
-                <div className={`w-2 h-2 rounded-full ${!n.read ? "bg-primary" : "bg-transparent"}`} />
-                <span className="text-sm text-foreground">{n.message}</span>
-              </div>
-              <span className="text-xs text-muted-foreground whitespace-nowrap ml-4">
-                {new Date(n.created_at).toLocaleDateString("sk")} {new Date(n.created_at).toLocaleTimeString("sk", { hour: "2-digit", minute: "2-digit" })}
-              </span>
-            </div>
-          ))}
-          {notifications.length === 0 && <p className="px-5 py-6 text-center text-muted-foreground text-sm">Žiadne notifikácie</p>}
-        </div>
-      </div>
+      {/* Notifications removed — available via header bell icon */}
 
       {/* Recent registrations */}
       <div className="bg-card rounded-2xl shadow-soft">

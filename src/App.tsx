@@ -11,6 +11,7 @@ import AddDog from "./pages/AddDog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import RegistrationCanceled from "./pages/RegistrationCanceled";
 import Rules from "./pages/Rules";
 import HowItWorks from "./pages/HowItWorks";
 import Winners from "./pages/Winners";
@@ -55,6 +56,7 @@ const App = () => (
             <Route path="/zabudnute-heslo" element={<ForgotPassword />} />
             <Route path="/reset-hesla" element={<ResetPassword />} />
             <Route path="/platba-uspesna" element={<PaymentSuccess />} />
+            <Route path="/registracia-zrusena" element={<RegistrationCanceled />} />
             <Route path="/pravidla" element={<Rules />} />
             <Route path="/ako-funguje" element={<HowItWorks />} />
             <Route path="/vitazi" element={<Winners />} />

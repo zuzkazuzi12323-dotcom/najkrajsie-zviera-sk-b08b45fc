@@ -98,7 +98,7 @@ serve(async (req) => {
       ],
       mode: "payment",
       success_url: `${siteOrigin}/platba-uspesna?session_id={CHECKOUT_SESSION_ID}&type=registration&dog_id=${dogId}`,
-      cancel_url: `${siteOrigin}/pridat`,
+      cancel_url: `${siteOrigin}/registracia-zrusena?dog_id=${dogId}`,
       metadata: {
         userId: userData.user.id,
         dogId,

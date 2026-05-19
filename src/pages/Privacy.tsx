@@ -28,7 +28,7 @@ const Privacy = () => {
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section1.title", "Aké údaje zbierame")}</h2>
             <ul className="list-disc list-inside space-y-1">
-              {splitLines(t("privacy.section1.body", "E-mailová adresa\nMeno alebo prezývka\nFotografie a informácie o psovi\nPlatobné údaje (registračný poplatok 2,99 €, boost hlasy, e-shop, dary)\nInformácie o boost hlasoch\nInformácie o príspevkoch")).map((line, i) => (
+              {splitLines(t("privacy.section1.body", "E-mailová adresa\nMeno alebo prezývka\nFotografie a informácie o psovi\nPlatobné údaje (registračný poplatok 2,99 €, e-shop, dary)\nInformácie o príspevkoch")).map((line, i) => (
                 <li key={i}>{line}</li>
               ))}
             </ul>
@@ -40,8 +40,8 @@ const Privacy = () => {
           </div>
 
           <div>
-            <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section3.title", "Hlasovanie a boost hlasy")}</h2>
-            <p className="whitespace-pre-line">{t("privacy.section3.body", "Bezplatné hlasy sú obmedzené na 1 hlas za 24 hodín.")}</p>
+            <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section3.title", "Hlasovanie")}</h2>
+            <p className="whitespace-pre-line">{t("privacy.section3.body", "Bezplatné hlasy sú obmedzené na 1 hlas za 24 hodín z jedného účtu.")}</p>
           </div>
 
           <div>

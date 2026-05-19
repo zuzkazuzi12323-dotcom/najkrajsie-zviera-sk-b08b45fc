@@ -1,4 +1,4 @@
-import { Heart, Award, Rocket, Archive } from "lucide-react";
+import { Heart, Award, Archive } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -68,11 +68,6 @@ const DogCard = ({ dog, userVoted = false }: DogCardProps) => {
           {dog.highlighted && (
             <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold shadow-golden">
               <Award className="w-3 h-3" /> Top
-            </div>
-          )}
-          {(dog.boost_votes || 0) > 0 && !dog.archived && (
-            <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[10px] font-semibold shadow-lg">
-              <Rocket className="w-3 h-3" /> Boost
             </div>
           )}
         </div>
