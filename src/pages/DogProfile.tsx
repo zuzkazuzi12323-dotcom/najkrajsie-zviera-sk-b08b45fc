@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send, Share2, Reply, Rocket, BadgeCheck } from "lucide-react";
+import { Heart, ArrowLeft, MessageCircle, Calendar, Award, Send, Share2, Reply, BadgeCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
