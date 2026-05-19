@@ -21,7 +21,7 @@ const DogProfile = () => {
   const [voted, setVoted] = useState(false);
   const [voteCount, setVoteCount] = useState(0);
   const [shareOpen, setShareOpen] = useState(false);
-  const [boostOpen, setBoostOpen] = useState(false);
+  
 
   const { data: dog, isLoading } = useQuery({
     queryKey: ["dog", id],
