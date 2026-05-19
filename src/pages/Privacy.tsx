@@ -40,8 +40,8 @@ const Privacy = () => {
           </div>
 
           <div>
-            <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section3.title", "Hlasovanie a boost hlasy")}</h2>
-            <p className="whitespace-pre-line">{t("privacy.section3.body", "Bezplatné hlasy sú obmedzené na 1 hlas za 24 hodín.")}</p>
+            <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section3.title", "Hlasovanie")}</h2>
+            <p className="whitespace-pre-line">{t("privacy.section3.body", "Bezplatné hlasy sú obmedzené na 1 hlas za 24 hodín z jedného účtu.")}</p>
           </div>
 
           <div>
