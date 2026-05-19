@@ -1,4 +1,4 @@
-import { Heart, Award, Rocket, Archive } from "lucide-react";
+import { Heart, Award, Archive } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
