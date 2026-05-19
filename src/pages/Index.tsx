@@ -138,7 +138,7 @@ const Index = () => {
           <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">Prečo sa zapojiť?</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty mb-6">
             Registrácia psa do súťaže stojí jednorazovo iba <strong className="text-foreground">2,99 €</strong>. Každý zaregistrovaný psík dostáva šancu získať titul <strong className="text-foreground">Najkrajší pes Slovenska</strong>.
-            Z každej registrácie, boost hlasov a e-shopu venujeme <strong className="text-foreground">20 %</strong> útulkom pre opustené zvieratá. 🐾
+            Z každej registrácie a nákupu v e-shope venujeme <strong className="text-foreground">20 %</strong>, a z priamych darov <strong className="text-foreground">100 %</strong> útulkom pre opustené zvieratá. 🐾
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
