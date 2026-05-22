@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Trophy, Heart, Rocket, Medal, TrendingUp } from "lucide-react";
+import { Trophy, Heart, Medal, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
