@@ -62,20 +62,7 @@ const AdminDogs = () => {
     if (error) toast.error("Chyba"); else { toast.success(current ? "Zvýraznenie zrušené" : "Pes označený ako Top 🌟"); invalidate(); }
   };
 
-  const addBoost = async (id: string, currentBoost: number) => {
-    const amount = parseInt(prompt("Koľko boost hlasov pridať?", "100") || "0");
-    if (!amount || amount <= 0) return;
-    const { error } = await supabase.from("dogs").update({ boost_votes: currentBoost + amount }).eq("id", id);
-    if (error) toast.error("Chyba"); else { toast.success(`+${amount} boost hlasov pridaných 🚀`); invalidate(); }
-  };
-
-  const removeBoost = async (id: string, currentBoost: number) => {
-    const amount = parseInt(prompt(`Koľko boost hlasov odobrať? (max ${currentBoost})`, String(currentBoost)) || "0");
-    if (!amount || amount <= 0) return;
-    const newVal = Math.max(0, currentBoost - amount);
-    const { error } = await supabase.from("dogs").update({ boost_votes: newVal }).eq("id", id);
-    if (error) toast.error("Chyba"); else { toast.success(`-${amount} boost hlasov odobratých`); invalidate(); }
-  };
+  // boost feature removed
 
   const toggleArchive = async (id: string, archived: boolean) => {
     const { error } = await supabase.from("dogs").update({ archived: !archived }).eq("id", id);
