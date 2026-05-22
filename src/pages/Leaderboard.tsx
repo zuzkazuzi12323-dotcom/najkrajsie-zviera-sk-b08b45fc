@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 const Leaderboard = () => {
   const { data: dogs = [], isLoading } = useQuery({
     queryKey: ["leaderboard"],
+    staleTime: 2 * 60 * 1000,
     queryFn: async () => {
       const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).eq("archived", false);
       if (!dogsData) return [];

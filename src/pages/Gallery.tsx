@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
@@ -15,16 +15,19 @@ const Gallery = () => {
 
   const { data: dogs = [] } = useQuery({
     queryKey: ["dogs"],
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     queryFn: async () => {
-      const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true);
+      const { data: dogsData } = await supabase.from("dogs").select("id,name,breed,age,description,image_url,highlighted,owner_id,boost_votes,archived,created_at").eq("approved", true);
       if (!dogsData) return [];
 
       const ownerIds = [...new Set(dogsData.map((d) => d.owner_id))];
-      const { data: profiles } = await supabase.from("profiles").select("user_id, display_name").in("user_id", ownerIds);
+      const [{ data: profiles }, { data: voteCounts }] = await Promise.all([
+        supabase.from("profiles").select("user_id, display_name").in("user_id", ownerIds),
+        supabase.from("votes").select("dog_id"),
+      ]);
       const profileMap: Record<string, string> = {};
       profiles?.forEach((p) => { profileMap[p.user_id] = p.display_name || "Neznámy"; });
-
-      const { data: voteCounts } = await supabase.from("votes").select("dog_id");
       const voteMap: Record<string, number> = {};
       voteCounts?.forEach((v) => { voteMap[v.dog_id] = (voteMap[v.dog_id] || 0) + 1; });
 
@@ -43,25 +46,29 @@ const Gallery = () => {
   const { data: userVotes = [] } = useQuery({
     queryKey: ["user-votes", user?.id],
     enabled: !!user,
+    staleTime: 60 * 1000,
     queryFn: async () => {
       const { data } = await supabase.from("votes").select("dog_id").eq("user_id", user!.id);
       return data?.map((v) => v.dog_id) || [];
     },
   });
 
-  const breeds = ["Všetky", ...new Set(dogs.map((d) => d.breed))];
+  const breeds = useMemo(() => ["Všetky", ...new Set(dogs.map((d) => d.breed))], [dogs]);
 
-  const filtered = dogs
-    .filter((dog) => {
-      const matchesSearch = dog.name.toLowerCase().includes(search.toLowerCase()) || dog.breed.toLowerCase().includes(search.toLowerCase());
-      const matchesBreed = selectedBreed === "Všetky" || dog.breed === selectedBreed;
-      return matchesSearch && matchesBreed;
-    })
-    .sort((a, b) => {
-      if (sortBy === "votes") return b.votes - a.votes;
-      if (sortBy === "name") return a.name.localeCompare(b.name);
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    });
+  const filtered = useMemo(() => {
+    const s = search.toLowerCase();
+    return dogs
+      .filter((dog) => {
+        const matchesSearch = !s || dog.name.toLowerCase().includes(s) || dog.breed.toLowerCase().includes(s);
+        const matchesBreed = selectedBreed === "Všetky" || dog.breed === selectedBreed;
+        return matchesSearch && matchesBreed;
+      })
+      .sort((a, b) => {
+        if (sortBy === "votes") return b.votes - a.votes;
+        if (sortBy === "name") return a.name.localeCompare(b.name);
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      });
+  }, [dogs, search, selectedBreed, sortBy]);
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -47,10 +47,10 @@ const DogCard = ({ dog, userVoted = false }: DogCardProps) => {
   return (
     <Link to={`/pes/${dog.id}`}>
       <div
-        className={`group relative bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 ${dog.highlighted ? "ring-2 ring-primary" : ""}`}>
+        className={`group relative bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated ${dog.highlighted ? "ring-2 ring-primary" : ""}`}>
         <div className="relative aspect-square overflow-hidden rounded-t-2xl">
-          <img src={dog.image_url} alt={dog.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-          <div className="absolute inset-0 gradient-hero opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <img src={dog.image_url} alt={dog.name} width={400} height={400} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+          <div className="absolute inset-0 gradient-hero opacity-0 group-hover:opacity-100" />
           {!dog.archived && (
             <button onClick={handleVote}
               className={`absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-2 rounded-full font-semibold text-xs shadow-lg transition-all duration-300 active:scale-95 ${
