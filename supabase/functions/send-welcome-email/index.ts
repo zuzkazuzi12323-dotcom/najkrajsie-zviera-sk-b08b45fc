@@ -49,7 +49,7 @@ function buildEmail(to: string, displayName: string): string {
             Vitaj v komunite <strong>${SITE_NAME}</strong>. Sme veľmi radi, že si súčasťou nášho projektu.
           </p>
           <p style="margin:0 0 24px;font-size:15px;line-height:1.65;color:#333;">
-            Spolu pomáhame opusteným psíkom v útulkoch — <strong>20 % zo všetkých nákupov a boostov</strong> a <strong>100 % z priamych darov</strong> putuje útulkom. ❤️
+            Spolu pomáhame opusteným psíkom v útulkoch — <strong>20 % zo všetkých registrácií a nákupov</strong> a <strong>100 % z priamych darov</strong> putuje útulkom. ❤️
           </p>
           <div style="text-align:center;margin:28px 0;">
             <a href="${SITE_URL}" style="display:inline-block;background:linear-gradient(135deg,#e89534,#c47b2a);color:#ffffff;text-decoration:none;padding:14px 36px;border-radius:999px;font-weight:700;font-size:15px;box-shadow:0 4px 12px rgba(196,123,42,0.3);">
