@@ -2,6 +2,9 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
+// Module-level guard so welcome email is only attempted once per browser session per user
+const welcomeAttempted = new Set<string>();
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
