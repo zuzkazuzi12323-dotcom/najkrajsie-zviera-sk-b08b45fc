@@ -119,15 +119,13 @@ const AdminPayments = () => {
     registration: "Registrácia",
     product: "E-shop",
     donation: "Príspevok",
-    boost: "Boost hlasy",
   };
 
   const typeFilters = [
     { key: "all", label: "Všetky" },
-    { key: "boost", label: "Boost" },
+    { key: "registration", label: "Registrácie" },
     { key: "product", label: "E-shop" },
     { key: "donation", label: "Príspevky" },
-    { key: "registration", label: "Registrácie" },
     { key: "highlight", label: "Zvýraznenia" },
   ];
 
