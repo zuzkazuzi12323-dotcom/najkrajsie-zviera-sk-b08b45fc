@@ -160,7 +160,7 @@ const DogProfile = () => {
                 <Award className="w-5 h-5 mt-0.5 shrink-0" />
                 <div>
                   <p className="font-semibold">Tento pes už súťažil v predchádzajúcom kole.</p>
-                  <p className="text-sm">Profil je verejne dostupný v galérii, ale ďalšie hlasovanie ani boost už nie sú možné.</p>
+                  <p className="text-sm">Profil je verejne dostupný v galérii, ale ďalšie hlasovanie už nie je možné.</p>
                 </div>
               </div>
             )}
