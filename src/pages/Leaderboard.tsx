@@ -56,7 +56,7 @@ const Leaderboard = () => {
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold text-foreground mb-2">🏆 Rebríček TOP psov</h1>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            Pozrite sa, kto vedie v hlasovaní. Podporite svojho favorita hlasovaním alebo boost balíčkom!
+            Pozrite sa, kto vedie v hlasovaní. Podporite svojho favorita svojim hlasom!
           </p>
         </motion.div>
 
