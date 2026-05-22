@@ -38,6 +38,8 @@ const Index = () => {
   const { data: allDogs = [] } = useQuery({
     queryKey: ["all-dogs-home"],
     queryFn: fetchDogsWithVotes,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const activeDogs = allDogs.filter((d: any) => !d.archived);
@@ -47,6 +49,7 @@ const Index = () => {
   const { data: userVotes = [] } = useQuery({
     queryKey: ["user-votes", user?.id],
     enabled: !!user,
+    staleTime: 60 * 1000,
     queryFn: async () => {
       const { data } = await supabase.from("votes").select("dog_id").eq("user_id", user!.id);
       return data?.map((v) => v.dog_id) || [];
@@ -55,6 +58,7 @@ const Index = () => {
 
   const { data: stats } = useQuery({
     queryKey: ["stats"],
+    staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const [{ count: dogCount }, { count: voteCount }, { count: userCount }] = await Promise.all([
         supabase.from("dogs").select("*", { count: "exact", head: true }),
