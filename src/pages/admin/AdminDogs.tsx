@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trash2, Search, Award, CheckCircle, XCircle, Rocket, Plus, Minus, Archive, ArchiveRestore, Trophy } from "lucide-react";
+import { Trash2, Search, Award, CheckCircle, XCircle, Archive, ArchiveRestore, Trophy } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -62,20 +62,7 @@ const AdminDogs = () => {
     if (error) toast.error("Chyba"); else { toast.success(current ? "Zvýraznenie zrušené" : "Pes označený ako Top 🌟"); invalidate(); }
   };
 
-  const addBoost = async (id: string, currentBoost: number) => {
-    const amount = parseInt(prompt("Koľko boost hlasov pridať?", "100") || "0");
-    if (!amount || amount <= 0) return;
-    const { error } = await supabase.from("dogs").update({ boost_votes: currentBoost + amount }).eq("id", id);
-    if (error) toast.error("Chyba"); else { toast.success(`+${amount} boost hlasov pridaných 🚀`); invalidate(); }
-  };
-
-  const removeBoost = async (id: string, currentBoost: number) => {
-    const amount = parseInt(prompt(`Koľko boost hlasov odobrať? (max ${currentBoost})`, String(currentBoost)) || "0");
-    if (!amount || amount <= 0) return;
-    const newVal = Math.max(0, currentBoost - amount);
-    const { error } = await supabase.from("dogs").update({ boost_votes: newVal }).eq("id", id);
-    if (error) toast.error("Chyba"); else { toast.success(`-${amount} boost hlasov odobratých`); invalidate(); }
-  };
+  // boost feature removed
 
   const toggleArchive = async (id: string, archived: boolean) => {
     const { error } = await supabase.from("dogs").update({ archived: !archived }).eq("id", id);
@@ -161,6 +148,10 @@ const AdminDogs = () => {
                 <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Stav</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Majiteľ</th>
                 <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Akcie</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Hlasy</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Stav</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Majiteľ</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase">Akcie</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -175,19 +166,6 @@ const AdminDogs = () => {
                   </td>
                   <td className="px-4 py-3 text-sm text-muted-foreground">{dog.breed}</td>
                   <td className="px-4 py-3 text-sm tabular-nums font-medium text-foreground">{dog.votes}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-1">
-                      <span className="text-sm tabular-nums font-medium text-foreground">{dog.boost_votes}</span>
-                      <button onClick={() => addBoost(dog.id, dog.boost_votes)} className="p-1 rounded hover:bg-green-100 text-green-600" title="Pridať boost">
-                        <Plus className="w-3.5 h-3.5" />
-                      </button>
-                      {dog.boost_votes > 0 && (
-                        <button onClick={() => removeBoost(dog.id, dog.boost_votes)} className="p-1 rounded hover:bg-red-100 text-red-600" title="Odobrať boost">
-                          <Minus className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                    </div>
-                  </td>
                   <td className="px-4 py-3">
                     {dog.archived ? (
                       <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 text-gray-700">Archivovaný</span>

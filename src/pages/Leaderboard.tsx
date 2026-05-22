@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Trophy, Heart, Rocket, Medal, TrendingUp } from "lucide-react";
+import { Trophy, Heart, Medal, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
@@ -56,7 +56,7 @@ const Leaderboard = () => {
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold text-foreground mb-2">🏆 Rebríček TOP psov</h1>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            Pozrite sa, kto vedie v hlasovaní. Podporite svojho favorita hlasovaním alebo boost balíčkom!
+            Pozrite sa, kto vedie v hlasovaní. Podporite svojho favorita svojim hlasom!
           </p>
         </motion.div>
 
@@ -129,11 +129,7 @@ const Leaderboard = () => {
                       <p className="text-xs text-muted-foreground">{dog.breed}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      {dog.boost_votes > 0 && (
-                        <span className="flex items-center gap-1 text-xs text-purple-600">
-                          <Rocket className="w-3.5 h-3.5" /> {dog.boost_votes}
-                        </span>
-                      )}
+                      {/* boost badge removed */}
                       <div className="flex items-center gap-1">
                         <Heart className="w-4 h-4 text-primary fill-primary" />
                         <span className="font-bold tabular-nums text-foreground">{dog.total}</span>
