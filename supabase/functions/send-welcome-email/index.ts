@@ -107,6 +107,28 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Require an authenticated caller (prevents email abuse)
+    const authHeader = req.headers.get('authorization');
+    const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+    const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
+    const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    let authorized = false;
+    if (authHeader === `Bearer ${SERVICE_KEY}`) {
+      authorized = true;
+    } else if (authHeader && SUPABASE_URL && SUPABASE_ANON_KEY) {
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2.45.0');
+      const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data } = await client.auth.getUser(authHeader.replace('Bearer ', ''));
+      authorized = !!data.user;
+    }
+    if (!authorized) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     const GOOGLE_MAIL_API_KEY = Deno.env.get('GOOGLE_MAIL_API_KEY');
     if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
