@@ -63,7 +63,7 @@ const Index = () => {
       const [{ count: dogCount }, { count: voteCount }, { count: userCount }] = await Promise.all([
         supabase.from("dogs").select("*", { count: "exact", head: true }),
         supabase.from("votes").select("*", { count: "exact", head: true }),
-        supabase.from("profiles").select("*", { count: "exact", head: true }),
+        supabase.from("profiles").select("user_id", { count: "exact", head: true }),
       ]);
       return { dogs: dogCount || 0, votes: voteCount || 0, users: userCount || 0 };
     },
