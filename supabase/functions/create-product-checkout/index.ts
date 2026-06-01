@@ -74,7 +74,6 @@ serve(async (req) => {
     if (!session.url) return jsonResponse({ error: "Checkout URL missing" }, 500);
 
     // Create pending payment record using service role
-    const adminClient = createClient(supabaseUrl, serviceKey);
     await adminClient.from("payments").insert({
       user_id: userData.user.id,
       amount,
