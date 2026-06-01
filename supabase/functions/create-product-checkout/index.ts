@@ -35,8 +35,18 @@ serve(async (req) => {
     const { data: userData, error: userError } = await supabase.auth.getUser(token);
     if (userError || !userData?.user?.email) return jsonResponse({ error: "Unauthorized" }, 401);
 
-    const { productId, productName, amount } = await req.json();
-    if (!productName || !amount) return jsonResponse({ error: "Missing product data" }, 400);
+    const { productId } = await req.json();
+    if (!productId) return jsonResponse({ error: "Missing product" }, 400);
+
+    // Verify price server-side from the database (prevents price manipulation)
+    const adminClient = createClient(supabaseUrl, serviceKey);
+    const { data: product } = await adminClient
+      .from("products").select("price, name, active, in_stock").eq("id", productId).single();
+    if (!product || !product.active || !product.in_stock) {
+      return jsonResponse({ error: "Produkt nie je dostupný" }, 400);
+    }
+    const amount = product.price;
+    const productName = product.name;
 
     const siteOrigin = getSiteOrigin(req);
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
