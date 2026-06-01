@@ -347,6 +347,84 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsor_inquiries: {
+        Row: {
+          created_at: string
+          email: string
+          handled: boolean
+          id: string
+          message: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          handled?: boolean
+          id?: string
+          message: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          handled?: boolean
+          id?: string
+          message?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      sponsors: {
+        Row: {
+          active: boolean
+          banner_url: string | null
+          created_at: string
+          cta_label: string | null
+          description: string | null
+          featured: boolean
+          id: string
+          link_url: string | null
+          logo_url: string | null
+          package_tier: string
+          placement: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          banner_url?: string | null
+          created_at?: string
+          cta_label?: string | null
+          description?: string | null
+          featured?: boolean
+          id?: string
+          link_url?: string | null
+          logo_url?: string | null
+          package_tier?: string
+          placement?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          banner_url?: string | null
+          created_at?: string
+          cta_label?: string | null
+          description?: string | null
+          featured?: boolean
+          id?: string
+          link_url?: string | null
+          logo_url?: string | null
+          package_tier?: string
+          placement?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -407,6 +485,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_blocked: { Args: never; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

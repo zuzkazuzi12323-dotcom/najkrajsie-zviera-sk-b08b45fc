@@ -99,8 +99,28 @@ Deno.serve(async (req) => {
     const GOOGLE_MAIL_API_KEY = Deno.env.get('GOOGLE_MAIL_API_KEY');
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
     const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    if (!LOVABLE_API_KEY || !GOOGLE_MAIL_API_KEY || !SUPABASE_URL || !SERVICE_KEY) {
+    const ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
+    if (!LOVABLE_API_KEY || !GOOGLE_MAIL_API_KEY || !SUPABASE_URL || !SERVICE_KEY || !ANON_KEY) {
       throw new Error('Missing env configuration');
+    }
+
+    // Only an authenticated admin (or the service role) may trigger winner emails
+    const authHeader = req.headers.get('authorization');
+    let authorized = authHeader === `Bearer ${SERVICE_KEY}`;
+    if (!authorized && authHeader) {
+      const anonClient = createClient(SUPABASE_URL, ANON_KEY, {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data: { user } } = await anonClient.auth.getUser(authHeader.replace('Bearer ', ''));
+      if (user) {
+        const { data: isAdmin } = await anonClient.rpc('has_role', { _user_id: user.id, _role: 'admin' });
+        authorized = !!isAdmin;
+      }
+    }
+    if (!authorized) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const { dogId, place } = await req.json();
