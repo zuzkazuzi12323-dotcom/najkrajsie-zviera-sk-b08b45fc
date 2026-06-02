@@ -75,6 +75,12 @@ const Winners = () => {
                         <Calendar className="w-3 h-3" /> {new Date(dog.created_at).toLocaleDateString("sk")}
                       </span>
                     </div>
+                    <Link
+                      to={`/certifikat/${dog.id}`}
+                      className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold hover:bg-primary/20 transition"
+                    >
+                      <Award className="w-4 h-4" /> Digitálny certifikát
+                    </Link>
                   </div>
                 </motion.div>
                 );
