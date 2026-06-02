@@ -43,29 +43,25 @@ const Winners = () => {
 
           {topDogs.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {topDogs.map((dog, i) => (
+              {topDogs.map((dog, i) => {
+                const place = dog.winner_place || i + 1;
+                return (
                 <motion.div
                   key={dog.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className={`bg-card rounded-2xl overflow-hidden shadow-elevated ${i === 0 ? "ring-2 ring-primary sm:col-span-2 lg:col-span-1" : ""}`}
+                  transition={{ delay: i * 0.05 }}
+                  className={`bg-card rounded-2xl overflow-hidden shadow-elevated ${place === 1 ? "ring-2 ring-primary" : ""}`}
                 >
                   <div className="relative aspect-square overflow-hidden">
                     <img src={dog.image_url} alt={dog.name} className="w-full h-full object-cover" />
-                    {i === 0 && (
+                    {place === 1 ? (
                       <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full gradient-golden text-primary-foreground text-xs font-bold shadow-golden flex items-center gap-1">
                         <Trophy className="w-3.5 h-3.5" /> 1. miesto
                       </div>
-                    )}
-                    {i === 1 && (
+                    ) : (
                       <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-bold">
-                        2. miesto
-                      </div>
-                    )}
-                    {i === 2 && (
-                      <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-bold">
-                        3. miesto
+                        {place}. miesto
                       </div>
                     )}
                   </div>
