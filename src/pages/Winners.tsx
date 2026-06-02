@@ -76,7 +76,8 @@ const Winners = () => {
                     </div>
                   </div>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <p className="text-center text-muted-foreground py-16">Zatiaľ žiadni víťazi.</p>
