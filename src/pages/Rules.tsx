@@ -41,7 +41,7 @@ const Rules = () => {
                 Pes s najväčším počtom hlasov vyhráva titul <strong>Najkrajší pes Slovenska</strong>.
               </p>
               <p className="text-foreground/80 mt-2">
-                Súťaž prebieha každý mesiac a každý mesiac bude vyhlásený nový víťaz.
+                Súťaž prebieha každý mesiac a každý mesiac bude vyhlásený nový víťaz. Po ukončení ročníka sa psy archivujú a už nemôžu prijímať ďalšie hlasy.
               </p>
             </div>
 
@@ -50,7 +50,10 @@ const Rules = () => {
                 <Gift className="w-5 h-5 text-primary" /> Výhra
               </h2>
               <p className="text-foreground/80">
-                Víťaz získa titul "Najkrajší pes Slovenska", digitálny diplom a malý darček pre psa.
+                Víťaz získa <strong>titul „Najkrajší pes Slovenska"</strong> a <strong>prestížny digitálny certifikát</strong>, ktorý si môže stiahnuť a vytlačiť. Žiadne fyzické ceny sa neodosielajú — všetky odmeny sú digitálne.
+              </p>
+              <p className="text-foreground/80 mt-3">
+                Výherca bude kontaktovaný e-mailom alebo cez účet na stránke. Ak sa neozve do <strong>14 dní</strong> od oznámenia výhry, organizátor si vyhradzuje právo odovzdať cenu ďalšiemu súťažiacemu v poradí.
               </p>
             </div>
           </div>

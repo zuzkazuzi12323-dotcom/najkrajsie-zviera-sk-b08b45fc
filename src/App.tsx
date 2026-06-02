@@ -15,6 +15,7 @@ import RegistrationCanceled from "./pages/RegistrationCanceled";
 import Rules from "./pages/Rules";
 import HowItWorks from "./pages/HowItWorks";
 import Winners from "./pages/Winners";
+import Certificate from "./pages/Certificate";
 import Privacy from "./pages/Privacy";
 import Contact from "./pages/Contact";
 import EShop from "./pages/EShop";
@@ -60,6 +61,7 @@ const App = () => (
             <Route path="/pravidla" element={<Rules />} />
             <Route path="/ako-funguje" element={<HowItWorks />} />
             <Route path="/vitazi" element={<Winners />} />
+            <Route path="/certifikat/:id" element={<Certificate />} />
             <Route path="/ochrana-udajov" element={<Privacy />} />
             <Route path="/kontakt" element={<Contact />} />
             <Route path="/eshop" element={<EShop />} />
