@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Trophy, Calendar } from "lucide-react";
+import { Trophy, Calendar, Award } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
