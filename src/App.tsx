@@ -15,6 +15,7 @@ import RegistrationCanceled from "./pages/RegistrationCanceled";
 import Rules from "./pages/Rules";
 import HowItWorks from "./pages/HowItWorks";
 import Winners from "./pages/Winners";
+import Certificate from "./pages/Certificate";
 import Privacy from "./pages/Privacy";
 import Contact from "./pages/Contact";
 import EShop from "./pages/EShop";
