@@ -21,7 +21,12 @@ const Winners = () => {
 
       return dogsData
         .map((d: any) => ({ ...d, votes: voteMap[d.id] || 0 }))
-        .sort((a: any, b: any) => (a.winner_place || 99) - (b.winner_place || 99));
+        .sort((a: any, b: any) => {
+          const placeA = a.winner_place || 99;
+          const placeB = b.winner_place || 99;
+          if (placeA !== placeB) return placeA - placeB;
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        });
     },
   });
 
