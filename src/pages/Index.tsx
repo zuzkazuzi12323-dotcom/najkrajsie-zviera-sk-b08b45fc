@@ -79,8 +79,8 @@ const Index = () => {
 
   const prizes = [
     { icon: Trophy, title: "Titul Najkrajší pes Slovenska", desc: "Prestížne ocenenie pre vášho miláčika" },
-    { icon: Award, title: "Digitálny diplom", desc: "Krásny certifikát na stiahnutie" },
-    { icon: Gift, title: "Darček pre psa", desc: "Hračka alebo pamlsky pre víťaza" },
+    { icon: Award, title: "Certifikát víťaza", desc: "Krásny certifikát na stiahnutie a vytlačenie" },
+    { icon: Gift, title: "Darček od partnerov", desc: "Vecná cena od partnerov súťaže" },
   ];
 
   return (
