@@ -134,6 +134,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Main partner banner */}
+      <PartnerHeroBanner />
+
       {/* Contest Countdown */}
       <ContestCountdown />
 
