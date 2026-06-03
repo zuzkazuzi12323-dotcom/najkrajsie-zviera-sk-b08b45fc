@@ -143,6 +143,7 @@ const Leaderboard = () => {
             </div>
           </>
         )}
+        <SponsorBanner className="mt-10 max-w-2xl mx-auto" />
       </div>
       <Footer />
     </div>
