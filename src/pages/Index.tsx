@@ -258,6 +258,11 @@ const Index = () => {
         </section>
       )}
 
+      {/* Partners */}
+      <PartnersSection compact />
+
+
+
       {/* Final CTA */}
       <section className="container mx-auto px-4 pb-20">
         <div className="gradient-golden rounded-3xl p-10 md:p-16 text-center">
