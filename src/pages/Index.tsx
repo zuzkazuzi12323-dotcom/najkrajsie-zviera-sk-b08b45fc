@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import DogCard from "@/components/DogCard";
 import DonationCounter from "@/components/DonationCounter";
 import ContestCountdown from "@/components/ContestCountdown";
+import PartnerHeroBanner from "@/components/PartnerHeroBanner";
+import PartnersSection from "@/components/PartnersSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSiteContent } from "@/hooks/useSiteContent";
@@ -77,8 +79,8 @@ const Index = () => {
 
   const prizes = [
     { icon: Trophy, title: "Titul Najkrajší pes Slovenska", desc: "Prestížne ocenenie pre vášho miláčika" },
-    { icon: Award, title: "Digitálny diplom", desc: "Krásny certifikát na stiahnutie" },
-    { icon: Gift, title: "Darček pre psa", desc: "Hračka alebo pamlsky pre víťaza" },
+    { icon: Award, title: "Certifikát víťaza", desc: "Krásny certifikát na stiahnutie a vytlačenie" },
+    { icon: Gift, title: "Darček od partnerov", desc: "Vecná cena od partnerov súťaže" },
   ];
 
   return (
@@ -132,6 +134,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Main partner banner */}
+      <PartnerHeroBanner />
+
       {/* Contest Countdown */}
       <ContestCountdown />
 
@@ -164,8 +169,10 @@ const Index = () => {
       {/* Prize section */}
       <section className="container mx-auto px-4 pb-12">
         <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">🏆 Čo môže pes vyhrať</h2>
-          <p className="text-muted-foreground mt-2">Víťaz súťaže každý mesiac získa</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground">{t("prize.title", "🏆 Čo získa víťaz")}</h2>
+          <p className="text-muted-foreground mt-2 max-w-2xl mx-auto text-pretty whitespace-pre-line">
+            {t("prize.body", "Víťazný pes získa darček od partnerov súťaže, certifikát víťaza a prestížne ocenenie Najkrajší pes Slovenska.")}
+          </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
           {prizes.map((prize) => (
@@ -178,7 +185,11 @@ const Index = () => {
             </div>
           ))}
         </div>
+        <p className="text-center text-sm text-muted-foreground mt-6 max-w-2xl mx-auto text-pretty whitespace-pre-line">
+          {t("prize.delivery", "Po ukončení súťaže bude výherca kontaktovaný e-mailom. Po potvrdení doručovacích údajov bude výhra odoslaná na adresu výhercu.")}
+        </p>
       </section>
+
 
       {/* Donation counter */}
       <DonationCounter />
@@ -246,6 +257,11 @@ const Index = () => {
           </Link>
         </section>
       )}
+
+      {/* Partners */}
+      <PartnersSection compact />
+
+
 
       {/* Final CTA */}
       <section className="container mx-auto px-4 pb-20">

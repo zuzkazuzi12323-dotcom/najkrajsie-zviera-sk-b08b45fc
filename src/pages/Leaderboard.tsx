@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SponsorBanner from "@/components/SponsorBanner";
 import { supabase } from "@/integrations/supabase/client";
 
 const Leaderboard = () => {
@@ -142,6 +143,7 @@ const Leaderboard = () => {
             </div>
           </>
         )}
+        <SponsorBanner className="mt-10 max-w-2xl mx-auto" />
       </div>
       <Footer />
     </div>

@@ -1,15 +1,43 @@
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import utulokTrnava from "@/assets/utulok-trnava.png";
+import { useActiveSponsors } from "@/hooks/useSponsors";
 
 const shelters = [
   { name: "Útulok pri kaplnke Trnava", logo: utulokTrnava, url: "https://www.trnava.utulok.sk" },
 ];
 
 const Footer = () => {
+  const { data: sponsors = [] } = useActiveSponsors();
+  const partners = sponsors.filter((s) => s.logo_url);
+
   return (
     <footer className="border-t border-border bg-secondary/30 mt-auto">
       <div className="container mx-auto px-4 py-12">
+        {/* Partner logos */}
+        {partners.length > 0 && (
+          <div className="mb-10 text-center">
+            <h4 className="font-semibold text-foreground mb-4">Naši partneri</h4>
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              {partners.map((p) => {
+                const Wrapper: any = p.link_url ? "a" : "div";
+                const wrapperProps = p.link_url
+                  ? { href: p.link_url, target: "_blank", rel: "noopener noreferrer" }
+                  : {};
+                return (
+                  <Wrapper key={p.id} {...wrapperProps} title={p.title}
+                    className="w-24 h-14 bg-white rounded-lg border border-border flex items-center justify-center p-2 transition-transform hover:scale-110">
+                    <img src={p.logo_url!} alt={p.title} className="max-w-full max-h-full object-contain" loading="lazy" />
+                  </Wrapper>
+                );
+              })}
+            </div>
+            <p className="mt-3">
+              <Link to="/partneri" className="text-sm text-primary hover:underline">Zobraziť všetkých partnerov →</Link>
+            </p>
+          </div>
+        )}
+
         {/* Shelter logos */}
         <div className="mb-10 text-center">
           <h4 className="font-semibold text-foreground mb-4">Podporujeme útulky</h4>
@@ -42,6 +70,7 @@ const Footer = () => {
               <Link to="/pravidla" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pravidlá súťaže</Link>
               <Link to="/ako-funguje" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Ako funguje súťaž</Link>
               <Link to="/vitazi" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Víťazi</Link>
+              <Link to="/partneri" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Partneri</Link>
               <Link to="/ochrana-udajov" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Ochrana údajov</Link>
             </div>
           </div>

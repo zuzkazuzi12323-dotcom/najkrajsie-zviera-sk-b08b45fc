@@ -377,6 +377,7 @@ export type Database = {
       sponsors: {
         Row: {
           active: boolean
+          banner_text: string | null
           banner_url: string | null
           created_at: string
           cta_label: string | null
@@ -393,6 +394,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          banner_text?: string | null
           banner_url?: string | null
           created_at?: string
           cta_label?: string | null
@@ -409,6 +411,7 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          banner_text?: string | null
           banner_url?: string | null
           created_at?: string
           cta_label?: string | null

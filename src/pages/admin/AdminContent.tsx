@@ -24,6 +24,7 @@ const PAGE_LABELS: Record<string, string> = {
   donate: "Podpora útulkov",
   contact: "Kontakt",
   howitworks: "Ako to funguje",
+  partners: "Partneri",
 };
 
 const AdminContent = () => {
