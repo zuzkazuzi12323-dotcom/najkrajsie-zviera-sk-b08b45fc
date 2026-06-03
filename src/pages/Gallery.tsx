@@ -107,9 +107,14 @@ const Gallery = () => {
           ))}
         </div>
 
+        <SponsorBanner className="mb-6" />
+
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {filtered.map((dog) => <DogCard key={dog.id} dog={dog} userVoted={userVotes.includes(dog.id)} />)}
         </div>
+
+        <SponsorBanner className="mt-8" />
+
 
         {filtered.length === 0 && (
           <div className="text-center py-20">
