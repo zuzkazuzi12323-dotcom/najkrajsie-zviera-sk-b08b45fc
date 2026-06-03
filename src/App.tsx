@@ -29,6 +29,8 @@ import AdminComments from "./pages/admin/AdminComments";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminContent from "./pages/admin/AdminContent";
+import AdminSponsors from "./pages/admin/AdminSponsors";
+import Partners from "./pages/Partners";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MyOrders from "./pages/MyOrders";
@@ -73,6 +75,7 @@ const App = () => (
             <Route path="/nastavenia" element={<AccountSettings />} />
             <Route path="/rebricek" element={<Leaderboard />} />
             <Route path="/moj-profil" element={<MyProfile />} />
+            <Route path="/partneri" element={<Partners />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
@@ -82,6 +85,7 @@ const App = () => (
               <Route path="komentare" element={<AdminComments />} />
               <Route path="platby" element={<AdminPayments />} />
               <Route path="produkty" element={<AdminProducts />} />
+              <Route path="partneri" element={<AdminSponsors />} />
               <Route path="obsah" element={<AdminContent />} />
             </Route>
 
