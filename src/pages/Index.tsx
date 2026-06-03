@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import DogCard from "@/components/DogCard";
 import DonationCounter from "@/components/DonationCounter";
 import ContestCountdown from "@/components/ContestCountdown";
+import PartnerHeroBanner from "@/components/PartnerHeroBanner";
+import PartnersSection from "@/components/PartnersSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSiteContent } from "@/hooks/useSiteContent";
