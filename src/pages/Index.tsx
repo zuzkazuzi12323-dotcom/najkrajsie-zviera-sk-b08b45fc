@@ -169,8 +169,10 @@ const Index = () => {
       {/* Prize section */}
       <section className="container mx-auto px-4 pb-12">
         <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">🏆 Čo môže pes vyhrať</h2>
-          <p className="text-muted-foreground mt-2">Víťaz súťaže každý mesiac získa</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground">{t("prize.title", "🏆 Čo získa víťaz")}</h2>
+          <p className="text-muted-foreground mt-2 max-w-2xl mx-auto text-pretty whitespace-pre-line">
+            {t("prize.body", "Víťazný pes získa darček od partnerov súťaže, certifikát víťaza a prestížne ocenenie Najkrajší pes Slovenska.")}
+          </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
           {prizes.map((prize) => (
@@ -183,7 +185,11 @@ const Index = () => {
             </div>
           ))}
         </div>
+        <p className="text-center text-sm text-muted-foreground mt-6 max-w-2xl mx-auto text-pretty whitespace-pre-line">
+          {t("prize.delivery", "Po ukončení súťaže bude výherca kontaktovaný e-mailom. Po potvrdení doručovacích údajov bude výhra odoslaná na adresu výhercu.")}
+        </p>
       </section>
+
 
       {/* Donation counter */}
       <DonationCounter />
