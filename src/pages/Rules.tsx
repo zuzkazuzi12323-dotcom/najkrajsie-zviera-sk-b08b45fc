@@ -50,10 +50,13 @@ const Rules = () => {
                 <Gift className="w-5 h-5 text-primary" /> Výhra
               </h2>
               <p className="text-foreground/80">
-                Víťaz získa <strong>titul „Najkrajší pes Slovenska"</strong> a <strong>prestížny digitálny certifikát</strong>, ktorý si môže stiahnuť a vytlačiť. Žiadne fyzické ceny sa neodosielajú — všetky odmeny sú digitálne.
+                Víťazný pes získa <strong>darček od partnerov súťaže</strong>, <strong>certifikát víťaza</strong> a prestížne ocenenie <strong>Najkrajší pes Slovenska</strong>.
               </p>
               <p className="text-foreground/80 mt-3">
-                Výherca bude kontaktovaný e-mailom alebo cez účet na stránke. Ak sa neozve do <strong>14 dní</strong> od oznámenia výhry, organizátor si vyhradzuje právo odovzdať cenu ďalšiemu súťažiacemu v poradí.
+                Po ukončení súťaže bude výherca kontaktovaný e-mailom. Po potvrdení doručovacích údajov bude výhra odoslaná na adresu výhercu.
+              </p>
+              <p className="text-foreground/80 mt-3">
+                Ak sa výherca neozve do <strong>14 dní</strong> od oznámenia výhry, organizátor si vyhradzuje právo odovzdať cenu ďalšiemu súťažiacemu v poradí.
               </p>
             </div>
           </div>
