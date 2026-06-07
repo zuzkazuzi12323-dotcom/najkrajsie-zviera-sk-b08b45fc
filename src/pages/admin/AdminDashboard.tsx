@@ -15,33 +15,35 @@ const AdminDashboard = () => {
 
       const [
         { count: users },
-        { count: dogs },
-        { count: votes },
+        { data: activeDogs },
+        { data: allVotes },
         { count: todayVotes },
-        { data: topDog },
         { data: recentProfiles },
         { data: pendingPayments },
         { data: contestSettings },
       ] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }),
-        supabase.from("dogs").select("*", { count: "exact", head: true }),
-        supabase.from("votes").select("*", { count: "exact", head: true }),
+        supabase.from("dogs").select("id, name, image_url, boost_votes").eq("approved", true).eq("archived", false),
+        supabase.from("votes").select("dog_id"),
         supabase.from("votes").select("*", { count: "exact", head: true }).gte("created_at", today.toISOString()),
-        supabase.from("votes").select("dog_id").then(({ data: allVotes }) => {
-          if (!allVotes || allVotes.length === 0) return { data: null };
-          const counts: Record<string, number> = {};
-          allVotes.forEach((v) => { counts[v.dog_id] = (counts[v.dog_id] || 0) + 1; });
-          const topId = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-          return topId ? supabase.from("dogs").select("name, image_url").eq("id", topId[0]).single().then(r => ({ data: r.data ? { ...r.data, votes: topId[1] } : null })) : { data: null };
-        }),
         supabase.from("profiles").select("display_name, user_id, created_at").order("created_at", { ascending: false }).limit(5),
         supabase.from("payments").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("contest_settings").select("*").eq("id", "00000000-0000-0000-0000-000000000002").single(),
       ]);
+      const activeDogIds = new Set((activeDogs || []).map((dog) => dog.id));
+      const freeVotes = (allVotes || []).filter((vote) => activeDogIds.has(vote.dog_id)).length;
+      const boostVotes = (activeDogs || []).reduce((sum, dog) => sum + ((dog as any).boost_votes || 0), 0);
+      const freeVoteMap: Record<string, number> = {};
+      (allVotes || []).forEach((vote) => {
+        if (activeDogIds.has(vote.dog_id)) freeVoteMap[vote.dog_id] = (freeVoteMap[vote.dog_id] || 0) + 1;
+      });
+      const topDog = [...(activeDogs || [])]
+        .map((dog) => ({ ...dog, votes: (freeVoteMap[dog.id] || 0) + ((dog as any).boost_votes || 0) }))
+        .sort((a, b) => b.votes - a.votes)[0] || null;
       return {
         users: users || 0,
-        dogs: dogs || 0,
-        votes: votes || 0,
+        dogs: activeDogs?.length || 0,
+        votes: freeVotes + boostVotes,
         todayVotes: todayVotes || 0,
         topDog: topDog as any,
         recentUsers: recentProfiles || [],

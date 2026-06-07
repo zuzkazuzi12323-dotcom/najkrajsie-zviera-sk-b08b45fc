@@ -62,12 +62,15 @@ const Index = () => {
     queryKey: ["stats"],
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
-      const [{ count: dogCount }, { count: voteCount }, { count: userCount }] = await Promise.all([
-        supabase.from("dogs").select("*", { count: "exact", head: true }),
-        supabase.from("votes").select("*", { count: "exact", head: true }),
+      const [{ data: activeDogsData }, { data: voteRows }, { count: userCount }] = await Promise.all([
+        supabase.from("dogs").select("id, boost_votes").eq("approved", true).eq("archived", false),
+        supabase.from("votes").select("dog_id"),
         supabase.from("profiles").select("user_id", { count: "exact", head: true }),
       ]);
-      return { dogs: dogCount || 0, votes: voteCount || 0, users: userCount || 0 };
+      const activeDogIds = new Set((activeDogsData || []).map((dog) => dog.id));
+      const freeVotes = (voteRows || []).filter((vote) => activeDogIds.has(vote.dog_id)).length;
+      const boostVotes = (activeDogsData || []).reduce((sum, dog) => sum + ((dog as any).boost_votes || 0), 0);
+      return { dogs: activeDogsData?.length || 0, votes: freeVotes + boostVotes, users: userCount || 0 };
     },
   });
 
