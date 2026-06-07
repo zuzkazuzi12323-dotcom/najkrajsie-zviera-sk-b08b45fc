@@ -15,8 +15,8 @@ const AdminDashboard = () => {
 
       const [
         { count: users },
-        { count: dogs },
-        { count: votes },
+        { data: activeDogs },
+        { data: allVotes },
         { count: todayVotes },
         { data: topDog },
         { data: recentProfiles },
@@ -24,8 +24,8 @@ const AdminDashboard = () => {
         { data: contestSettings },
       ] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }),
-        supabase.from("dogs").select("*", { count: "exact", head: true }),
-        supabase.from("votes").select("*", { count: "exact", head: true }),
+        supabase.from("dogs").select("id, boost_votes").eq("approved", true).eq("archived", false),
+        supabase.from("votes").select("dog_id"),
         supabase.from("votes").select("*", { count: "exact", head: true }).gte("created_at", today.toISOString()),
         supabase.from("votes").select("dog_id").then(({ data: allVotes }) => {
           if (!allVotes || allVotes.length === 0) return { data: null };
@@ -38,10 +38,13 @@ const AdminDashboard = () => {
         supabase.from("payments").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("contest_settings").select("*").eq("id", "00000000-0000-0000-0000-000000000002").single(),
       ]);
+      const activeDogIds = new Set((activeDogs || []).map((dog) => dog.id));
+      const freeVotes = (allVotes || []).filter((vote) => activeDogIds.has(vote.dog_id)).length;
+      const boostVotes = (activeDogs || []).reduce((sum, dog) => sum + ((dog as any).boost_votes || 0), 0);
       return {
         users: users || 0,
-        dogs: dogs || 0,
-        votes: votes || 0,
+        dogs: activeDogs?.length || 0,
+        votes: freeVotes + boostVotes,
         todayVotes: todayVotes || 0,
         topDog: topDog as any,
         recentUsers: recentProfiles || [],
