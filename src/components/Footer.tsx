@@ -77,7 +77,15 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-3 text-foreground">Kontakt</h4>
             <a href="mailto:infonajkrajsipes@gmail.com" className="text-sm text-primary hover:underline">infonajkrajsipes@gmail.com</a>
-            <p className="text-sm text-muted-foreground mt-3">© 2025 NajkrajšíPes.sk</p>
+            <div className="mt-4">
+              <p className="text-sm font-medium text-foreground">Pre partnerov a sponzorov</p>
+              <p className="text-xs text-muted-foreground mb-1">Máte záujem o spoluprácu? Napíšte nám:</p>
+              <a href="mailto:infonajkrajsipes@gmail.com?subject=Záujem o spoluprácu / sponzoring" className="text-sm text-primary hover:underline">infonajkrajsipes@gmail.com</a>
+              <p className="mt-1">
+                <Link to="/partneri" className="text-xs text-primary hover:underline">Viac o spolupráci →</Link>
+              </p>
+            </div>
+            <p className="text-sm text-muted-foreground mt-4">© 2025 NajkrajšíPes.sk</p>
           </div>
         </div>
       </div>
