@@ -36,6 +36,18 @@ const Rules = () => {
 
             <div>
               <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-primary" /> Registrácia a platba
+              </h2>
+              <ul className="space-y-3 text-foreground/80">
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa do súťaže zaradí <strong>automaticky až po úspešnej úhrade</strong> registračného poplatku 2,99 €.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Schválenie nie je manuálne – o zaradení rozhoduje výhradne úspešná platba.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-primary" /> Ako sa vyberá víťaz
               </h2>
               <p className="text-foreground/80">
