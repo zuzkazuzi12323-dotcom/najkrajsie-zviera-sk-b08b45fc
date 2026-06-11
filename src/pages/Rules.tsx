@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { BookOpen, CheckCircle, Trophy, Gift } from "lucide-react";
+import { Link } from "react-router-dom";
+import { BookOpen, CheckCircle, Trophy, Gift, CreditCard, Handshake } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -35,6 +36,18 @@ const Rules = () => {
 
             <div>
               <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-primary" /> Registrácia a platba
+              </h2>
+              <ul className="space-y-3 text-foreground/80">
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa do súťaže zaradí <strong>automaticky až po úspešnej úhrade</strong> registračného poplatku 2,99 €.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Schválenie nie je manuálne – o zaradení rozhoduje výhradne úspešná platba.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-primary" /> Ako sa vyberá víťaz
               </h2>
               <p className="text-foreground/80">
@@ -56,7 +69,20 @@ const Rules = () => {
                 Po ukončení súťaže bude výherca kontaktovaný e-mailom. Po potvrdení doručovacích údajov bude výhra odoslaná na adresu výhercu.
               </p>
               <p className="text-foreground/80 mt-3">
-                Ak sa výherca neozve do <strong>14 dní</strong> od oznámenia výhry, organizátor si vyhradzuje právo odovzdať cenu ďalšiemu súťažiacemu v poradí.
+                Výherca bude kontaktovaný e-mailom alebo cez účet na stránke. Ak sa neozve do <strong>14 dní</strong> od oznámenia výhry, organizátor si vyhradzuje právo odovzdať cenu ďalšiemu súťažiacemu v poradí.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <Handshake className="w-5 h-5 text-primary" /> Partneri a sponzori
+              </h2>
+              <p className="text-foreground/80">
+                Súťaž podporujú partneri a sponzori, ktorí prispievajú cenami a pomáhajú útulkom. Ak máte záujem o spoluprácu,
+                pozrite si možnosti na stránke{" "}
+                <Link to="/partneri" className="text-primary font-medium hover:underline">Partneri a sponzori</Link>{" "}
+                alebo nám napíšte na{" "}
+                <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a>.
               </p>
             </div>
           </div>

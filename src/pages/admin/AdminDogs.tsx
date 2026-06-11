@@ -105,13 +105,18 @@ const AdminDogs = () => {
 
   const filters: { key: typeof filter; label: string }[] = [
     { key: "all", label: `Všetci (${dogs.length})` },
-    { key: "pending", label: `Čakajú (${dogs.filter(d => !d.approved).length})` },
+    { key: "pending", label: `Nezaplatené (${dogs.filter(d => !d.approved).length})` },
     { key: "approved", label: `Schválení (${dogs.filter(d => d.approved && !d.archived).length})` },
     { key: "archived", label: `Archivovaní (${dogs.filter(d => d.archived).length})` },
   ];
 
   return (
     <div className="space-y-4">
+      <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-800">
+        🔒 Psy sa do súťaže pridávajú <strong>automaticky až po úhrade</strong> registračného poplatku 2,99 €.
+        Nezaplatené psy sa v galérii ani v rebríčku nezobrazujú a po zrušení platby sa automaticky odstránia.
+        Manuálne schvaľovanie nie je potrebné.
+      </div>
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -165,8 +170,8 @@ const AdminDogs = () => {
                     {dog.archived ? (
                       <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 text-gray-700">Archivovaný</span>
                     ) : (
-                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${dog.approved ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
-                        {dog.approved ? "Schválený" : "Čaká"}
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${dog.approved ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                        {dog.approved ? "Zaplatený" : "Nezaplatený"}
                       </span>
                     )}
                   </td>
