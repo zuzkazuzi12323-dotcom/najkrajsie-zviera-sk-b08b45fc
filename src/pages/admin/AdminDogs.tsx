@@ -105,7 +105,7 @@ const AdminDogs = () => {
 
   const filters: { key: typeof filter; label: string }[] = [
     { key: "all", label: `Všetci (${dogs.length})` },
-    { key: "pending", label: `Čakajú (${dogs.filter(d => !d.approved).length})` },
+    { key: "pending", label: `Nezaplatené (${dogs.filter(d => !d.approved).length})` },
     { key: "approved", label: `Schválení (${dogs.filter(d => d.approved && !d.archived).length})` },
     { key: "archived", label: `Archivovaní (${dogs.filter(d => d.archived).length})` },
   ];
