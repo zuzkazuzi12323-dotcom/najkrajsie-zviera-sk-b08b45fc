@@ -112,6 +112,11 @@ const AdminDogs = () => {
 
   return (
     <div className="space-y-4">
+      <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-800">
+        🔒 Psy sa do súťaže pridávajú <strong>automaticky až po úhrade</strong> registračného poplatku 2,99 €.
+        Nezaplatené psy sa v galérii ani v rebríčku nezobrazujú a po zrušení platby sa automaticky odstránia.
+        Manuálne schvaľovanie nie je potrebné.
+      </div>
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
