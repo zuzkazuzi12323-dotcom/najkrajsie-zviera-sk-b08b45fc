@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { BookOpen, CheckCircle, Trophy, Gift } from "lucide-react";
+import { Link } from "react-router-dom";
+import { BookOpen, CheckCircle, Trophy, Gift, CreditCard, Handshake } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
