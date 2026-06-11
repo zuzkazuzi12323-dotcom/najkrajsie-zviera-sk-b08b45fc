@@ -69,7 +69,20 @@ const Rules = () => {
                 Po ukončení súťaže bude výherca kontaktovaný e-mailom. Po potvrdení doručovacích údajov bude výhra odoslaná na adresu výhercu.
               </p>
               <p className="text-foreground/80 mt-3">
-                Ak sa výherca neozve do <strong>14 dní</strong> od oznámenia výhry, organizátor si vyhradzuje právo odovzdať cenu ďalšiemu súťažiacemu v poradí.
+                Výherca bude kontaktovaný e-mailom alebo cez účet na stránke. Ak sa neozve do <strong>14 dní</strong> od oznámenia výhry, organizátor si vyhradzuje právo odovzdať cenu ďalšiemu súťažiacemu v poradí.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <Handshake className="w-5 h-5 text-primary" /> Partneri a sponzori
+              </h2>
+              <p className="text-foreground/80">
+                Súťaž podporujú partneri a sponzori, ktorí prispievajú cenami a pomáhajú útulkom. Ak máte záujem o spoluprácu,
+                pozrite si možnosti na stránke{" "}
+                <Link to="/partneri" className="text-primary font-medium hover:underline">Partneri a sponzori</Link>{" "}
+                alebo nám napíšte na{" "}
+                <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a>.
               </p>
             </div>
           </div>
