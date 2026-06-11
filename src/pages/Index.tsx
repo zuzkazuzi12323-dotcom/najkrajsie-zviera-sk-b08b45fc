@@ -14,7 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSiteContent } from "@/hooks/useSiteContent";
 
 const fetchDogsWithVotes = async () => {
-  const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true);
+  const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).eq("archived", false);
   if (!dogsData?.length) return [];
   const ownerIds = [...new Set(dogsData.map((d) => d.owner_id))];
   const [{ data: profiles }, { data: voteCounts }] = await Promise.all([
