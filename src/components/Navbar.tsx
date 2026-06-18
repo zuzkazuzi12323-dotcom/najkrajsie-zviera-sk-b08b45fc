@@ -20,6 +20,7 @@ const Navbar = () => {
   const moreLinks = [
     { to: "/vitazi", label: "Víťazi" },
     { to: "/partneri", label: "Partneri" },
+    { to: "/utulky", label: "Útulky, ktorým pomáhame ❤️" },
     { to: "/pravidla", label: "Pravidlá súťaže" },
     { to: "/ako-funguje", label: "Ako funguje súťaž" },
     { to: "/kontakt", label: "Kontakt" },

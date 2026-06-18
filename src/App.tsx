@@ -30,7 +30,9 @@ import AdminPayments from "./pages/admin/AdminPayments";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminContent from "./pages/admin/AdminContent";
 import AdminSponsors from "./pages/admin/AdminSponsors";
+import AdminShelters from "./pages/admin/AdminShelters";
 import Partners from "./pages/Partners";
+import Shelters from "./pages/Shelters";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MyOrders from "./pages/MyOrders";
@@ -76,6 +78,7 @@ const App = () => (
             <Route path="/rebricek" element={<Leaderboard />} />
             <Route path="/moj-profil" element={<MyProfile />} />
             <Route path="/partneri" element={<Partners />} />
+            <Route path="/utulky" element={<Shelters />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
@@ -86,6 +89,7 @@ const App = () => (
               <Route path="platby" element={<AdminPayments />} />
               <Route path="produkty" element={<AdminProducts />} />
               <Route path="partneri" element={<AdminSponsors />} />
+              <Route path="utulky" element={<AdminShelters />} />
               <Route path="obsah" element={<AdminContent />} />
             </Route>
 
