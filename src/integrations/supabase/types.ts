@@ -317,6 +317,45 @@ export type Database = {
         }
         Relationships: []
       }
+      shelters: {
+        Row: {
+          active: boolean
+          city: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          logo_url: string | null
+          name: string
+          support_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          logo_url?: string | null
+          name: string
+          support_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          logo_url?: string | null
+          name?: string
+          support_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_content: {
         Row: {
           key: string
