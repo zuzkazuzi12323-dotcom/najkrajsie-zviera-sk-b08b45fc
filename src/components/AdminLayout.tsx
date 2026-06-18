@@ -16,6 +16,7 @@ const navItems = [
   { to: "/admin/platby", icon: CreditCard, label: "Platby" },
   { to: "/admin/produkty", icon: ShoppingBag, label: "E-shop produkty" },
   { to: "/admin/partneri", icon: Handshake, label: "Partneri a bannery" },
+  { to: "/admin/utulky", icon: HousePlus, label: "Útulky" },
   { to: "/admin/obsah", icon: FileText, label: "Obsah stránok" },
 ];
 
