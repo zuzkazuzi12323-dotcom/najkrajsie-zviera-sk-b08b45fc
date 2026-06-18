@@ -78,6 +78,7 @@ const App = () => (
             <Route path="/rebricek" element={<Leaderboard />} />
             <Route path="/moj-profil" element={<MyProfile />} />
             <Route path="/partneri" element={<Partners />} />
+            <Route path="/utulky" element={<Shelters />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
