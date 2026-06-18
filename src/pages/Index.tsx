@@ -328,6 +328,9 @@ const Index = () => {
         </Link>
       </section>
 
+      {/* Shelters we support */}
+      <SheltersSection />
+
       {/* Partners */}
       <PartnersSection compact />
 
