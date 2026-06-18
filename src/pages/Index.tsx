@@ -8,6 +8,7 @@ import DogCard from "@/components/DogCard";
 import DonationCounter from "@/components/DonationCounter";
 import ContestCountdown from "@/components/ContestCountdown";
 import PartnersSection from "@/components/PartnersSection";
+import SheltersSection from "@/components/SheltersSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
