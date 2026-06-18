@@ -30,6 +30,7 @@ import AdminPayments from "./pages/admin/AdminPayments";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminContent from "./pages/admin/AdminContent";
 import AdminSponsors from "./pages/admin/AdminSponsors";
+import AdminShelters from "./pages/admin/AdminShelters";
 import Partners from "./pages/Partners";
 import Shelters from "./pages/Shelters";
 import ForgotPassword from "./pages/ForgotPassword";
