@@ -1,4 +1,5 @@
-import { Heart, MapPin, ExternalLink, HousePlus } from "lucide-react";
+import { Heart, MapPin, ExternalLink, HousePlus, Copy, Landmark } from "lucide-react";
+import { toast } from "sonner";
 import { useActiveShelters } from "@/hooks/useShelters";
 
 /** Public section showing animal shelters supported by the contest. */
