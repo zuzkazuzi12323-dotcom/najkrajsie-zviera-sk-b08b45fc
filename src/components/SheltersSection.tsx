@@ -43,6 +43,33 @@ const SheltersSection = ({ showHeading = true }: { showHeading?: boolean }) => {
               </p>
             )}
             {s.description && <p className="text-sm text-muted-foreground mt-2 text-pretty">{s.description}</p>}
+
+            {s.iban && (
+              <div className="mt-4 w-full bg-secondary/50 rounded-xl border border-border p-3 text-left">
+                <p className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1">
+                  <Landmark className="w-3.5 h-3.5" /> Číslo účtu (IBAN)
+                </p>
+                {s.bank_holder && <p className="text-xs text-muted-foreground mb-1">{s.bank_holder}</p>}
+                <div className="flex items-center justify-between gap-2">
+                  <code className="text-sm font-semibold text-foreground break-all">{s.iban}</code>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(s.iban!);
+                      toast.success("IBAN skopírovaný");
+                    }}
+                    title="Kopírovať IBAN"
+                    className="shrink-0 p-1.5 rounded-lg hover:bg-background text-muted-foreground"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-2">
+                  Príspevok je dobrovoľný a ide priamo na účet útulku. Web nie je sprostredkovateľ platby.
+                </p>
+              </div>
+            )}
+
             {s.support_url && (
               <a
                 href={s.support_url}
