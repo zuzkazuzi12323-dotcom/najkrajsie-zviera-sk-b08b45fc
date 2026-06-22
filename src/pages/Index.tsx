@@ -35,6 +35,9 @@ const fetchDogsWithVotes = async () => {
 
 const Index = () => {
   const { user } = useAuth();
+  const { data: featuredShelter } = useFeaturedShelter();
+  const { data: donationTotal = 0 } = useDonationTotal();
+
 
   const { data: allDogs = [] } = useQuery({
     queryKey: ["all-dogs-home"],
