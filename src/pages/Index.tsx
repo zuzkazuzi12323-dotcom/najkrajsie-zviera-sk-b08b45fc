@@ -9,6 +9,7 @@ import DonationCounter from "@/components/DonationCounter";
 import ContestCountdown from "@/components/ContestCountdown";
 import PartnersSection from "@/components/PartnersSection";
 import SheltersSection from "@/components/SheltersSection";
+import { useFeaturedShelter, useDonationTotal } from "@/hooks/useShelters";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
