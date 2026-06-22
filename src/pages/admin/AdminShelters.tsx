@@ -199,6 +199,20 @@ const AdminShelters = () => {
             placeholder="Odkaz na podporu / web útulku (https://...)"
             className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
           />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              value={form.iban}
+              onChange={(e) => setForm({ ...form, iban: e.target.value })}
+              placeholder="IBAN útulku (SK...)"
+              className="px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+            />
+            <input
+              value={form.bank_holder}
+              onChange={(e) => setForm({ ...form, bank_holder: e.target.value })}
+              placeholder="Majiteľ účtu / názov"
+              className="px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+            />
+          </div>
           <textarea
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
