@@ -211,12 +211,35 @@ const Index = () => {
         <div className="bg-card rounded-2xl p-6 md:p-10 shadow-soft border border-primary/10 text-center max-w-3xl mx-auto">
           <Home className="w-10 h-10 text-primary mx-auto mb-3" />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Podpora útulkov</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-pretty mb-4">
-            Z každej registrácie ide <strong className="text-foreground">20 %</strong> na útulky pre zvieratá. Spolu pomáhame opusteným psíkom nájsť lepší domov. 🐾
+          <p className="text-muted-foreground max-w-2xl mx-auto text-pretty mb-5">
+            Z každej registrácie ide <strong className="text-foreground">20 %</strong> na podporu útulkov. Spolu pomáhame opusteným psíkom 🐾
           </p>
+
+          {featuredShelter && (
+            <div className="flex flex-col items-center gap-3 mb-5">
+              {featuredShelter.logo_url && (
+                <div className="w-28 h-20 bg-white rounded-xl border border-border flex items-center justify-center p-3">
+                  <img src={featuredShelter.logo_url} alt={featuredShelter.name} className="max-w-full max-h-full object-contain" loading="lazy" />
+                </div>
+              )}
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-foreground px-5 py-3 rounded-full font-semibold">
+                <Heart className="w-4 h-4 text-primary fill-primary" />
+                Aktuálne podporovaný útulok: {featuredShelter.name}
+              </div>
+              {featuredShelter.description && (
+                <p className="text-sm text-muted-foreground max-w-xl mx-auto text-pretty">{featuredShelter.description}</p>
+              )}
+              {featuredShelter.iban && featuredShelter.show_iban && (
+                <p className="text-sm text-foreground">
+                  IBAN útulku: <code className="font-semibold">{featuredShelter.iban}</code>
+                </p>
+              )}
+            </div>
+          )}
+
           <div className="inline-flex items-center gap-2 bg-primary/10 text-foreground px-5 py-3 rounded-full font-semibold">
             <Heart className="w-4 h-4 text-primary fill-primary" />
-            Aktuálne podporovaný útulok: Útulok pri kaplnke Trnava
+            Pre útulky sme zatiaľ vyzbierali: {(donationTotal / 100).toFixed(2)} € ❤️
           </div>
         </div>
       </section>
