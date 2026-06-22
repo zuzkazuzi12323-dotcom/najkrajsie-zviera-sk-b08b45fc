@@ -8,6 +8,8 @@ export type Shelter = {
   description: string | null;
   logo_url: string | null;
   support_url: string | null;
+  iban: string | null;
+  bank_holder: string | null;
   active: boolean;
   display_order: number;
 };

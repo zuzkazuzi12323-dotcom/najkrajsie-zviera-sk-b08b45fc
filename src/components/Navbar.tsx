@@ -11,19 +11,21 @@ const Navbar = () => {
   const { user, isAdmin, profile, signOut } = useAuth();
 
   const mainLinks = [
-    { to: "/galeria", label: "Galéria" },
-    { to: "/rebricek", label: "Rebríček 🏆" },
+    { to: "/", label: "Domov" },
+    { to: "/galeria", label: "Súťaž" },
     { to: "/pridat", label: "Pridať psa" },
-    { to: "/eshop", label: "E-shop 🛒" },
+    { to: "/rebricek", label: "Hlasovanie 🏆" },
+    { to: "/vitazi", label: "Víťazi" },
   ];
 
   const moreLinks = [
-    { to: "/vitazi", label: "Víťazi" },
+    { to: "/utulky", label: "Podpora útulkov ❤️" },
+    { to: "/ako-funguje", label: "Ako to funguje" },
+    { to: "/#o-projekte", label: "O projekte" },
     { to: "/partneri", label: "Partneri" },
-    { to: "/utulky", label: "Útulky, ktorým pomáhame ❤️" },
-    { to: "/pravidla", label: "Pravidlá súťaže" },
-    { to: "/ako-funguje", label: "Ako funguje súťaž" },
     { to: "/kontakt", label: "Kontakt" },
+    { to: "/eshop", label: "E-shop 🛒" },
+    { to: "/pravidla", label: "Pravidlá súťaže" },
     { to: "/ochrana-udajov", label: "Ochrana údajov" },
   ];
 

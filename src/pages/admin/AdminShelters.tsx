@@ -11,6 +11,8 @@ type ShelterRow = {
   description: string | null;
   logo_url: string | null;
   support_url: string | null;
+  iban: string | null;
+  bank_holder: string | null;
   active: boolean;
   display_order: number;
 };
@@ -21,6 +23,8 @@ const emptyForm = {
   description: "",
   logo_url: "",
   support_url: "",
+  iban: "",
+  bank_holder: "",
   active: true,
 };
 
@@ -87,6 +91,8 @@ const AdminShelters = () => {
       description: form.description.trim() || null,
       logo_url: form.logo_url || null,
       support_url: form.support_url.trim() || null,
+      iban: form.iban.trim() || null,
+      bank_holder: form.bank_holder.trim() || null,
       active: form.active,
     };
 
@@ -144,6 +150,8 @@ const AdminShelters = () => {
       description: s.description || "",
       logo_url: s.logo_url || "",
       support_url: s.support_url || "",
+      iban: s.iban || "",
+      bank_holder: s.bank_holder || "",
       active: s.active,
     });
     setEditId(s.id);
@@ -191,6 +199,20 @@ const AdminShelters = () => {
             placeholder="Odkaz na podporu / web útulku (https://...)"
             className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
           />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              value={form.iban}
+              onChange={(e) => setForm({ ...form, iban: e.target.value })}
+              placeholder="IBAN útulku (SK...)"
+              className="px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+            />
+            <input
+              value={form.bank_holder}
+              onChange={(e) => setForm({ ...form, bank_holder: e.target.value })}
+              placeholder="Majiteľ účtu / názov"
+              className="px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+            />
+          </div>
           <textarea
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
