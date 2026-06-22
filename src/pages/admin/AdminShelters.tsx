@@ -14,6 +14,8 @@ type ShelterRow = {
   iban: string | null;
   bank_holder: string | null;
   active: boolean;
+  featured: boolean;
+  show_iban: boolean;
   display_order: number;
 };
 
@@ -26,7 +28,11 @@ const emptyForm = {
   iban: "",
   bank_holder: "",
   active: true,
+  featured: false,
+  show_iban: true,
 };
+
+const DONATION_ID = "00000000-0000-0000-0000-000000000001";
 
 const AdminShelters = () => {
   const [showForm, setShowForm] = useState(false);
