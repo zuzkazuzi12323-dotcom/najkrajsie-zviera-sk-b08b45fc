@@ -44,7 +44,7 @@ const SheltersSection = ({ showHeading = true }: { showHeading?: boolean }) => {
             )}
             {s.description && <p className="text-sm text-muted-foreground mt-2 text-pretty">{s.description}</p>}
 
-            {s.iban && (
+            {s.iban && s.show_iban && (
               <div className="mt-4 w-full bg-secondary/50 rounded-xl border border-border p-3 text-left">
                 <p className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1">
                   <Landmark className="w-3.5 h-3.5" /> Číslo účtu (IBAN)
