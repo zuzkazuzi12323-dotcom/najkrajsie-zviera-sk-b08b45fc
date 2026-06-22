@@ -11,6 +11,8 @@ type ShelterRow = {
   description: string | null;
   logo_url: string | null;
   support_url: string | null;
+  iban: string | null;
+  bank_holder: string | null;
   active: boolean;
   display_order: number;
 };
@@ -21,6 +23,8 @@ const emptyForm = {
   description: "",
   logo_url: "",
   support_url: "",
+  iban: "",
+  bank_holder: "",
   active: true,
 };
 
