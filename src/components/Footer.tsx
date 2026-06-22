@@ -85,7 +85,7 @@ const Footer = () => {
                 <Link to="/partneri" className="text-xs text-primary hover:underline">Viac o spolupráci →</Link>
               </p>
             </div>
-            <p className="text-sm text-foreground mt-4">Organizátor: <span className="font-medium">Mário B.</span></p>
+            <p className="text-sm text-foreground mt-4">Organizátor: <span className="font-medium">Zuzana B.</span></p>
             <p className="text-sm text-muted-foreground mt-1">© 2025 NajkrajšíPes.sk</p>
           </div>
         </div>

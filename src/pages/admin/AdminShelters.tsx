@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Plus, Trash2, Pencil, Upload, X, ArrowUp, ArrowDown, Eye, EyeOff, ExternalLink, MapPin } from "lucide-react";
+import { Plus, Trash2, Pencil, Upload, X, ArrowUp, ArrowDown, Eye, EyeOff, ExternalLink, MapPin, Star, Landmark } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -14,6 +14,8 @@ type ShelterRow = {
   iban: string | null;
   bank_holder: string | null;
   active: boolean;
+  featured: boolean;
+  show_iban: boolean;
   display_order: number;
 };
 
@@ -26,13 +28,18 @@ const emptyForm = {
   iban: "",
   bank_holder: "",
   active: true,
+  featured: false,
+  show_iban: true,
 };
+
+const DONATION_ID = "00000000-0000-0000-0000-000000000001";
 
 const AdminShelters = () => {
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState({ ...emptyForm });
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [donationInput, setDonationInput] = useState("");
   const logoRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
@@ -48,10 +55,59 @@ const AdminShelters = () => {
     },
   });
 
+  const { data: donationCents = 0 } = useQuery({
+    queryKey: ["admin-donation-total"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("donations_total")
+        .select("total_cents")
+        .eq("id", DONATION_ID)
+        .single();
+      return data?.total_cents || 0;
+    },
+  });
+
+  const invalidateDonation = () => {
+    queryClient.invalidateQueries({ queryKey: ["admin-donation-total"] });
+    queryClient.invalidateQueries({ queryKey: ["donation-total"] });
+  };
+
+  const setDonationTotal = async (euros: number) => {
+    const cents = Math.max(0, Math.round(euros * 100));
+    const { error } = await supabase
+      .from("donations_total")
+      .update({ total_cents: cents })
+      .eq("id", DONATION_ID);
+    if (error) {
+      toast.error("Chyba pri ukladaní sumy");
+      return;
+    }
+    invalidateDonation();
+  };
+
+  const handleSaveDonation = async () => {
+    const val = parseFloat(donationInput.replace(",", "."));
+    if (isNaN(val)) {
+      toast.error("Zadajte platnú sumu");
+      return;
+    }
+    await setDonationTotal(val);
+    setDonationInput("");
+    toast.success("Suma aktualizovaná");
+  };
+
+  const handleResetDonation = async () => {
+    if (!confirm("Naozaj resetovať vyzbieranú sumu na 0,00 €?")) return;
+    await setDonationTotal(0);
+    toast.success("Suma resetovaná na 0,00 €");
+  };
+
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["admin-shelters"] });
     queryClient.invalidateQueries({ queryKey: ["active-shelters"] });
+    queryClient.invalidateQueries({ queryKey: ["featured-shelter"] });
   };
+
 
   const resetForm = () => {
     setForm({ ...emptyForm });
@@ -94,6 +150,8 @@ const AdminShelters = () => {
       iban: form.iban.trim() || null,
       bank_holder: form.bank_holder.trim() || null,
       active: form.active,
+      featured: form.featured,
+      show_iban: form.show_iban,
     };
 
     if (editId) {
@@ -153,9 +211,25 @@ const AdminShelters = () => {
       iban: s.iban || "",
       bank_holder: s.bank_holder || "",
       active: s.active,
+      featured: s.featured,
+      show_iban: s.show_iban,
     });
     setEditId(s.id);
     setShowForm(true);
+  };
+
+  const setFeatured = async (s: ShelterRow) => {
+    await supabase.from("shelters").update({ featured: false }).neq("id", s.id);
+    await supabase.from("shelters").update({ featured: true }).eq("id", s.id);
+    invalidate();
+    queryClient.invalidateQueries({ queryKey: ["featured-shelter"] });
+    toast.success(`Aktuálne podporovaný útulok: ${s.name}`);
+  };
+
+  const toggleShowIban = async (s: ShelterRow) => {
+    await supabase.from("shelters").update({ show_iban: !s.show_iban }).eq("id", s.id);
+    invalidate();
+    queryClient.invalidateQueries({ queryKey: ["featured-shelter"] });
   };
 
   return (
@@ -175,6 +249,38 @@ const AdminShelters = () => {
           <Plus className="w-4 h-4" /> Pridať útulok
         </button>
       </div>
+
+      {/* Vyzbieraná suma */}
+      <div className="bg-card rounded-2xl p-6 border border-border space-y-4">
+        <div>
+          <h3 className="font-semibold text-foreground">Vyzbieraná suma pre útulky</h3>
+          <p className="text-sm text-muted-foreground">
+            Aktuálne zobrazené na stránke: <strong className="text-foreground">{(donationCents / 100).toFixed(2)} €</strong>
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            20 % z každej registrácie sa pripočíta automaticky. Sumu môžete upraviť alebo resetovať.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            value={donationInput}
+            onChange={(e) => setDonationInput(e.target.value)}
+            placeholder="Nová suma v € (napr. 120.50)"
+            inputMode="decimal"
+            className="px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm flex-1 min-w-[180px]"
+          />
+          <button onClick={handleSaveDonation} className="gradient-golden text-primary-foreground px-5 py-2.5 rounded-xl font-medium text-sm">
+            Uložiť sumu
+          </button>
+          <button
+            onClick={handleResetDonation}
+            className="px-5 py-2.5 rounded-xl text-sm border border-destructive/30 text-destructive hover:bg-destructive/10"
+          >
+            Resetovať na 0,00 €
+          </button>
+        </div>
+      </div>
+
 
       {showForm && (
         <div className="bg-card rounded-2xl p-6 border border-border space-y-4">
@@ -255,6 +361,22 @@ const AdminShelters = () => {
               />{" "}
               Aktívny
             </label>
+            <label className="flex items-center gap-2 text-sm text-foreground">
+              <input
+                type="checkbox"
+                checked={form.featured}
+                onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+              />{" "}
+              Aktuálne podporovaný útulok
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground">
+              <input
+                type="checkbox"
+                checked={form.show_iban}
+                onChange={(e) => setForm({ ...form, show_iban: e.target.checked })}
+              />{" "}
+              Zobraziť IBAN na stránke
+            </label>
           </div>
           <div className="flex gap-2">
             <button onClick={handleSave} className="gradient-golden text-primary-foreground px-5 py-2 rounded-xl font-medium text-sm">
@@ -318,11 +440,24 @@ const AdminShelters = () => {
                   )}
                 </td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-1 rounded-full text-xs ${s.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                    {s.active ? "Aktívny" : "Neaktívny"}
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    <span className={`px-2 py-1 rounded-full text-xs w-fit ${s.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                      {s.active ? "Aktívny" : "Neaktívny"}
+                    </span>
+                    {s.featured && (
+                      <span className="px-2 py-1 rounded-full text-xs w-fit bg-primary/15 text-primary flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-primary" /> Podporovaný
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-right space-x-1 whitespace-nowrap">
+                  <button onClick={() => setFeatured(s)} title="Nastaviť ako aktuálne podporovaný" className={`p-1.5 rounded-lg hover:bg-secondary ${s.featured ? "text-primary" : "text-muted-foreground"}`}>
+                    <Star className={`w-4 h-4 ${s.featured ? "fill-primary" : ""}`} />
+                  </button>
+                  <button onClick={() => toggleShowIban(s)} title={s.show_iban ? "Skryť IBAN na stránke" : "Zobraziť IBAN na stránke"} className={`p-1.5 rounded-lg hover:bg-secondary ${s.show_iban ? "text-primary" : "text-muted-foreground"}`}>
+                    <Landmark className="w-4 h-4" />
+                  </button>
                   <button onClick={() => toggleActive(s)} title={s.active ? "Deaktivovať" : "Aktivovať"} className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground">
                     {s.active ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
