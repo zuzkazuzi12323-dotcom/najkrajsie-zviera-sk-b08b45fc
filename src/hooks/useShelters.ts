@@ -11,6 +11,8 @@ export type Shelter = {
   iban: string | null;
   bank_holder: string | null;
   active: boolean;
+  featured: boolean;
+  show_iban: boolean;
   display_order: number;
 };
 
@@ -26,5 +28,36 @@ export const useActiveShelters = () =>
         .order("display_order", { ascending: true })
         .order("created_at", { ascending: true });
       return (data || []) as Shelter[];
+    },
+  });
+
+/** The single currently supported (featured) shelter, if set. */
+export const useFeaturedShelter = () =>
+  useQuery({
+    queryKey: ["featured-shelter"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("shelters")
+        .select("*")
+        .eq("active", true)
+        .eq("featured", true)
+        .order("display_order", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      return (data as Shelter) || null;
+    },
+  });
+
+/** Total amount collected for shelters (in cents). */
+export const useDonationTotal = () =>
+  useQuery({
+    queryKey: ["donation-total"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("donations_total")
+        .select("total_cents")
+        .eq("id", "00000000-0000-0000-0000-000000000001")
+        .single();
+      return data?.total_cents || 0;
     },
   });
