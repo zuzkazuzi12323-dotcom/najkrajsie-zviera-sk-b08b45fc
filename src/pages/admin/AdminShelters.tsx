@@ -440,11 +440,24 @@ const AdminShelters = () => {
                   )}
                 </td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-1 rounded-full text-xs ${s.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                    {s.active ? "Aktívny" : "Neaktívny"}
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    <span className={`px-2 py-1 rounded-full text-xs w-fit ${s.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                      {s.active ? "Aktívny" : "Neaktívny"}
+                    </span>
+                    {s.featured && (
+                      <span className="px-2 py-1 rounded-full text-xs w-fit bg-primary/15 text-primary flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-primary" /> Podporovaný
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-right space-x-1 whitespace-nowrap">
+                  <button onClick={() => setFeatured(s)} title="Nastaviť ako aktuálne podporovaný" className={`p-1.5 rounded-lg hover:bg-secondary ${s.featured ? "text-primary" : "text-muted-foreground"}`}>
+                    <Star className={`w-4 h-4 ${s.featured ? "fill-primary" : ""}`} />
+                  </button>
+                  <button onClick={() => toggleShowIban(s)} title={s.show_iban ? "Skryť IBAN na stránke" : "Zobraziť IBAN na stránke"} className={`p-1.5 rounded-lg hover:bg-secondary ${s.show_iban ? "text-primary" : "text-muted-foreground"}`}>
+                    <Landmark className="w-4 h-4" />
+                  </button>
                   <button onClick={() => toggleActive(s)} title={s.active ? "Deaktivovať" : "Aktivovať"} className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground">
                     {s.active ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
