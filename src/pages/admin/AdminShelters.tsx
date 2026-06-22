@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Plus, Trash2, Pencil, Upload, X, ArrowUp, ArrowDown, Eye, EyeOff, ExternalLink, MapPin } from "lucide-react";
+import { Plus, Trash2, Pencil, Upload, X, ArrowUp, ArrowDown, Eye, EyeOff, ExternalLink, MapPin, Star, Landmark } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
