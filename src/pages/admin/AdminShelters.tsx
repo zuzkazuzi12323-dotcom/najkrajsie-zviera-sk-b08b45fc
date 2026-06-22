@@ -150,6 +150,8 @@ const AdminShelters = () => {
       description: s.description || "",
       logo_url: s.logo_url || "",
       support_url: s.support_url || "",
+      iban: s.iban || "",
+      bank_holder: s.bank_holder || "",
       active: s.active,
     });
     setEditId(s.id);
