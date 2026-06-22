@@ -306,7 +306,7 @@ const Index = () => {
       </section>
 
       {/* O projekte */}
-      <section className="container mx-auto px-4 pb-12">
+      <section id="o-projekte" className="container mx-auto px-4 pb-12 scroll-mt-20">
         <div className="bg-card rounded-2xl p-6 md:p-10 shadow-soft border border-primary/10 max-w-3xl mx-auto text-center">
           <PawPrint className="w-10 h-10 text-primary mx-auto mb-3" />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">O projekte</h2>
