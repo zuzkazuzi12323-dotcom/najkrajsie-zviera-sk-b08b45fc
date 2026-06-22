@@ -338,7 +338,7 @@ const Index = () => {
           <PawPrint className="w-10 h-10 text-primary mx-auto mb-3" />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">O projekte</h2>
           <p className="text-muted-foreground text-pretty mb-3">
-            Projekt <strong className="text-foreground">NajkrajšíPes.sk</strong> vytvoril <strong className="text-foreground">Mário B</strong> ako nezávislú iniciatívu pre milovníkov psov na Slovensku.
+            Projekt <strong className="text-foreground">NajkrajšíPes.sk</strong> vytvoril <strong className="text-foreground">Zuzana B</strong> ako nezávislú iniciatívu pre milovníkov psov na Slovensku.
           </p>
           <p className="text-muted-foreground text-pretty">
             Cieľom projektu je spojiť online súťaž so zábavou a zároveň pomáhať útulkom pre zvieratá. 🐾
