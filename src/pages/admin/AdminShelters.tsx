@@ -100,6 +100,8 @@ const AdminShelters = () => {
       iban: form.iban.trim() || null,
       bank_holder: form.bank_holder.trim() || null,
       active: form.active,
+      featured: form.featured,
+      show_iban: form.show_iban,
     };
 
     if (editId) {
