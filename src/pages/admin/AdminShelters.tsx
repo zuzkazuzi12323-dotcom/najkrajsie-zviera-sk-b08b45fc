@@ -250,6 +250,38 @@ const AdminShelters = () => {
         </button>
       </div>
 
+      {/* Vyzbieraná suma */}
+      <div className="bg-card rounded-2xl p-6 border border-border space-y-4">
+        <div>
+          <h3 className="font-semibold text-foreground">Vyzbieraná suma pre útulky</h3>
+          <p className="text-sm text-muted-foreground">
+            Aktuálne zobrazené na stránke: <strong className="text-foreground">{(donationCents / 100).toFixed(2)} €</strong>
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            20 % z každej registrácie sa pripočíta automaticky. Sumu môžete upraviť alebo resetovať.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            value={donationInput}
+            onChange={(e) => setDonationInput(e.target.value)}
+            placeholder="Nová suma v € (napr. 120.50)"
+            inputMode="decimal"
+            className="px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm flex-1 min-w-[180px]"
+          />
+          <button onClick={handleSaveDonation} className="gradient-golden text-primary-foreground px-5 py-2.5 rounded-xl font-medium text-sm">
+            Uložiť sumu
+          </button>
+          <button
+            onClick={handleResetDonation}
+            className="px-5 py-2.5 rounded-xl text-sm border border-destructive/30 text-destructive hover:bg-destructive/10"
+          >
+            Resetovať na 0,00 €
+          </button>
+        </div>
+      </div>
+
+
       {showForm && (
         <div className="bg-card rounded-2xl p-6 border border-border space-y-4">
           <h3 className="font-semibold text-foreground">{editId ? "Upraviť útulok" : "Nový útulok"}</h3>
