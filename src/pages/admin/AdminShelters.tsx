@@ -161,9 +161,25 @@ const AdminShelters = () => {
       iban: s.iban || "",
       bank_holder: s.bank_holder || "",
       active: s.active,
+      featured: s.featured,
+      show_iban: s.show_iban,
     });
     setEditId(s.id);
     setShowForm(true);
+  };
+
+  const setFeatured = async (s: ShelterRow) => {
+    await supabase.from("shelters").update({ featured: false }).neq("id", s.id);
+    await supabase.from("shelters").update({ featured: true }).eq("id", s.id);
+    invalidate();
+    queryClient.invalidateQueries({ queryKey: ["featured-shelter"] });
+    toast.success(`Aktuálne podporovaný útulok: ${s.name}`);
+  };
+
+  const toggleShowIban = async (s: ShelterRow) => {
+    await supabase.from("shelters").update({ show_iban: !s.show_iban }).eq("id", s.id);
+    invalidate();
+    queryClient.invalidateQueries({ queryKey: ["featured-shelter"] });
   };
 
   return (
