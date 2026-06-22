@@ -329,6 +329,22 @@ const AdminShelters = () => {
               />{" "}
               Aktívny
             </label>
+            <label className="flex items-center gap-2 text-sm text-foreground">
+              <input
+                type="checkbox"
+                checked={form.featured}
+                onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+              />{" "}
+              Aktuálne podporovaný útulok
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground">
+              <input
+                type="checkbox"
+                checked={form.show_iban}
+                onChange={(e) => setForm({ ...form, show_iban: e.target.checked })}
+              />{" "}
+              Zobraziť IBAN na stránke
+            </label>
           </div>
           <div className="flex gap-2">
             <button onClick={handleSave} className="gradient-golden text-primary-foreground px-5 py-2 rounded-xl font-medium text-sm">
