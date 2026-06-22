@@ -91,6 +91,8 @@ const AdminShelters = () => {
       description: form.description.trim() || null,
       logo_url: form.logo_url || null,
       support_url: form.support_url.trim() || null,
+      iban: form.iban.trim() || null,
+      bank_holder: form.bank_holder.trim() || null,
       active: form.active,
     };
 
