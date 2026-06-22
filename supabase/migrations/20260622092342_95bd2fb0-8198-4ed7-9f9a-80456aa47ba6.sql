@@ -1,0 +1,1 @@
+ALTER TABLE public.shelters ADD COLUMN IF NOT EXISTS iban text, ADD COLUMN IF NOT EXISTS bank_holder text;

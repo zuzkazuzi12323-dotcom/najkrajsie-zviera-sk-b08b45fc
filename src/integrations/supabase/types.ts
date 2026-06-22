@@ -320,10 +320,12 @@ export type Database = {
       shelters: {
         Row: {
           active: boolean
+          bank_holder: string | null
           city: string | null
           created_at: string
           description: string | null
           display_order: number
+          iban: string | null
           id: string
           logo_url: string | null
           name: string
@@ -332,10 +334,12 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          bank_holder?: string | null
           city?: string | null
           created_at?: string
           description?: string | null
           display_order?: number
+          iban?: string | null
           id?: string
           logo_url?: string | null
           name: string
@@ -344,10 +348,12 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          bank_holder?: string | null
           city?: string | null
           created_at?: string
           description?: string | null
           display_order?: number
+          iban?: string | null
           id?: string
           logo_url?: string | null
           name?: string
