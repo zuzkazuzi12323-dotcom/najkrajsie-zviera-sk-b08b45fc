@@ -106,6 +106,28 @@ serve(async (req) => {
       }
     }
 
+    // Handle platform support payments (voluntary contributions)
+    if (type === "platform_support") {
+      const amountCents = session.amount_total || parseInt(session.metadata?.amount || "0");
+      if (amountCents > 0) {
+        const meta = session.metadata || {};
+        const { error: supError } = await supabase.from("platform_supporters").insert({
+          name: meta.name || null,
+          is_anonymous: meta.is_anonymous === "1",
+          comment: meta.comment || null,
+          show_comment: meta.show_comment === "1",
+          amount_cents: amountCents,
+          status: "completed",
+        });
+        if (supError) console.error("Supporter insert error:", supError);
+
+        // 20% of platform support goes to shelters
+        const { error: donErr } = await supabase.rpc("add_donation", { payment_amount: amountCents });
+        if (donErr) console.error("Support donation update error:", donErr);
+        console.log("Platform support of", amountCents, "cents recorded");
+      }
+    }
+
     // If registration payment, approve dog & send confirmation email
     if (type === "registration" && dogId) {
       const { data: dogRow, error: approveError } = await supabase
