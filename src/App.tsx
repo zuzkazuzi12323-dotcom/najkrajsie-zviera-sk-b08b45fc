@@ -99,6 +99,8 @@ const App = () => (
               <Route path="produkty" element={<AdminProducts />} />
               <Route path="partneri" element={<AdminSponsors />} />
               <Route path="utulky" element={<AdminShelters />} />
+              <Route path="podporovatelia" element={<AdminSupporters />} />
+              <Route path="transparentnost" element={<AdminTransparency />} />
               <Route path="obsah" element={<AdminContent />} />
             </Route>
 
