@@ -42,7 +42,7 @@ const DogProfile = () => {
       if (!data) return [];
       const userIds = [...new Set(data.map((c) => c.user_id))];
       const [{ data: profiles }, { data: roles }] = await Promise.all([
-        supabase.from("profiles").select("user_id, display_name").in("user_id", userIds),
+        supabase.from("profiles_public").select("user_id, display_name").in("user_id", userIds),
         supabase.from("user_roles").select("user_id, role").in("user_id", userIds),
       ]);
       const profileMap: Record<string, string> = {};
