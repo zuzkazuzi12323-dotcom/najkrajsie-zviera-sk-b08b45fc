@@ -85,6 +85,9 @@ const App = () => (
             <Route path="/moj-profil" element={<MyProfile />} />
             <Route path="/partneri" element={<Partners />} />
             <Route path="/utulky" element={<Shelters />} />
+            <Route path="/podpora" element={<SupportPlatform />} />
+            <Route path="/podpora-dakujeme" element={<SupportSuccess />} />
+            <Route path="/transparentnost" element={<Transparency />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
