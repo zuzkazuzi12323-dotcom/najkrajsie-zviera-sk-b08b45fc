@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, Outlet, Navigate } from "react-router-dom";
 import { 
   LayoutDashboard, Users, Dog, MessageCircle, CreditCard, 
-  LogOut, Heart, ChevronLeft, Menu, ShoppingBag, Bell, FileText, Handshake, HousePlus
+  LogOut, Heart, ChevronLeft, Menu, ShoppingBag, Bell, FileText, Handshake, HousePlus, ShieldCheck, PawPrint
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,6 +17,8 @@ const navItems = [
   { to: "/admin/produkty", icon: ShoppingBag, label: "E-shop produkty" },
   { to: "/admin/partneri", icon: Handshake, label: "Partneri a bannery" },
   { to: "/admin/utulky", icon: HousePlus, label: "Útulky" },
+  { to: "/admin/podporovatelia", icon: PawPrint, label: "Podporovatelia" },
+  { to: "/admin/transparentnost", icon: ShieldCheck, label: "Transparentnosť" },
   { to: "/admin/obsah", icon: FileText, label: "Obsah stránok" },
 ];
 

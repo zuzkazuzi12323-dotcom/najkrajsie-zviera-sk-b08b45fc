@@ -18,7 +18,7 @@ const fetchDogsWithVotes = async () => {
   if (!dogsData?.length) return [];
   const ownerIds = [...new Set(dogsData.map((d) => d.owner_id))];
   const [{ data: profiles }, { data: voteCounts }] = await Promise.all([
-    supabase.from("profiles").select("user_id, display_name").in("user_id", ownerIds),
+    supabase.from("profiles_public").select("user_id, display_name").in("user_id", ownerIds),
     supabase.from("votes").select("dog_id"),
   ]);
   const profileMap: Record<string, string> = {};
@@ -67,7 +67,7 @@ const Index = () => {
       const [{ data: activeDogsData }, { data: voteRows }, { count: userCount }] = await Promise.all([
         supabase.from("dogs").select("id, boost_votes").eq("approved", true).eq("archived", false),
         supabase.from("votes").select("dog_id"),
-        supabase.from("profiles").select("user_id", { count: "exact", head: true }),
+        supabase.from("profiles_public").select("user_id", { count: "exact", head: true }),
       ]);
       const activeDogIds = new Set((activeDogsData || []).map((dog) => dog.id));
       const freeVotes = (voteRows || []).filter((vote) => activeDogIds.has(vote.dog_id)).length;

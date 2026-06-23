@@ -34,6 +34,11 @@ import AdminSponsors from "./pages/admin/AdminSponsors";
 import AdminShelters from "./pages/admin/AdminShelters";
 import Partners from "./pages/Partners";
 import Shelters from "./pages/Shelters";
+import SupportPlatform from "./pages/SupportPlatform";
+import SupportSuccess from "./pages/SupportSuccess";
+import Transparency from "./pages/Transparency";
+import AdminSupporters from "./pages/admin/AdminSupporters";
+import AdminTransparency from "./pages/admin/AdminTransparency";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MyOrders from "./pages/MyOrders";
@@ -80,6 +85,9 @@ const App = () => (
             <Route path="/moj-profil" element={<MyProfile />} />
             <Route path="/partneri" element={<Partners />} />
             <Route path="/utulky" element={<Shelters />} />
+            <Route path="/podpora" element={<SupportPlatform />} />
+            <Route path="/podpora-dakujeme" element={<SupportSuccess />} />
+            <Route path="/transparentnost" element={<Transparency />} />
 
             {/* Admin */}
             <Route path="/admin" element={<AdminLayout />}>
@@ -91,6 +99,8 @@ const App = () => (
               <Route path="produkty" element={<AdminProducts />} />
               <Route path="partneri" element={<AdminSponsors />} />
               <Route path="utulky" element={<AdminShelters />} />
+              <Route path="podporovatelia" element={<AdminSupporters />} />
+              <Route path="transparentnost" element={<AdminTransparency />} />
               <Route path="obsah" element={<AdminContent />} />
             </Route>
 

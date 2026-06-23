@@ -70,6 +70,8 @@ const Footer = () => {
               <Link to="/pravidla" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pravidlá súťaže</Link>
               <Link to="/ako-funguje" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Ako funguje súťaž</Link>
               <Link to="/vitazi" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Víťazi</Link>
+              <Link to="/podpora" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Podpora platformy</Link>
+              <Link to="/transparentnost" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Transparentnosť</Link>
               <Link to="/partneri" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Partneri</Link>
               <Link to="/ochrana-udajov" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Ochrana údajov</Link>
             </div>

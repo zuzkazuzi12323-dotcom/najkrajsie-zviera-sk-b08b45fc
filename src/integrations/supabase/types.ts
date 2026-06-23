@@ -210,6 +210,45 @@ export type Database = {
           },
         ]
       }
+      platform_supporters: {
+        Row: {
+          amount_cents: number
+          comment: string | null
+          created_at: string
+          hidden: boolean
+          id: string
+          is_anonymous: boolean
+          name: string | null
+          show_comment: boolean
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount_cents: number
+          comment?: string | null
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          is_anonymous?: boolean
+          name?: string | null
+          show_comment?: boolean
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          comment?: string | null
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          is_anonymous?: boolean
+          name?: string | null
+          show_comment?: boolean
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_images: {
         Row: {
           created_at: string
@@ -479,6 +518,54 @@ export type Database = {
         }
         Relationships: []
       }
+      transparency_records: {
+        Row: {
+          amount_cents: number | null
+          category: string
+          created_at: string
+          description: string | null
+          display_order: number
+          donor_name: string | null
+          id: string
+          image_url: string | null
+          published: boolean
+          record_date: string
+          shelter_name: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          amount_cents?: number | null
+          category: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          donor_name?: string | null
+          id?: string
+          image_url?: string | null
+          published?: boolean
+          record_date?: string
+          shelter_name?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          donor_name?: string | null
+          id?: string
+          image_url?: string | null
+          published?: boolean
+          record_date?: string
+          shelter_name?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -528,7 +615,99 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      platform_supporters_public: {
+        Row: {
+          amount_cents: number | null
+          comment: string | null
+          created_at: string | null
+          id: string | null
+          name: string | null
+        }
+        Insert: {
+          amount_cents?: number | null
+          comment?: never
+          created_at?: string | null
+          id?: string | null
+          name?: never
+        }
+        Update: {
+          amount_cents?: number | null
+          comment?: never
+          created_at?: string | null
+          id?: string | null
+          name?: never
+        }
+        Relationships: []
+      }
+      profiles_public: {
+        Row: {
+          avatar_url: string | null
+          display_name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          display_name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          display_name?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      shelters_public: {
+        Row: {
+          active: boolean | null
+          bank_holder: string | null
+          city: string | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          featured: boolean | null
+          iban: string | null
+          id: string | null
+          logo_url: string | null
+          name: string | null
+          show_iban: boolean | null
+          support_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          bank_holder?: never
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          iban?: never
+          id?: string | null
+          logo_url?: string | null
+          name?: string | null
+          show_iban?: boolean | null
+          support_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          bank_holder?: never
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          iban?: never
+          id?: string | null
+          logo_url?: string | null
+          name?: string | null
+          show_iban?: boolean | null
+          support_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       add_donation: { Args: { payment_amount: number }; Returns: undefined }

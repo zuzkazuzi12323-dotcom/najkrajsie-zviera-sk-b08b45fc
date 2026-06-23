@@ -52,7 +52,12 @@ const AdminPayments = () => {
       if (payment.type === "registration" && payment.dog_id) {
         await supabase.from("dogs").update({ approved: true }).eq("id", payment.dog_id);
       }
-      await supabase.rpc("add_donation", { payment_amount: payment.amount });
+      const donationId = "00000000-0000-0000-0000-000000000001";
+      const { data: dt } = await supabase.from("donations_total").select("total_cents").eq("id", donationId).single();
+      await supabase
+        .from("donations_total")
+        .update({ total_cents: (dt?.total_cents || 0) + Math.round((payment.amount * 20) / 100) })
+        .eq("id", donationId);
       toast.success("Platba schválená");
       queryClient.invalidateQueries({ queryKey: ["admin-payments"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dogs"] });

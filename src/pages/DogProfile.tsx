@@ -28,7 +28,7 @@ const DogProfile = () => {
     queryFn: async () => {
       const { data } = await supabase.from("dogs").select("*").eq("id", id!).single();
       if (!data) return null;
-      const { data: profile } = await supabase.from("profiles").select("display_name").eq("user_id", data.owner_id).single();
+      const { data: profile } = await supabase.from("profiles_public").select("display_name").eq("user_id", data.owner_id).maybeSingle();
       const { count } = await supabase.from("votes").select("*", { count: "exact", head: true }).eq("dog_id", id!);
       const boostVotes = (data as any).boost_votes || 0;
       return { ...data, owner_name: profile?.display_name || "Neznámy", votes: count || 0, boost_votes: boostVotes };
@@ -42,7 +42,7 @@ const DogProfile = () => {
       if (!data) return [];
       const userIds = [...new Set(data.map((c) => c.user_id))];
       const [{ data: profiles }, { data: roles }] = await Promise.all([
-        supabase.from("profiles").select("user_id, display_name").in("user_id", userIds),
+        supabase.from("profiles_public").select("user_id, display_name").in("user_id", userIds),
         supabase.from("user_roles").select("user_id, role").in("user_id", userIds),
       ]);
       const profileMap: Record<string, string> = {};
