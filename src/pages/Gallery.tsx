@@ -24,7 +24,7 @@ const Gallery = () => {
 
       const ownerIds = [...new Set(dogsData.map((d) => d.owner_id))];
       const [{ data: profiles }, { data: voteCounts }] = await Promise.all([
-        supabase.from("profiles").select("user_id, display_name").in("user_id", ownerIds),
+        supabase.from("profiles_public").select("user_id, display_name").in("user_id", ownerIds),
         supabase.from("votes").select("dog_id"),
       ]);
       const profileMap: Record<string, string> = {};
