@@ -22,9 +22,8 @@ export const useActiveShelters = () =>
     queryKey: ["active-shelters"],
     queryFn: async () => {
       const { data } = await supabase
-        .from("shelters")
+        .from("shelters_public")
         .select("*")
-        .eq("active", true)
         .order("display_order", { ascending: true })
         .order("created_at", { ascending: true });
       return (data || []) as Shelter[];
@@ -37,9 +36,8 @@ export const useFeaturedShelter = () =>
     queryKey: ["featured-shelter"],
     queryFn: async () => {
       const { data } = await supabase
-        .from("shelters")
+        .from("shelters_public")
         .select("*")
-        .eq("active", true)
         .eq("featured", true)
         .order("display_order", { ascending: true })
         .limit(1)
