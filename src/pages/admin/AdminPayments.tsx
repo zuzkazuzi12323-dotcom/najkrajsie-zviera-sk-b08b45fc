@@ -108,7 +108,7 @@ const AdminPayments = () => {
       p.status === "completed" ? "Zaplatené" : p.status === "pending" ? "Čaká" : "Zlyhalo",
       new Date(p.created_at).toLocaleDateString("sk"),
     ]);
-    const csv = [headers, ...rows].map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
+    const csv = [headers, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";")).join("\r\n");
     const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

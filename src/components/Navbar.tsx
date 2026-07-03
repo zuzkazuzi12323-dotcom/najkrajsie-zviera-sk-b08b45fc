@@ -16,6 +16,7 @@ const Navbar = () => {
     { to: "/pridat", label: "Pridať psa" },
     { to: "/rebricek", label: "Hlasovanie 🏆" },
     { to: "/podpora", label: "Podpora platformy 🐾" },
+    { to: "/transparentnost", label: "Transparentnosť 🔍" },
     { to: "/vitazi", label: "Víťazi" },
   ];
 

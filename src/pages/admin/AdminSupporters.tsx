@@ -62,14 +62,14 @@ const AdminSupporters = () => {
         s.name || "",
         s.is_anonymous ? "áno" : "nie",
         (s.amount_cents / 100).toFixed(2),
-        (s.comment || "").replace(/"/g, '""'),
+        s.comment || "",
         s.show_comment ? "áno" : "nie",
         s.hidden ? "áno" : "nie",
         s.status,
         new Date(s.created_at).toLocaleString("sk-SK"),
       ]),
     ];
-    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
+    const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";")).join("\r\n");
     const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
