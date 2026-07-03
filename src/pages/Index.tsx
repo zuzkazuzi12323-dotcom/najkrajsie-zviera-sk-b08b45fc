@@ -199,7 +199,7 @@ const Index = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">🏆 Čo získa víťaz</h2>
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">Víťaz s najviac hlasmi získa</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
           {prizes.map((prize) => (
             <div key={prize.title} className="bg-card rounded-2xl p-6 shadow-soft text-center">
               <div className="w-14 h-14 rounded-xl gradient-golden flex items-center justify-center mx-auto mb-4">
@@ -269,7 +269,7 @@ const Index = () => {
             {topDogs.map((dog) => <DogCard key={dog.id} dog={dog} userVoted={userVotes.includes(dog.id)} />)}
           </div>
         ) : (
-          <div className="text-center py-16"><p className="text-muted-foreground text-lg">Zatiaľ žiadni psy v súťaži. Buďte prvý!</p></div>
+          <div className="text-center py-16"><p className="text-muted-foreground text-lg">Zatiaľ žiadni psi v súťaži. Buďte prvý!</p></div>
         )}
         <Link to="/galeria" className="md:hidden flex items-center justify-center gap-2 mt-6 text-primary font-semibold">
           Zobraziť všetkých <ArrowRight className="w-4 h-4" />
@@ -319,7 +319,7 @@ const Index = () => {
       <section className="container mx-auto px-4 pb-12">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">Transparentnosť</h2>
-          <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">Pomáhame otvorene a zodpovedne</p>
+          <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">Pomáhame otvorene, zodpovedne a verejne auditovateľne</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {transparency.map((item) => (
