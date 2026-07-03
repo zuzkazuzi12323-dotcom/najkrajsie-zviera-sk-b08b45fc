@@ -332,6 +332,11 @@ const Index = () => {
             </div>
           ))}
         </div>
+        <div className="text-center mt-8">
+          <Link to="/transparentnost" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+            Zobraziť všetky zverejnené záznamy <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
       </section>
 
       {/* O projekte */}
@@ -340,11 +345,15 @@ const Index = () => {
           <PawPrint className="w-10 h-10 text-primary mx-auto mb-3" />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">O projekte</h2>
           <p className="text-muted-foreground text-pretty mb-3">
-            Projekt <strong className="text-foreground">NajkrajšíPes.sk</strong> vytvoril <strong className="text-foreground">Zuzana B</strong> ako nezávislú iniciatívu pre milovníkov psov na Slovensku.
+            Projekt <strong className="text-foreground">NajkrajšíPes.sk</strong> vytvorila <strong className="text-foreground">Zuzana Biháriová</strong>.
+          </p>
+          <p className="text-muted-foreground text-pretty mb-3">
+            Ide o slovenskú online súťaž pre majiteľov psov, kde môžu registrovať svojho psa a zapojiť ho do verejného hlasovania.
           </p>
           <p className="text-muted-foreground text-pretty">
-            Cieľom projektu je spojiť online súťaž so zábavou a zároveň pomáhať útulkom pre zvieratá. 🐾
+            Cieľom projektu je budovanie komunity milovníkov psov na Slovensku a transparentná pomoc útulkom pre zvieratá. Z každej registrácie ide 20 % na útulky. 🐾
           </p>
+          <p className="text-sm font-medium text-foreground mt-4">Organizátor projektu: Zuzana Biháriová</p>
         </div>
       </section>
 
