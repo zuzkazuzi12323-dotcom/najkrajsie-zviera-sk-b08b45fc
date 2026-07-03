@@ -92,8 +92,9 @@ const Index = () => {
 
   const prizes = [
     { icon: Trophy, title: "Titul Najkrajší pes Slovenska", desc: "Prestížne ocenenie pre vášho miláčika" },
-    { icon: Award, title: "Certifikát víťaza", desc: "Krásny certifikát na stiahnutie a vytlačenie" },
-    { icon: Gift, title: "Darček od partnerov", desc: "Vecná cena od partnerov súťaže" },
+    { icon: Award, title: "Oficiálny certifikát víťaza", desc: "Krásny certifikát na stiahnutie a vytlačenie" },
+    { icon: Sparkles, title: "Zverejnenie na stránke víťazov", desc: "Váš pes bude natrvalo uvedený medzi víťazmi" },
+    { icon: Gift, title: "Vecné ceny", desc: "Vecná cena, ak bude dostupná od partnerov súťaže" },
   ];
 
   const rules = [
@@ -101,12 +102,13 @@ const Index = () => {
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
     "Víťazom je pes s najviac hlasmi",
+    "Súťaž prebieha v pravidelných cykloch",
   ];
 
   const transparency = [
     { icon: Heart, title: "20 % útulkom", desc: "Z každej registrácie venujeme 20 % na útulky pre zvieratá." },
-    { icon: ShieldCheck, title: "Pravidelné vyhodnotenie", desc: "Podpora útulkov sa pravidelne vyhodnocuje a zverejňuje." },
-    { icon: CheckCircle2, title: "Transparentné fungovanie", desc: "Projekt funguje otvorene a transparentne." },
+    { icon: ShieldCheck, title: "Verejne zverejnené", desc: "Názov útulku, dátum odoslania, výška príspevku aj dôkaz o prevode." },
+    { icon: CheckCircle2, title: "Maximálna transparentnosť", desc: "Cieľom je maximálna transparentnosť a auditovateľnosť projektu." },
   ];
 
   return (
