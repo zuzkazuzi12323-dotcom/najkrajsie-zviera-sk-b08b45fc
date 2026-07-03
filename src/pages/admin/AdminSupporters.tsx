@@ -62,7 +62,7 @@ const AdminSupporters = () => {
         s.name || "",
         s.is_anonymous ? "áno" : "nie",
         (s.amount_cents / 100).toFixed(2),
-        (s.comment || "").replace(/"/g, '""'),
+        s.comment || "",
         s.show_comment ? "áno" : "nie",
         s.hidden ? "áno" : "nie",
         s.status,
