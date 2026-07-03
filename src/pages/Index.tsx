@@ -255,8 +255,8 @@ const Index = () => {
       <section className="container mx-auto px-4 py-12">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">🔥 Najobľúbenejší psy</h2>
-            <p className="text-muted-foreground mt-2">Títo psy majú najviac hlasov v aktuálnej súťaži</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">🔥 Najobľúbenejšie psy</h2>
+            <p className="text-muted-foreground mt-2">Títo psi majú najviac hlasov v aktuálnej súťaži</p>
           </div>
           <Link to="/galeria" className="hidden md:flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
             Zobraziť všetkých <ArrowRight className="w-4 h-4" />
@@ -280,7 +280,7 @@ const Index = () => {
           <div className="flex items-end justify-between mb-8">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-foreground">🆕 Najnovšie pridaní</h2>
-              <p className="text-muted-foreground mt-2">Čerstvo pridaní psy čakajú na vaše hlasy</p>
+              <p className="text-muted-foreground mt-2">Čerstvo pridaní psi čakajú na vaše hlasy</p>
             </div>
             <Link to="/galeria" className="hidden md:flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
               Zobraziť všetkých <ArrowRight className="w-4 h-4" />
