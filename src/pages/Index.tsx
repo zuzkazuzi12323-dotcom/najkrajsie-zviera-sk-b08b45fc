@@ -367,8 +367,9 @@ const Index = () => {
         </Link>
       </section>
 
-      {/* Shelters we support */}
-      <SheltersSection respectVisibility />
+      {/* Shelters we support (featured shown above, so excluded here to avoid duplication) */}
+      <SheltersSection respectVisibility excludeFeatured />
+
 
       {/* Partners */}
       <PartnersSection compact />
