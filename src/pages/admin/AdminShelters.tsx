@@ -33,6 +33,7 @@ const emptyForm = {
 };
 
 const DONATION_ID = "00000000-0000-0000-0000-000000000001";
+const CONTEST_ID = "00000000-0000-0000-0000-000000000002";
 
 const AdminShelters = () => {
   const [showForm, setShowForm] = useState(false);
@@ -66,6 +67,33 @@ const AdminShelters = () => {
       return data?.total_cents || 0;
     },
   });
+
+  const { data: sheltersVisible = true } = useQuery({
+    queryKey: ["admin-shelters-visible"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("contest_settings")
+        .select("shelters_visible")
+        .eq("id", CONTEST_ID)
+        .maybeSingle();
+      return (data as any)?.shelters_visible ?? true;
+    },
+  });
+
+  const toggleSheltersVisible = async () => {
+    const { error } = await supabase
+      .from("contest_settings")
+      .update({ shelters_visible: !sheltersVisible } as any)
+      .eq("id", CONTEST_ID);
+    if (error) {
+      toast.error("Chyba pri ukladaní");
+      return;
+    }
+    queryClient.invalidateQueries({ queryKey: ["admin-shelters-visible"] });
+    queryClient.invalidateQueries({ queryKey: ["shelters-visible"] });
+    toast.success(!sheltersVisible ? "Sekcia zapnutá" : "Sekcia vypnutá");
+  };
+
 
   const invalidateDonation = () => {
     queryClient.invalidateQueries({ queryKey: ["admin-donation-total"] });
@@ -280,6 +308,28 @@ const AdminShelters = () => {
           </button>
         </div>
       </div>
+
+      {/* Zobrazenie sekcie na stránke */}
+      <div className="bg-card rounded-2xl p-6 border border-border flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h3 className="font-semibold text-foreground">Sekcia „Útulky, ktorým pomáhame"</h3>
+          <p className="text-sm text-muted-foreground">
+            Zobrazenie sekcie s útulkami na hlavnej stránke.{" "}
+            <strong className="text-foreground">{sheltersVisible ? "Zapnutá" : "Vypnutá"}</strong>
+          </p>
+        </div>
+        <button
+          onClick={toggleSheltersVisible}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm ${
+            sheltersVisible
+              ? "border border-destructive/30 text-destructive hover:bg-destructive/10"
+              : "gradient-golden text-primary-foreground"
+          }`}
+        >
+          {sheltersVisible ? <><EyeOff className="w-4 h-4" /> Vypnúť</> : <><Eye className="w-4 h-4" /> Zapnúť</>}
+        </button>
+      </div>
+
 
 
       {showForm && (

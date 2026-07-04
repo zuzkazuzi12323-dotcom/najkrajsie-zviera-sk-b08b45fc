@@ -1,0 +1,1 @@
+ALTER TABLE public.contest_settings ADD COLUMN IF NOT EXISTS shelters_visible boolean NOT NULL DEFAULT true;
