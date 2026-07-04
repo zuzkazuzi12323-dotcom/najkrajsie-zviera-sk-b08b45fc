@@ -1,12 +1,24 @@
-import { Heart, MapPin, ExternalLink, HousePlus, Copy, Landmark } from "lucide-react";
+import { Heart, MapPin, ExternalLink, HousePlus, Copy, Landmark, Star } from "lucide-react";
 import { toast } from "sonner";
-import { useActiveShelters } from "@/hooks/useShelters";
+import { useActiveShelters, useSheltersVisible } from "@/hooks/useShelters";
 
 /** Public section showing animal shelters supported by the contest. */
-const SheltersSection = ({ showHeading = true }: { showHeading?: boolean }) => {
+const SheltersSection = ({
+  showHeading = true,
+  respectVisibility = false,
+}: {
+  showHeading?: boolean;
+  respectVisibility?: boolean;
+}) => {
   const { data: shelters = [] } = useActiveShelters();
+  const { data: visible = true } = useSheltersVisible();
 
+  if (respectVisibility && !visible) return null;
   if (shelters.length === 0) return null;
+
+  // Featured (currently supported) shelter is always shown first.
+  const sorted = [...shelters].sort((a, b) => Number(b.featured) - Number(a.featured));
+
 
   return (
     <section className="container mx-auto px-4 py-12">
