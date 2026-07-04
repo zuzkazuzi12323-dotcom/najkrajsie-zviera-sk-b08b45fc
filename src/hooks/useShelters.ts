@@ -46,6 +46,20 @@ export const useFeaturedShelter = () =>
     },
   });
 
+/** Whether the "shelters we support" section is shown on the homepage. */
+export const useSheltersVisible = () =>
+  useQuery({
+    queryKey: ["shelters-visible"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("contest_settings")
+        .select("shelters_visible")
+        .eq("id", "00000000-0000-0000-0000-000000000002")
+        .maybeSingle();
+      return (data as any)?.shelters_visible ?? true;
+    },
+  });
+
 /** Total amount collected for shelters (in cents). */
 export const useDonationTotal = () =>
   useQuery({
