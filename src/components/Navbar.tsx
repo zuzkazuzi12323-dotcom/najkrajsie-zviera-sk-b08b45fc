@@ -119,6 +119,12 @@ const Navbar = () => {
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
             className="md:hidden overflow-hidden border-b border-border bg-background">
             <div className="px-4 py-4 flex flex-col gap-2">
+              {user && isAdmin && (
+                <Link to="/admin" onClick={() => setMobileOpen(false)}
+                  className="px-4 py-3 rounded-xl text-sm font-semibold gradient-golden text-primary-foreground flex items-center gap-2 shadow-golden">
+                  <Shield className="w-4 h-4" /> Admin Panel
+                </Link>
+              )}
               {allLinks.map((link) => (
                 <Link key={link.to} to={link.to} onClick={() => setMobileOpen(false)}
                   className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
