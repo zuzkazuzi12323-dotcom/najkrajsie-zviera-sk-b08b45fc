@@ -6,18 +6,26 @@ import { useActiveShelters, useSheltersVisible } from "@/hooks/useShelters";
 const SheltersSection = ({
   showHeading = true,
   respectVisibility = false,
+  excludeFeatured = false,
 }: {
   showHeading?: boolean;
   respectVisibility?: boolean;
+  excludeFeatured?: boolean;
 }) => {
   const { data: shelters = [] } = useActiveShelters();
   const { data: visible = true } = useSheltersVisible();
 
   if (respectVisibility && !visible) return null;
-  if (shelters.length === 0) return null;
+
+  // Deduplicate by id, then optionally drop the featured shelter (shown elsewhere).
+  const unique = Array.from(new Map(shelters.map((s) => [s.id, s])).values());
+  const filtered = excludeFeatured ? unique.filter((s) => !s.featured) : unique;
+  if (filtered.length === 0) return null;
 
   // Featured (currently supported) shelter is always shown first.
-  const sorted = [...shelters].sort((a, b) => Number(b.featured) - Number(a.featured));
+  const sorted = [...filtered].sort((a, b) => Number(b.featured) - Number(a.featured));
+
+
 
 
   return (
