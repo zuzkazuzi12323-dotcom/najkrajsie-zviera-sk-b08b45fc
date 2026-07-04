@@ -78,18 +78,21 @@ export type Database = {
           active: boolean
           end_date: string | null
           id: string
+          shelters_visible: boolean
           updated_at: string
         }
         Insert: {
           active?: boolean
           end_date?: string | null
           id?: string
+          shelters_visible?: boolean
           updated_at?: string
         }
         Update: {
           active?: boolean
           end_date?: string | null
           id?: string
+          shelters_visible?: boolean
           updated_at?: string
         }
         Relationships: []
