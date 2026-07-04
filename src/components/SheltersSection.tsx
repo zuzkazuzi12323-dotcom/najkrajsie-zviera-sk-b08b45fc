@@ -36,11 +36,18 @@ const SheltersSection = ({
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-        {shelters.map((s) => (
+        {sorted.map((s) => (
           <div
             key={s.id}
-            className="bg-card rounded-2xl p-6 shadow-soft border border-border flex flex-col items-center text-center"
+            className={`bg-card rounded-2xl p-6 shadow-soft border flex flex-col items-center text-center ${
+              s.featured ? "border-primary ring-1 ring-primary/30" : "border-border"
+            }`}
           >
+            {s.featured && (
+              <span className="mb-3 inline-flex items-center gap-1 bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full">
+                <Star className="w-3 h-3 fill-primary" /> Aktuálne podporujeme
+              </span>
+            )}
             <div className="w-full h-28 bg-white rounded-xl border border-border flex items-center justify-center p-4 mb-4">
               {s.logo_url ? (
                 <img src={s.logo_url} alt={s.name} className="max-w-full max-h-full object-contain" loading="lazy" />
