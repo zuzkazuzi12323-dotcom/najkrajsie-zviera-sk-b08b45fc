@@ -67,6 +67,33 @@ const AdminShelters = () => {
     },
   });
 
+  const { data: sheltersVisible = true } = useQuery({
+    queryKey: ["admin-shelters-visible"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("contest_settings")
+        .select("shelters_visible")
+        .eq("id", CONTEST_ID)
+        .maybeSingle();
+      return (data as any)?.shelters_visible ?? true;
+    },
+  });
+
+  const toggleSheltersVisible = async () => {
+    const { error } = await supabase
+      .from("contest_settings")
+      .update({ shelters_visible: !sheltersVisible } as any)
+      .eq("id", CONTEST_ID);
+    if (error) {
+      toast.error("Chyba pri ukladaní");
+      return;
+    }
+    queryClient.invalidateQueries({ queryKey: ["admin-shelters-visible"] });
+    queryClient.invalidateQueries({ queryKey: ["shelters-visible"] });
+    toast.success(!sheltersVisible ? "Sekcia zapnutá" : "Sekcia vypnutá");
+  };
+
+
   const invalidateDonation = () => {
     queryClient.invalidateQueries({ queryKey: ["admin-donation-total"] });
     queryClient.invalidateQueries({ queryKey: ["donation-total"] });
