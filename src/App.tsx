@@ -62,8 +62,9 @@ const App = () => (
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<><AnnouncementBanner /><Index /></>} />
             <Route path="/galeria" element={<Gallery />} />
+
             <Route path="/pes/:id" element={<DogProfile />} />
             <Route path="/pridat" element={<AddDog />} />
             <Route path="/prihlasenie" element={<Login />} />
