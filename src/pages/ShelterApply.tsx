@@ -25,8 +25,39 @@ const ShelterApply = () => {
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [done, setDone] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/spolupraca-utulky` : "";
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast.success("Odkaz bol skopírovaný");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Odkaz sa nepodarilo skopírovať");
+    }
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Spolupráca s útulkami – NajkrajšíPes.sk",
+          text: "Ste slovenský útulok? Zapojte sa do projektu NajkrajšíPes.sk.",
+          url: shareUrl,
+        });
+      } catch {
+        /* user canceled */
+      }
+    } else {
+      handleCopy();
+    }
+  };
 
   const set = (k: keyof typeof emptyForm, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
 
   const handleLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
