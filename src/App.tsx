@@ -41,6 +41,8 @@ import SupportSuccess from "./pages/SupportSuccess";
 import Transparency from "./pages/Transparency";
 import AdminSupporters from "./pages/admin/AdminSupporters";
 import AdminTransparency from "./pages/admin/AdminTransparency";
+import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
+import AnnouncementBanner from "./components/AnnouncementBanner";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MyOrders from "./pages/MyOrders";
