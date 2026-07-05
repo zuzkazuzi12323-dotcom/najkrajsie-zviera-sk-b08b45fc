@@ -124,6 +124,34 @@ const ShelterApply = () => {
           Každú žiadosť ručne skontrolujeme a schválime. Útulok sa zverejní až po schválení organizátorom.
         </p>
 
+        <div className="max-w-xl mx-auto mb-8 bg-card rounded-2xl p-4 md:p-5 border border-border shadow-soft">
+          <p className="text-sm font-semibold text-foreground mb-3 text-center">
+            Zdieľajte túto sekciu s útulkami na sociálnych sieťach
+          </p>
+          <div className="flex flex-col sm:flex-row items-stretch gap-2">
+            <div className="flex-1 px-3 py-2.5 rounded-xl border border-border bg-background text-sm text-muted-foreground truncate flex items-center">
+              {shareUrl}
+            </div>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-secondary text-foreground text-sm font-medium hover:bg-secondary/70"
+            >
+              {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
+              {copied ? "Skopírované" : "Kopírovať odkaz"}
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="flex items-center justify-center gap-2 gradient-golden text-primary-foreground px-4 py-2.5 rounded-xl text-sm font-semibold"
+            >
+              <Share2 className="w-4 h-4" /> Zdieľať
+            </button>
+          </div>
+        </div>
+
+
+
         {done ? (
           <div className="bg-card rounded-2xl p-8 text-center shadow-elevated border border-border">
             <CheckCircle2 className="w-12 h-12 text-primary mx-auto mb-4" />
