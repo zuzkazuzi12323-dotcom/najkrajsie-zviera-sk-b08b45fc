@@ -47,7 +47,7 @@ const AdminShelterApplications = () => {
         .from("shelter_applications")
         .select("*")
         .order("created_at", { ascending: false });
-      return (data || []) as Application[];
+      return (data || []) as unknown as Application[];
     },
   });
 
