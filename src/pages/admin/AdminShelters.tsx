@@ -123,6 +123,7 @@ const AdminShelters = () => {
       toast.error("Vyplňte názov útulku");
       return;
     }
+    const collectedEuros = parseFloat((form.collected_euros || "").replace(",", "."));
     const payload = {
       name: form.name.trim(),
       city: form.city.trim() || null,
@@ -134,6 +135,7 @@ const AdminShelters = () => {
       active: form.active,
       featured: form.featured,
       show_iban: form.show_iban,
+      collected_cents: isNaN(collectedEuros) ? 0 : Math.max(0, Math.round(collectedEuros * 100)),
     };
 
     if (editId) {
