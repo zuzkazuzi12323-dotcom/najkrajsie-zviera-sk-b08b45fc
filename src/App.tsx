@@ -34,6 +34,8 @@ import AdminSponsors from "./pages/admin/AdminSponsors";
 import AdminShelters from "./pages/admin/AdminShelters";
 import Partners from "./pages/Partners";
 import Shelters from "./pages/Shelters";
+import ShelterApply from "./pages/ShelterApply";
+import AdminShelterApplications from "./pages/admin/AdminShelterApplications";
 import SupportPlatform from "./pages/SupportPlatform";
 import SupportSuccess from "./pages/SupportSuccess";
 import Transparency from "./pages/Transparency";
@@ -85,6 +87,7 @@ const App = () => (
             <Route path="/moj-profil" element={<MyProfile />} />
             <Route path="/partneri" element={<Partners />} />
             <Route path="/utulky" element={<Shelters />} />
+            <Route path="/spolupraca-utulky" element={<ShelterApply />} />
             <Route path="/podpora" element={<SupportPlatform />} />
             <Route path="/podpora-dakujeme" element={<SupportSuccess />} />
             <Route path="/transparentnost" element={<Transparency />} />
@@ -99,6 +102,7 @@ const App = () => (
               <Route path="produkty" element={<AdminProducts />} />
               <Route path="partneri" element={<AdminSponsors />} />
               <Route path="utulky" element={<AdminShelters />} />
+              <Route path="ziadosti-utulkov" element={<AdminShelterApplications />} />
               <Route path="podporovatelia" element={<AdminSupporters />} />
               <Route path="transparentnost" element={<AdminTransparency />} />
               <Route path="obsah" element={<AdminContent />} />

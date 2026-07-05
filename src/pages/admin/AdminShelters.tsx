@@ -17,6 +17,7 @@ type ShelterRow = {
   featured: boolean;
   show_iban: boolean;
   display_order: number;
+  collected_cents: number;
 };
 
 const emptyForm = {
@@ -30,6 +31,7 @@ const emptyForm = {
   active: true,
   featured: false,
   show_iban: true,
+  collected_euros: "",
 };
 
 const DONATION_ID = "00000000-0000-0000-0000-000000000001";
@@ -40,7 +42,6 @@ const AdminShelters = () => {
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState({ ...emptyForm });
   const [uploadingLogo, setUploadingLogo] = useState(false);
-  const [donationInput, setDonationInput] = useState("");
   const logoRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 

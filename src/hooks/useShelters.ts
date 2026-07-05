@@ -14,6 +14,7 @@ export type Shelter = {
   featured: boolean;
   show_iban: boolean;
   display_order: number;
+  collected_cents: number;
 };
 
 /** Active shelters, ordered by display_order, for public display. */
