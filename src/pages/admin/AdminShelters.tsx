@@ -57,18 +57,6 @@ const AdminShelters = () => {
     },
   });
 
-  const { data: donationCents = 0 } = useQuery({
-    queryKey: ["admin-donation-total"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("donations_total")
-        .select("total_cents")
-        .eq("id", DONATION_ID)
-        .single();
-      return data?.total_cents || 0;
-    },
-  });
-
   const { data: sheltersVisible = true } = useQuery({
     queryKey: ["admin-shelters-visible"],
     queryFn: async () => {
@@ -95,41 +83,6 @@ const AdminShelters = () => {
     toast.success(!sheltersVisible ? "Sekcia zapnutá" : "Sekcia vypnutá");
   };
 
-
-  const invalidateDonation = () => {
-    queryClient.invalidateQueries({ queryKey: ["admin-donation-total"] });
-    queryClient.invalidateQueries({ queryKey: ["donation-total"] });
-  };
-
-  const setDonationTotal = async (euros: number) => {
-    const cents = Math.max(0, Math.round(euros * 100));
-    const { error } = await supabase
-      .from("donations_total")
-      .update({ total_cents: cents })
-      .eq("id", DONATION_ID);
-    if (error) {
-      toast.error("Chyba pri ukladaní sumy");
-      return;
-    }
-    invalidateDonation();
-  };
-
-  const handleSaveDonation = async () => {
-    const val = parseFloat(donationInput.replace(",", "."));
-    if (isNaN(val)) {
-      toast.error("Zadajte platnú sumu");
-      return;
-    }
-    await setDonationTotal(val);
-    setDonationInput("");
-    toast.success("Suma aktualizovaná");
-  };
-
-  const handleResetDonation = async () => {
-    if (!confirm("Naozaj resetovať vyzbieranú sumu na 0,00 €?")) return;
-    await setDonationTotal(0);
-    toast.success("Suma resetovaná na 0,00 €");
-  };
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["admin-shelters"] });
