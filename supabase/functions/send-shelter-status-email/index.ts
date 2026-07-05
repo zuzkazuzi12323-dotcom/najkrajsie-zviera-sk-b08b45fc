@@ -170,9 +170,23 @@ Deno.serve(async (req) => {
     const data = await res.json();
     if (!res.ok) throw new Error(`Gmail API failed [${res.status}]: ${JSON.stringify(data)}`);
 
+    // Append to email history so admins can see when/what was sent
+    const { data: current } = await admin
+      .from('shelter_applications')
+      .select('email_history')
+      .eq('id', applicationId)
+      .single();
+    const history = Array.isArray((current as any)?.email_history) ? (current as any).email_history : [];
+    history.push({ status, sent_at: new Date().toISOString(), message_id: data.id });
+    await admin
+      .from('shelter_applications')
+      .update({ email_history: history } as any)
+      .eq('id', applicationId);
+
     return new Response(JSON.stringify({ success: true, id: data.id }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
+
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
     console.error('send-shelter-status-email error:', msg);
