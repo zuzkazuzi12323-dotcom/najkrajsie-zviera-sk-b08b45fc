@@ -57,6 +57,15 @@ const AdminShelterApplications = () => {
       toast.error("Chyba pri zmene stavu");
       return;
     }
+    // Send status notification email to the applicant (needs_info / approved / rejected)
+    if (status === "needs_info" || status === "approved" || status === "rejected") {
+      supabase.functions
+        .invoke("send-shelter-status-email", { body: { applicationId: app.id, status } })
+        .then(({ error: mailErr }) => {
+          if (mailErr) toast.error("Stav zmenený, ale e-mail sa nepodarilo odoslať");
+          else toast.success("Notifikačný e-mail bol odoslaný žiadateľovi");
+        });
+    }
     if (status === "approved") {
       // Add to approved shelters (only once)
       const { data: existing } = await supabase
