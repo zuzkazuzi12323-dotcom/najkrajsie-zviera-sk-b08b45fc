@@ -20,7 +20,7 @@ const navItems = [
   { to: "/admin/ziadosti-utulkov", icon: FileText, label: "Žiadosti útulkov" },
   { to: "/admin/podporovatelia", icon: PawPrint, label: "Podporovatelia" },
   { to: "/admin/transparentnost", icon: ShieldCheck, label: "Transparentnosť" },
-  { to: "/admin/obsah", icon: FileText, label: "Obsah stránok" },
+  { to: "/admin/upozornenia", icon: Megaphone, label: "Upozornenia" },
 ];
 
 const AdminLayout = () => {
