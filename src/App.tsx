@@ -105,7 +105,9 @@ const App = () => (
               <Route path="ziadosti-utulkov" element={<AdminShelterApplications />} />
               <Route path="podporovatelia" element={<AdminSupporters />} />
               <Route path="transparentnost" element={<AdminTransparency />} />
+              <Route path="upozornenia" element={<AdminAnnouncements />} />
               <Route path="obsah" element={<AdminContent />} />
+
             </Route>
 
             <Route path="*" element={<NotFound />} />
