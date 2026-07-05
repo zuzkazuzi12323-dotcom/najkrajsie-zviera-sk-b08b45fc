@@ -22,6 +22,7 @@ const Navbar = () => {
 
   const moreLinks = [
     { to: "/utulky", label: "Podpora útulkov ❤️" },
+    { to: "/spolupraca-utulky", label: "Spolupráca s útulkami 🏠" },
     { to: "/ako-funguje", label: "Ako to funguje" },
     { to: "/#o-projekte", label: "O projekte" },
     { to: "/partneri", label: "Partneri" },

@@ -359,11 +359,69 @@ export type Database = {
         }
         Relationships: []
       }
+      shelter_applications: {
+        Row: {
+          admin_note: string | null
+          agreed_terms: boolean
+          bank_holder: string | null
+          city: string | null
+          contact_email: string
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          description: string | null
+          iban: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          status: Database["public"]["Enums"]["shelter_application_status"]
+          support_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          admin_note?: string | null
+          agreed_terms?: boolean
+          bank_holder?: string | null
+          city?: string | null
+          contact_email: string
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          iban?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          status?: Database["public"]["Enums"]["shelter_application_status"]
+          support_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          admin_note?: string | null
+          agreed_terms?: boolean
+          bank_holder?: string | null
+          city?: string | null
+          contact_email?: string
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          iban?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          status?: Database["public"]["Enums"]["shelter_application_status"]
+          support_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       shelters: {
         Row: {
           active: boolean
           bank_holder: string | null
           city: string | null
+          collected_cents: number
           created_at: string
           description: string | null
           display_order: number
@@ -380,6 +438,7 @@ export type Database = {
           active?: boolean
           bank_holder?: string | null
           city?: string | null
+          collected_cents?: number
           created_at?: string
           description?: string | null
           display_order?: number
@@ -396,6 +455,7 @@ export type Database = {
           active?: boolean
           bank_holder?: string | null
           city?: string | null
+          collected_cents?: number
           created_at?: string
           description?: string | null
           display_order?: number
@@ -665,6 +725,7 @@ export type Database = {
           active: boolean | null
           bank_holder: string | null
           city: string | null
+          collected_cents: number | null
           created_at: string | null
           description: string | null
           display_order: number | null
@@ -681,6 +742,7 @@ export type Database = {
           active?: boolean | null
           bank_holder?: never
           city?: string | null
+          collected_cents?: number | null
           created_at?: string | null
           description?: string | null
           display_order?: number | null
@@ -697,6 +759,7 @@ export type Database = {
           active?: boolean | null
           bank_holder?: never
           city?: string | null
+          collected_cents?: number | null
           created_at?: string | null
           description?: string | null
           display_order?: number | null
@@ -725,6 +788,11 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      shelter_application_status:
+        | "pending"
+        | "needs_info"
+        | "approved"
+        | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -853,6 +921,12 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      shelter_application_status: [
+        "pending",
+        "needs_info",
+        "approved",
+        "rejected",
+      ],
     },
   },
 } as const

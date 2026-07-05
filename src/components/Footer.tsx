@@ -1,11 +1,6 @@
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import utulokTrnava from "@/assets/utulok-trnava.png";
 import { useActiveSponsors } from "@/hooks/useSponsors";
-
-const shelters = [
-  { name: "Útulok pri kaplnke Trnava", logo: utulokTrnava, url: "https://www.trnava.utulok.sk" },
-];
 
 const Footer = () => {
   const { data: sponsors = [] } = useActiveSponsors();
@@ -38,19 +33,15 @@ const Footer = () => {
           </div>
         )}
 
-        {/* Shelter logos */}
+        {/* Shelter cooperation */}
         <div className="mb-10 text-center">
-          <h4 className="font-semibold text-foreground mb-4">Podporujeme útulky</h4>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-3">
-            {shelters.map((s) => (
-              <div key={s.name} title={s.name}
-                className="transition-transform duration-300 hover:scale-[2.5] cursor-default z-10 relative">
-                <img src={s.logo} alt={s.name} className="w-20 md:w-24 h-auto rounded-lg" />
-              </div>
-            ))}
-          </div>
-          <p className="text-sm text-muted-foreground">Podporujeme útulky a pomáhame zvieratkám ❤️</p>
+          <h4 className="font-semibold text-foreground mb-2">Podporujeme útulky</h4>
+          <p className="text-sm text-muted-foreground mb-3">Pomáhame zvieratkám z útulkov po celom Slovensku ❤️</p>
+          <Link to="/spolupraca-utulky" className="text-sm text-primary hover:underline">
+            Ste útulok? Prihláste sa do projektu →
+          </Link>
         </div>
+
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>

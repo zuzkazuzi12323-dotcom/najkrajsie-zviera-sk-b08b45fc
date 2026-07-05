@@ -85,7 +85,20 @@ const Rules = () => {
                 <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a>.
               </p>
             </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <Handshake className="w-5 h-5 text-primary" /> Registrácia útulkov
+              </h2>
+              <ul className="space-y-3 text-foreground/80">
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Slovenské útulky sa môžu prihlásiť do projektu cez formulár na stránke <Link to="/spolupraca-utulky" className="text-primary font-medium hover:underline">Spolupráca s útulkami</Link>.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Každá žiadosť sa <strong>neuverejňuje automaticky</strong> – uloží sa do administrácie a je ručne posúdená a schválená organizátorom.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Odoslaním formulára žiadateľ potvrdzuje <strong>pravdivosť uvedených údajov</strong> a súhlasí so spracovaním osobných údajov.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Organizátor si vyhradzuje právo žiadosť <strong>zamietnuť alebo odstrániť</strong> pri podozrení na podvod alebo pri nepravdivých údajoch.</li>
+              </ul>
+            </div>
           </div>
+
         </motion.div>
       </div>
       <Footer />

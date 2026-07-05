@@ -65,6 +65,19 @@ const Privacy = () => {
           </div>
 
           <div>
+            <h2 className="text-lg font-bold text-foreground mb-2">Registrácia útulkov</h2>
+            <p>
+              Útulky sa môžu prihlásiť do projektu cez formulár „Spolupráca s útulkami". Údaje z formulára
+              (názov, kontaktné údaje, IBAN, popis, logo) spracúvame výhradne na posúdenie žiadosti a
+              prípadné zverejnenie schváleného útulku. Žiadosti sa <strong>neuverejňujú automaticky</strong> –
+              každú ručne posúdi a schváli organizátor. Odoslaním formulára žiadateľ potvrdzuje pravdivosť
+              údajov a súhlasí s ich spracovaním. Organizátor si vyhradzuje právo žiadosť zamietnuť alebo
+              odstrániť pri podozrení na podvod alebo pri nepravdivých údajoch.
+            </p>
+          </div>
+
+
+          <div>
             <h2 className="text-lg font-bold text-foreground mb-2">Kontakt</h2>
             <p>
               V prípade otázok nás kontaktujte na{" "}

@@ -17,6 +17,7 @@ const navItems = [
   { to: "/admin/produkty", icon: ShoppingBag, label: "E-shop produkty" },
   { to: "/admin/partneri", icon: Handshake, label: "Partneri a bannery" },
   { to: "/admin/utulky", icon: HousePlus, label: "Útulky" },
+  { to: "/admin/ziadosti-utulkov", icon: FileText, label: "Žiadosti útulkov" },
   { to: "/admin/podporovatelia", icon: PawPrint, label: "Podporovatelia" },
   { to: "/admin/transparentnost", icon: ShieldCheck, label: "Transparentnosť" },
   { to: "/admin/obsah", icon: FileText, label: "Obsah stránok" },

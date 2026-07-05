@@ -17,6 +17,7 @@ type ShelterRow = {
   featured: boolean;
   show_iban: boolean;
   display_order: number;
+  collected_cents: number;
 };
 
 const emptyForm = {
@@ -30,9 +31,9 @@ const emptyForm = {
   active: true,
   featured: false,
   show_iban: true,
+  collected_euros: "",
 };
 
-const DONATION_ID = "00000000-0000-0000-0000-000000000001";
 const CONTEST_ID = "00000000-0000-0000-0000-000000000002";
 
 const AdminShelters = () => {
@@ -40,7 +41,6 @@ const AdminShelters = () => {
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState({ ...emptyForm });
   const [uploadingLogo, setUploadingLogo] = useState(false);
-  const [donationInput, setDonationInput] = useState("");
   const logoRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
@@ -53,18 +53,6 @@ const AdminShelters = () => {
         .order("display_order", { ascending: true })
         .order("created_at", { ascending: true });
       return (data || []) as ShelterRow[];
-    },
-  });
-
-  const { data: donationCents = 0 } = useQuery({
-    queryKey: ["admin-donation-total"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("donations_total")
-        .select("total_cents")
-        .eq("id", DONATION_ID)
-        .single();
-      return data?.total_cents || 0;
     },
   });
 
@@ -94,41 +82,6 @@ const AdminShelters = () => {
     toast.success(!sheltersVisible ? "Sekcia zapnutá" : "Sekcia vypnutá");
   };
 
-
-  const invalidateDonation = () => {
-    queryClient.invalidateQueries({ queryKey: ["admin-donation-total"] });
-    queryClient.invalidateQueries({ queryKey: ["donation-total"] });
-  };
-
-  const setDonationTotal = async (euros: number) => {
-    const cents = Math.max(0, Math.round(euros * 100));
-    const { error } = await supabase
-      .from("donations_total")
-      .update({ total_cents: cents })
-      .eq("id", DONATION_ID);
-    if (error) {
-      toast.error("Chyba pri ukladaní sumy");
-      return;
-    }
-    invalidateDonation();
-  };
-
-  const handleSaveDonation = async () => {
-    const val = parseFloat(donationInput.replace(",", "."));
-    if (isNaN(val)) {
-      toast.error("Zadajte platnú sumu");
-      return;
-    }
-    await setDonationTotal(val);
-    setDonationInput("");
-    toast.success("Suma aktualizovaná");
-  };
-
-  const handleResetDonation = async () => {
-    if (!confirm("Naozaj resetovať vyzbieranú sumu na 0,00 €?")) return;
-    await setDonationTotal(0);
-    toast.success("Suma resetovaná na 0,00 €");
-  };
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["admin-shelters"] });
@@ -169,6 +122,7 @@ const AdminShelters = () => {
       toast.error("Vyplňte názov útulku");
       return;
     }
+    const collectedEuros = parseFloat((form.collected_euros || "").replace(",", "."));
     const payload = {
       name: form.name.trim(),
       city: form.city.trim() || null,
@@ -180,6 +134,7 @@ const AdminShelters = () => {
       active: form.active,
       featured: form.featured,
       show_iban: form.show_iban,
+      collected_cents: isNaN(collectedEuros) ? 0 : Math.max(0, Math.round(collectedEuros * 100)),
     };
 
     if (editId) {
@@ -241,6 +196,7 @@ const AdminShelters = () => {
       active: s.active,
       featured: s.featured,
       show_iban: s.show_iban,
+      collected_euros: ((s.collected_cents || 0) / 100).toFixed(2),
     });
     setEditId(s.id);
     setShowForm(true);
@@ -278,36 +234,15 @@ const AdminShelters = () => {
         </button>
       </div>
 
-      {/* Vyzbieraná suma */}
-      <div className="bg-card rounded-2xl p-6 border border-border space-y-4">
-        <div>
-          <h3 className="font-semibold text-foreground">Vyzbieraná suma pre útulky</h3>
-          <p className="text-sm text-muted-foreground">
-            Aktuálne zobrazené na stránke: <strong className="text-foreground">{(donationCents / 100).toFixed(2)} €</strong>
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            20 % z každej registrácie sa pripočíta automaticky. Sumu môžete upraviť alebo resetovať.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            value={donationInput}
-            onChange={(e) => setDonationInput(e.target.value)}
-            placeholder="Nová suma v € (napr. 120.50)"
-            inputMode="decimal"
-            className="px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm flex-1 min-w-[180px]"
-          />
-          <button onClick={handleSaveDonation} className="gradient-golden text-primary-foreground px-5 py-2.5 rounded-xl font-medium text-sm">
-            Uložiť sumu
-          </button>
-          <button
-            onClick={handleResetDonation}
-            className="px-5 py-2.5 rounded-xl text-sm border border-destructive/30 text-destructive hover:bg-destructive/10"
-          >
-            Resetovať na 0,00 €
-          </button>
-        </div>
+      {/* Info o vyzbieraných sumách */}
+      <div className="bg-card rounded-2xl p-6 border border-border">
+        <h3 className="font-semibold text-foreground">Vyzbierané sumy pre útulky</h3>
+        <p className="text-sm text-muted-foreground mt-1">
+          Každý útulok má vlastnú evidenciu vyzbieranej sumy. Sumu upravíte v detaile útulku (tlačidlo Upraviť).
+          Na hlavnej stránke sa zobrazuje suma aktuálne podporovaného útulku.
+        </p>
       </div>
+
 
       {/* Zobrazenie sekcie na stránke */}
       <div className="bg-card rounded-2xl p-6 border border-border flex flex-wrap items-center justify-between gap-4">
@@ -376,6 +311,18 @@ const AdminShelters = () => {
             rows={2}
             className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
           />
+
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Vyzbieraná suma pre tento útulok (€)</label>
+            <input
+              value={form.collected_euros}
+              onChange={(e) => setForm({ ...form, collected_euros: e.target.value })}
+              placeholder="napr. 120.50"
+              inputMode="decimal"
+              className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+            />
+          </div>
+
 
           {/* Logo upload */}
           <div className="flex items-center gap-2">
