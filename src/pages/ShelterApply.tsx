@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HousePlus, CheckCircle2, Loader2 } from "lucide-react";
+import { HousePlus, CheckCircle2, Loader2, Copy, Check, Share2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
