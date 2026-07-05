@@ -27,7 +27,10 @@ const ShelterApply = () => {
   const [done, setDone] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/spolupraca-utulky` : "";
+  // Always share the public, published site URL (never the preview/editor URL that
+  // would ask visitors to log in) so social links open the page directly.
+  const PUBLIC_SITE_URL = "https://najkrajsie-zviera-sk.lovable.app";
+  const shareUrl = `${PUBLIC_SITE_URL}/spolupraca-utulky`;
 
   const handleCopy = async () => {
     try {

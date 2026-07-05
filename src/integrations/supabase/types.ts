@@ -370,6 +370,7 @@ export type Database = {
           contact_phone: string | null
           created_at: string
           description: string | null
+          email_history: Json
           iban: string | null
           id: string
           logo_url: string | null
@@ -388,6 +389,7 @@ export type Database = {
           contact_phone?: string | null
           created_at?: string
           description?: string | null
+          email_history?: Json
           iban?: string | null
           id?: string
           logo_url?: string | null
@@ -406,6 +408,7 @@ export type Database = {
           contact_phone?: string | null
           created_at?: string
           description?: string | null
+          email_history?: Json
           iban?: string | null
           id?: string
           logo_url?: string | null
@@ -467,6 +470,36 @@ export type Database = {
           show_iban?: boolean
           support_url?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      site_announcements: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          message: string
+          title: string
+          updated_at: string
+          variant: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          message: string
+          title: string
+          updated_at?: string
+          variant?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          message?: string
+          title?: string
+          updated_at?: string
+          variant?: string
         }
         Relationships: []
       }

@@ -41,6 +41,8 @@ import SupportSuccess from "./pages/SupportSuccess";
 import Transparency from "./pages/Transparency";
 import AdminSupporters from "./pages/admin/AdminSupporters";
 import AdminTransparency from "./pages/admin/AdminTransparency";
+import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
+import AnnouncementBanner from "./components/AnnouncementBanner";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MyOrders from "./pages/MyOrders";
@@ -60,8 +62,9 @@ const App = () => (
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<><AnnouncementBanner /><Index /></>} />
             <Route path="/galeria" element={<Gallery />} />
+
             <Route path="/pes/:id" element={<DogProfile />} />
             <Route path="/pridat" element={<AddDog />} />
             <Route path="/prihlasenie" element={<Login />} />
@@ -105,7 +108,9 @@ const App = () => (
               <Route path="ziadosti-utulkov" element={<AdminShelterApplications />} />
               <Route path="podporovatelia" element={<AdminSupporters />} />
               <Route path="transparentnost" element={<AdminTransparency />} />
+              <Route path="upozornenia" element={<AdminAnnouncements />} />
               <Route path="obsah" element={<AdminContent />} />
+
             </Route>
 
             <Route path="*" element={<NotFound />} />
