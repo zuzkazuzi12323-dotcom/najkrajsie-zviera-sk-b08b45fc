@@ -34,7 +34,6 @@ const emptyForm = {
   collected_euros: "",
 };
 
-const DONATION_ID = "00000000-0000-0000-0000-000000000001";
 const CONTEST_ID = "00000000-0000-0000-0000-000000000002";
 
 const AdminShelters = () => {
