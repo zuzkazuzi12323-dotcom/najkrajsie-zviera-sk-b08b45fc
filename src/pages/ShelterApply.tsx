@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HousePlus, CheckCircle2, Loader2 } from "lucide-react";
+import { HousePlus, CheckCircle2, Loader2, Copy, Check, Share2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
@@ -25,8 +25,39 @@ const ShelterApply = () => {
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [done, setDone] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/spolupraca-utulky` : "";
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast.success("Odkaz bol skopírovaný");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Odkaz sa nepodarilo skopírovať");
+    }
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Spolupráca s útulkami – NajkrajšíPes.sk",
+          text: "Ste slovenský útulok? Zapojte sa do projektu NajkrajšíPes.sk.",
+          url: shareUrl,
+        });
+      } catch {
+        /* user canceled */
+      }
+    } else {
+      handleCopy();
+    }
+  };
 
   const set = (k: keyof typeof emptyForm, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
 
   const handleLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -92,6 +123,34 @@ const ShelterApply = () => {
           Ste slovenský útulok a chcete sa zapojiť do projektu NajkrajšíPes.sk? Vyplňte formulár nižšie.
           Každú žiadosť ručne skontrolujeme a schválime. Útulok sa zverejní až po schválení organizátorom.
         </p>
+
+        <div className="max-w-xl mx-auto mb-8 bg-card rounded-2xl p-4 md:p-5 border border-border shadow-soft">
+          <p className="text-sm font-semibold text-foreground mb-3 text-center">
+            Zdieľajte túto sekciu s útulkami na sociálnych sieťach
+          </p>
+          <div className="flex flex-col sm:flex-row items-stretch gap-2">
+            <div className="flex-1 px-3 py-2.5 rounded-xl border border-border bg-background text-sm text-muted-foreground truncate flex items-center">
+              {shareUrl}
+            </div>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-secondary text-foreground text-sm font-medium hover:bg-secondary/70"
+            >
+              {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
+              {copied ? "Skopírované" : "Kopírovať odkaz"}
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="flex items-center justify-center gap-2 gradient-golden text-primary-foreground px-4 py-2.5 rounded-xl text-sm font-semibold"
+            >
+              <Share2 className="w-4 h-4" /> Zdieľať
+            </button>
+          </div>
+        </div>
+
+
 
         {done ? (
           <div className="bg-card rounded-2xl p-8 text-center shadow-elevated border border-border">
