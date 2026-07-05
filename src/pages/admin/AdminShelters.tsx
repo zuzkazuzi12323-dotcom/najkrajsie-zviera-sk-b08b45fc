@@ -313,6 +313,18 @@ const AdminShelters = () => {
             className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
           />
 
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Vyzbieraná suma pre tento útulok (€)</label>
+            <input
+              value={form.collected_euros}
+              onChange={(e) => setForm({ ...form, collected_euros: e.target.value })}
+              placeholder="napr. 120.50"
+              inputMode="decimal"
+              className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+            />
+          </div>
+
+
           {/* Logo upload */}
           <div className="flex items-center gap-2">
             <input ref={logoRef} type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
