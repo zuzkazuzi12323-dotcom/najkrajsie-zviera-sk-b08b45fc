@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Megaphone, Plus, Trash2, Eye, EyeOff, Info, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { Megaphone, Plus, Trash2, Eye, EyeOff, Info, AlertTriangle, CheckCircle2, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Announcement } from "@/hooks/useAnnouncements";
@@ -10,6 +10,21 @@ const VARIANTS = [
   { value: "warning", label: "Upozornenie", icon: AlertTriangle },
   { value: "success", label: "Úspech", icon: CheckCircle2 },
 ];
+
+// Predefined quick announcement templates — one click fills the form, then edit or send instantly
+const QUICK_TEMPLATES: { title: string; message: string; variant: string }[] = [
+  { title: "Nový útulok bol pridaný", message: "Do projektu NajkrajšíPes.sk pribudol nový útulok. Pozrite si jeho profil a podporte zvieratká, ktoré potrebujú pomoc. 🐾", variant: "success" },
+  { title: "Nové zvieratá boli pridané", message: "Pridali sme nové zvieratká do súťaže! Príďte si ich pozrieť a zahlasujte za svojho favorita. 🐶", variant: "info" },
+  { title: "Hľadáme dobrovoľníkov", message: "Hľadáme obetavých dobrovoľníkov, ktorí chcú pomôcť útulkom. Ak máte chuť pomáhať, ozvite sa nám – každá ruka je vzácna! ❤️", variant: "info" },
+  { title: "Zvieratká čakajú na adopciu", message: "Mnohé zvieratká stále čakajú na svoj domov. Zvážte adopciu a darujte im druhú šancu na šťastný život. 🏡", variant: "info" },
+  { title: "Pomôžte útulkom darovaním", message: "Vaša podpora zachraňuje životy. Aj malý dar pomáha útulkom postarať sa o zvieratká v núdzi. Ďakujeme, že pomáhate! 🙏", variant: "warning" },
+  { title: "Ďakujeme za vašu podporu", message: "Zo srdca ďakujeme všetkým, ktorí podporujú náš projekt a pomáhajú zvieratkám. Spolu robíme veľké veci! 💛", variant: "success" },
+  { title: "Dôležitá novinka v aplikácii", message: "Pripravili sme pre vás dôležitú novinku. Pozrite si najnovšie zmeny a vylepšenia na našej stránke. ✨", variant: "info" },
+  { title: "Plánovaná údržba aplikácie", message: "Oznamujeme, že v najbližšom čase prebehne plánovaná údržba stránky. Ďakujeme za pochopenie a trpezlivosť. 🔧", variant: "warning" },
+  { title: "Hlasovanie je spustené", message: "Hlasovanie v súťaži o najkrajšieho psa je spustené! Zahlasujte za svojho favorita – jeden hlas denne. 🗳️", variant: "success" },
+  { title: "Blíži sa koniec hlasovania", message: "Nezabudnite zahlasovať – hlasovanie sa čoskoro uzatvára. Podporte svojho favorita, kým je čas! ⏰", variant: "warning" },
+];
+
 
 const AdminAnnouncements = () => {
   const queryClient = useQueryClient();
