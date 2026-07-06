@@ -73,6 +73,33 @@ const AdminAnnouncements = () => {
     toast.success("Oznámenie bolo zverejnené na stránke");
   };
 
+  // Fill the form from a template so the admin can edit before publishing
+  const fillTemplate = (t: { title: string; message: string; variant: string }) => {
+    setTitle(t.title);
+    setMessage(t.message);
+    setVariant(t.variant);
+    toast.success("Šablóna vyplnená – môžete upraviť alebo zverejniť");
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Publish a template instantly with one click
+  const sendTemplate = async (t: { title: string; message: string; variant: string }) => {
+    setSaving(true);
+    const { error } = await supabase.from("site_announcements").insert({
+      title: t.title,
+      message: t.message,
+      variant: t.variant,
+      active: true,
+    } as any);
+    setSaving(false);
+    if (error) {
+      toast.error("Nepodarilo sa zverejniť oznámenie");
+      return;
+    }
+    invalidate();
+    toast.success("Oznámenie bolo okamžite zverejnené na stránke");
+  };
+
   const toggleActive = async (a: Announcement) => {
     const { error } = await supabase
       .from("site_announcements")
