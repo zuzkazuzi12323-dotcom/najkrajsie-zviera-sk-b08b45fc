@@ -60,16 +60,33 @@ const AdminShelterApplications = () => {
     setSendingId(app.id + status);
     const toastId = toast.loading(`Odosielam e-mail na ${app.contact_email}...`);
     try {
-      const { error } = await supabase.functions.invoke("send-shelter-status-email", {
+      const { data, error } = await supabase.functions.invoke("send-shelter-status-email", {
         body: { applicationId: app.id, status },
       });
-      if (error) throw error;
+      // Try to surface the exact backend failure reason instead of a generic message
+      let backendError: string | null = null;
+      if (error) {
+        // FunctionsHttpError carries the response body in `context`
+        try {
+          const ctx = (error as any).context;
+          if (ctx && typeof ctx.json === "function") {
+            const body = await ctx.json();
+            backendError = body?.error || null;
+          }
+        } catch {
+          /* ignore parse errors */
+        }
+        throw new Error(backendError || error.message);
+      }
+      if (data && (data as any).success === false) {
+        throw new Error((data as any).error || "Neznáma chyba servera");
+      }
       toast.success(`E-mail bol úspešne odoslaný na ${app.contact_email}`, { id: toastId });
       invalidate();
       return true;
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Neznáma chyba";
-      toast.error(`E-mail sa nepodarilo odoslať: ${msg}`, { id: toastId });
+      toast.error(`E-mail sa nepodarilo odoslať: ${msg}`, { id: toastId, duration: 8000 });
       return false;
     } finally {
       setSendingId(null);
