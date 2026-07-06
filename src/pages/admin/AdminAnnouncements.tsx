@@ -182,6 +182,47 @@ const AdminAnnouncements = () => {
         </button>
       </div>
 
+      {/* Quick announcement templates */}
+      <div className="bg-card rounded-2xl p-5 border border-border space-y-3">
+        <div>
+          <h2 className="font-semibold text-foreground flex items-center gap-2"><Zap className="w-4 h-4 text-primary" /> Rýchle upozornenia</h2>
+          <p className="text-xs text-muted-foreground mt-1">
+            Predpripravené šablóny. Kliknite na „Vyplniť" pre úpravu pred zverejnením, alebo „Zverejniť ihneď" pre okamžité odoslanie.
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {QUICK_TEMPLATES.map((t, i) => {
+            const V = VARIANTS.find((v) => v.value === t.variant) ?? VARIANTS[0];
+            return (
+              <div key={i} className="rounded-xl border border-border bg-background p-3 flex flex-col">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <V.icon className="w-4 h-4 text-primary shrink-0" />
+                  <h3 className="text-sm font-semibold text-foreground">{t.title}</h3>
+                </div>
+                <p className="text-xs text-muted-foreground line-clamp-3 flex-1">{t.message}</p>
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={() => fillTemplate(t)}
+                    className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium border border-border hover:bg-secondary"
+                  >
+                    Vyplniť
+                  </button>
+                  <button
+                    onClick={() => sendTemplate(t)}
+                    disabled={saving}
+                    className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium gradient-golden text-primary-foreground disabled:opacity-50"
+                  >
+                    Zverejniť ihneď
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+
+
       {/* Existing announcements */}
       <div className="space-y-3">
         <h2 className="font-semibold text-foreground">Zverejnené oznámenia</h2>
