@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, Outlet, Navigate } from "react-router-dom";
 import { 
   LayoutDashboard, Users, Dog, MessageCircle, CreditCard, 
-  LogOut, Heart, ChevronLeft, Menu, ShoppingBag, Bell, FileText, Handshake, HousePlus, ShieldCheck, PawPrint, Megaphone
+  LogOut, Heart, ChevronLeft, Menu, Bell, FileText, Handshake, HousePlus, ShieldCheck, PawPrint, Megaphone, History
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
