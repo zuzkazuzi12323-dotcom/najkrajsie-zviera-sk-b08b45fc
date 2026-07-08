@@ -600,6 +600,11 @@ const AdminShelters = () => {
                   <button onClick={() => setFeatured(s)} title="Nastaviť ako aktuálne podporovaný" className={`p-1.5 rounded-lg hover:bg-secondary ${s.featured ? "text-primary" : "text-muted-foreground"}`}>
                     <Star className={`w-4 h-4 ${s.featured ? "fill-primary" : ""}`} />
                   </button>
+                  {s.featured && (
+                    <button onClick={() => extendSupport(s, 7)} title="Predĺžiť podporu o 7 dní" className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground text-xs font-semibold">
+                      +7d
+                    </button>
+                  )}
                   <button onClick={() => toggleShowIban(s)} title={s.show_iban ? "Skryť IBAN na stránke" : "Zobraziť IBAN na stránke"} className={`p-1.5 rounded-lg hover:bg-secondary ${s.show_iban ? "text-primary" : "text-muted-foreground"}`}>
                     <Landmark className="w-4 h-4" />
                   </button>
