@@ -18,6 +18,9 @@ type ShelterRow = {
   show_iban: boolean;
   display_order: number;
   collected_cents: number;
+  goal_cents: number;
+  support_start_date: string | null;
+  support_end_date: string | null;
 };
 
 const emptyForm = {
@@ -32,6 +35,9 @@ const emptyForm = {
   featured: false,
   show_iban: true,
   collected_euros: "",
+  goal_euros: "",
+  support_start_date: "",
+  support_end_date: "",
 };
 
 const CONTEST_ID = "00000000-0000-0000-0000-000000000002";
