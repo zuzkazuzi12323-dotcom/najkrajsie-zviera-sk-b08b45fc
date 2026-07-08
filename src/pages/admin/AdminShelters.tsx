@@ -129,6 +129,7 @@ const AdminShelters = () => {
       return;
     }
     const collectedEuros = parseFloat((form.collected_euros || "").replace(",", "."));
+    const goalEuros = parseFloat((form.goal_euros || "").replace(",", "."));
     const payload = {
       name: form.name.trim(),
       city: form.city.trim() || null,
@@ -141,6 +142,9 @@ const AdminShelters = () => {
       featured: form.featured,
       show_iban: form.show_iban,
       collected_cents: isNaN(collectedEuros) ? 0 : Math.max(0, Math.round(collectedEuros * 100)),
+      goal_cents: isNaN(goalEuros) ? 0 : Math.max(0, Math.round(goalEuros * 100)),
+      support_start_date: form.support_start_date ? new Date(form.support_start_date).toISOString() : null,
+      support_end_date: form.support_end_date ? new Date(form.support_end_date).toISOString() : null,
     };
 
     if (editId) {
