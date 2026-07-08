@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Heart, Menu, X, User, LogIn, LogOut, Shield, ChevronDown, ShoppingBag, Settings } from "lucide-react";
+import { Heart, Menu, X, User, LogIn, LogOut, Shield, ChevronDown, Settings } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -84,9 +84,6 @@ const Navbar = () => {
               )}
               <Link to="/moj-profil" className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
                 <User className="w-4 h-4" /> Môj profil
-              </Link>
-              <Link to="/moje-objednavky" className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
-                <ShoppingBag className="w-4 h-4" /> Objednávky
               </Link>
               <span className="text-sm text-muted-foreground px-2">{profile?.display_name || user.email}</span>
               <button onClick={signOut} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
