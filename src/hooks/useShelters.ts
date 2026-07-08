@@ -15,6 +15,9 @@ export type Shelter = {
   show_iban: boolean;
   display_order: number;
   collected_cents: number;
+  goal_cents: number;
+  support_start_date: string | null;
+  support_end_date: string | null;
 };
 
 /** Active shelters, ordered by display_order, for public display. */
@@ -44,6 +47,54 @@ export const useFeaturedShelter = () =>
         .limit(1)
         .maybeSingle();
       return (data as Shelter) || null;
+    },
+  });
+
+/** A single shelter by id (public). */
+export const useShelter = (id: string | undefined) =>
+  useQuery({
+    queryKey: ["shelter", id],
+    enabled: !!id,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("shelters_public")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+      return (data as Shelter) || null;
+    },
+  });
+
+export type ShelterHistoryEntry = {
+  id: string;
+  shelter_id: string;
+  period_start: string;
+  period_end: string;
+  collected_cents: number;
+  created_at: string;
+  shelter?: Shelter | null;
+};
+
+/** History of shelter support periods, newest first, joined with shelter info. */
+export const useShelterHistory = () =>
+  useQuery({
+    queryKey: ["shelter-history"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("shelter_support_history")
+        .select("*")
+        .order("period_end", { ascending: false });
+      const entries = (data || []) as ShelterHistoryEntry[];
+      const ids = [...new Set(entries.map((e) => e.shelter_id))];
+      if (ids.length) {
+        const { data: shelters } = await supabase
+          .from("shelters_public")
+          .select("*")
+          .in("id", ids);
+        const map = new Map((shelters || []).map((s: any) => [s.id, s as Shelter]));
+        entries.forEach((e) => { e.shelter = map.get(e.shelter_id) || null; });
+      }
+      return entries;
     },
   });
 

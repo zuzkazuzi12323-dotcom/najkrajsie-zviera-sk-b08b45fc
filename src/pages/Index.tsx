@@ -8,7 +8,7 @@ import DogCard from "@/components/DogCard";
 import ContestCountdown from "@/components/ContestCountdown";
 import PartnersSection from "@/components/PartnersSection";
 import SheltersSection from "@/components/SheltersSection";
-import { useFeaturedShelter } from "@/hooks/useShelters";
+import FeaturedShelterSection from "@/components/FeaturedShelterSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -34,7 +34,7 @@ const fetchDogsWithVotes = async () => {
 
 const Index = () => {
   const { user } = useAuth();
-  const { data: featuredShelter } = useFeaturedShelter();
+  
 
 
   const { data: allDogs = [] } = useQuery({
@@ -163,6 +163,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Aktuálne podporovaný útulok */}
+      <FeaturedShelterSection />
+
       {/* Contest Countdown */}
       <ContestCountdown />
 
@@ -210,52 +213,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Podpora útulkov – zobrazí sa iba ak je vybraný aktuálne podporovaný útulok */}
-      {featuredShelter && (
-        <section className="container mx-auto px-4 pb-12">
-          <div className="bg-card rounded-2xl p-6 md:p-10 shadow-soft border border-primary/10 text-center max-w-3xl mx-auto">
-            <Home className="w-10 h-10 text-primary mx-auto mb-3" />
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Podpora útulkov</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-pretty mb-5">
-              Z každej registrácie ide <strong className="text-foreground">20 %</strong> na podporu útulkov. Spolu pomáhame opusteným psíkom 🐾
-            </p>
-
-            <div className="flex flex-col items-center gap-3">
-              {featuredShelter.logo_url && (
-                <div className="w-28 h-20 bg-white rounded-xl border border-border flex items-center justify-center p-3">
-                  <img src={featuredShelter.logo_url} alt={featuredShelter.name} className="max-w-full max-h-full object-contain" loading="lazy" />
-                </div>
-              )}
-              <div className="inline-flex items-center gap-2 bg-primary/10 text-foreground px-5 py-3 rounded-full font-semibold">
-                <Heart className="w-4 h-4 text-primary fill-primary" />
-                Aktuálne podporovaný útulok: {featuredShelter.name}
-              </div>
-              {featuredShelter.description && (
-                <p className="text-sm text-muted-foreground max-w-xl mx-auto text-pretty">{featuredShelter.description}</p>
-              )}
-              {featuredShelter.iban && featuredShelter.show_iban && (
-                <p className="text-sm text-foreground">
-                  IBAN útulku: <code className="font-semibold">{featuredShelter.iban}</code>
-                </p>
-              )}
-              {featuredShelter.support_url && (
-                <a
-                  href={featuredShelter.support_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-primary font-semibold hover:underline"
-                >
-                  Navštíviť stránku útulku →
-                </a>
-              )}
-              <div className="inline-flex items-center gap-2 bg-primary/10 text-foreground px-5 py-3 rounded-full font-semibold mt-2">
-                <Heart className="w-4 h-4 text-primary fill-primary" />
-                Pre tento útulok sme zatiaľ vyzbierali: {((featuredShelter.collected_cents || 0) / 100).toFixed(2)} € ❤️
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
 
 
@@ -363,15 +320,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* E-shop banner */}
-      <section className="container mx-auto px-4 pb-8">
-        <Link to="/eshop">
-          <div className="bg-card rounded-2xl p-8 shadow-soft text-center border-2 border-primary/20 hover:border-primary/40 transition-colors cursor-pointer">
-            <p className="text-2xl md:text-3xl font-bold text-foreground mb-2">🛒 Navštívte náš e-shop a podporte útulky!</p>
-            <p className="text-muted-foreground">Časť výťažku z každého nákupu venujeme útulkom pre zvieratá ❤️</p>
-          </div>
-        </Link>
-      </section>
 
       {/* Shelters we support (featured shown above, so excluded here to avoid duplication) */}
       <SheltersSection respectVisibility excludeFeatured />

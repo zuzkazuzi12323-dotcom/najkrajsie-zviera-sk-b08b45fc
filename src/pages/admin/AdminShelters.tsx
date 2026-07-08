@@ -18,6 +18,9 @@ type ShelterRow = {
   show_iban: boolean;
   display_order: number;
   collected_cents: number;
+  goal_cents: number;
+  support_start_date: string | null;
+  support_end_date: string | null;
 };
 
 const emptyForm = {
@@ -32,6 +35,9 @@ const emptyForm = {
   featured: false,
   show_iban: true,
   collected_euros: "",
+  goal_euros: "",
+  support_start_date: "",
+  support_end_date: "",
 };
 
 const CONTEST_ID = "00000000-0000-0000-0000-000000000002";
@@ -82,6 +88,51 @@ const AdminShelters = () => {
     toast.success(!sheltersVisible ? "Sekcia zapnutá" : "Sekcia vypnutá");
   };
 
+  const { data: rotationSettings } = useQuery({
+    queryKey: ["admin-shelters-rotation"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("contest_settings")
+        .select("shelters_auto_rotate, shelter_support_days")
+        .eq("id", CONTEST_ID)
+        .maybeSingle();
+      return (data as any) || { shelters_auto_rotate: true, shelter_support_days: 7 };
+    },
+  });
+  const [daysInput, setDaysInput] = useState("");
+
+  const toggleAutoRotate = async () => {
+    const next = !(rotationSettings?.shelters_auto_rotate ?? true);
+    const { error } = await supabase
+      .from("contest_settings")
+      .update({ shelters_auto_rotate: next } as any)
+      .eq("id", CONTEST_ID);
+    if (error) return toast.error("Chyba pri ukladaní");
+    queryClient.invalidateQueries({ queryKey: ["admin-shelters-rotation"] });
+    toast.success(next ? "Automatické striedanie zapnuté" : "Automatické striedanie vypnuté");
+  };
+
+  const saveDays = async () => {
+    const n = parseInt(daysInput, 10);
+    if (isNaN(n) || n < 1) return toast.error("Zadajte počet dní (min. 1)");
+    const { error } = await supabase
+      .from("contest_settings")
+      .update({ shelter_support_days: n } as any)
+      .eq("id", CONTEST_ID);
+    if (error) return toast.error("Chyba pri ukladaní");
+    queryClient.invalidateQueries({ queryKey: ["admin-shelters-rotation"] });
+    toast.success(`Dĺžka podpory: ${n} dní`);
+  };
+
+  const extendSupport = async (s: ShelterRow, extraDays: number) => {
+    const base = s.support_end_date ? new Date(s.support_end_date) : new Date();
+    const end = new Date(base.getTime() + extraDays * 24 * 60 * 60 * 1000);
+    await supabase.from("shelters").update({ support_end_date: end.toISOString() }).eq("id", s.id);
+    invalidate();
+    queryClient.invalidateQueries({ queryKey: ["featured-shelter"] });
+    toast.success(`Podpora predĺžená o ${extraDays} dní`);
+  };
+
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["admin-shelters"] });
@@ -123,6 +174,7 @@ const AdminShelters = () => {
       return;
     }
     const collectedEuros = parseFloat((form.collected_euros || "").replace(",", "."));
+    const goalEuros = parseFloat((form.goal_euros || "").replace(",", "."));
     const payload = {
       name: form.name.trim(),
       city: form.city.trim() || null,
@@ -135,6 +187,9 @@ const AdminShelters = () => {
       featured: form.featured,
       show_iban: form.show_iban,
       collected_cents: isNaN(collectedEuros) ? 0 : Math.max(0, Math.round(collectedEuros * 100)),
+      goal_cents: isNaN(goalEuros) ? 0 : Math.max(0, Math.round(goalEuros * 100)),
+      support_start_date: form.support_start_date ? new Date(form.support_start_date).toISOString() : null,
+      support_end_date: form.support_end_date ? new Date(form.support_end_date).toISOString() : null,
     };
 
     if (editId) {
@@ -197,14 +252,31 @@ const AdminShelters = () => {
       featured: s.featured,
       show_iban: s.show_iban,
       collected_euros: ((s.collected_cents || 0) / 100).toFixed(2),
+      goal_euros: ((s.goal_cents || 0) / 100).toFixed(2),
+      support_start_date: s.support_start_date ? s.support_start_date.slice(0, 16) : "",
+      support_end_date: s.support_end_date ? s.support_end_date.slice(0, 16) : "",
     });
     setEditId(s.id);
     setShowForm(true);
   };
 
   const setFeatured = async (s: ShelterRow) => {
+    const days = rotationSettings?.shelter_support_days ?? 7;
+    const start = new Date();
+    const end = new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
     await supabase.from("shelters").update({ featured: false }).neq("id", s.id);
-    await supabase.from("shelters").update({ featured: true }).eq("id", s.id);
+    await supabase.from("shelters").update({
+      featured: true,
+      support_start_date: start.toISOString(),
+      support_end_date: end.toISOString(),
+    }).eq("id", s.id);
+    // Announce the new supported shelter
+    await supabase.from("site_announcements").insert({
+      title: "Aktuálne podporovaný útulok",
+      message: `🐾 Tento týždeň podporujeme ${s.name}. Pomôžte zvieratkám priamym príspevkom na účet útulku.`,
+      variant: "info",
+      active: true,
+    } as any);
     invalidate();
     queryClient.invalidateQueries({ queryKey: ["featured-shelter"] });
     toast.success(`Aktuálne podporovaný útulok: ${s.name}`);
@@ -265,6 +337,48 @@ const AdminShelters = () => {
         </button>
       </div>
 
+      {/* Automatické striedanie útulkov */}
+      <div className="bg-card rounded-2xl p-6 border border-border space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 className="font-semibold text-foreground">Automatické striedanie útulkov</h3>
+            <p className="text-sm text-muted-foreground">
+              Systém automaticky prepne na ďalší útulok v poradí po skončení podpory.{" "}
+              <strong className="text-foreground">{rotationSettings?.shelters_auto_rotate ? "Zapnuté" : "Vypnuté"}</strong>
+            </p>
+          </div>
+          <button
+            onClick={toggleAutoRotate}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm ${
+              rotationSettings?.shelters_auto_rotate
+                ? "border border-destructive/30 text-destructive hover:bg-destructive/10"
+                : "gradient-golden text-primary-foreground"
+            }`}
+          >
+            {rotationSettings?.shelters_auto_rotate ? <><EyeOff className="w-4 h-4" /> Vypnúť</> : <><Eye className="w-4 h-4" /> Zapnúť</>}
+          </button>
+        </div>
+        <div className="flex flex-wrap items-end gap-3 border-t border-border pt-4">
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">
+              Predvolená dĺžka podpory (dni) — aktuálne {rotationSettings?.shelter_support_days ?? 7}
+            </label>
+            <input
+              value={daysInput}
+              onChange={(e) => setDaysInput(e.target.value)}
+              placeholder={String(rotationSettings?.shelter_support_days ?? 7)}
+              inputMode="numeric"
+              className="w-32 px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+            />
+          </div>
+          <button onClick={saveDays} className="gradient-golden text-primary-foreground px-5 py-2.5 rounded-xl font-medium text-sm">
+            Uložiť dĺžku
+          </button>
+        </div>
+      </div>
+
+
+
 
 
       {showForm && (
@@ -321,6 +435,40 @@ const AdminShelters = () => {
               inputMode="decimal"
               className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
             />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Cieľ zbierky (€)</label>
+              <input
+                value={form.goal_euros}
+                onChange={(e) => setForm({ ...form, goal_euros: e.target.value })}
+                placeholder="napr. 500"
+                inputMode="decimal"
+                className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Začiatok podpory</label>
+              <input
+                type="datetime-local"
+                value={form.support_start_date}
+                onChange={(e) => setForm({ ...form, support_start_date: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Ukončenie podpory</label>
+              <input
+                type="datetime-local"
+                value={form.support_end_date}
+                onChange={(e) => setForm({ ...form, support_end_date: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+              />
+            </div>
           </div>
 
 
@@ -452,6 +600,11 @@ const AdminShelters = () => {
                   <button onClick={() => setFeatured(s)} title="Nastaviť ako aktuálne podporovaný" className={`p-1.5 rounded-lg hover:bg-secondary ${s.featured ? "text-primary" : "text-muted-foreground"}`}>
                     <Star className={`w-4 h-4 ${s.featured ? "fill-primary" : ""}`} />
                   </button>
+                  {s.featured && (
+                    <button onClick={() => extendSupport(s, 7)} title="Predĺžiť podporu o 7 dní" className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground text-xs font-semibold">
+                      +7d
+                    </button>
+                  )}
                   <button onClick={() => toggleShowIban(s)} title={s.show_iban ? "Skryť IBAN na stránke" : "Zobraziť IBAN na stránke"} className={`p-1.5 rounded-lg hover:bg-secondary ${s.show_iban ? "text-primary" : "text-muted-foreground"}`}>
                     <Landmark className="w-4 h-4" />
                   </button>

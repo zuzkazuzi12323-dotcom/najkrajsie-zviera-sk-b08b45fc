@@ -122,14 +122,13 @@ const AdminPayments = () => {
   const typeLabels: Record<string, string> = {
     highlight: "Zvýraznenie",
     registration: "Registrácia",
-    product: "E-shop",
+    product: "Nákup produktu",
     donation: "Príspevok",
   };
 
   const typeFilters = [
     { key: "all", label: "Všetky" },
     { key: "registration", label: "Registrácie" },
-    { key: "product", label: "E-shop" },
     { key: "donation", label: "Príspevky" },
     { key: "highlight", label: "Zvýraznenia" },
   ];
