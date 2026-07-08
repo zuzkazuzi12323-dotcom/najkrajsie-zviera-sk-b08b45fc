@@ -437,6 +437,40 @@ const AdminShelters = () => {
             />
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Cieľ zbierky (€)</label>
+              <input
+                value={form.goal_euros}
+                onChange={(e) => setForm({ ...form, goal_euros: e.target.value })}
+                placeholder="napr. 500"
+                inputMode="decimal"
+                className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Začiatok podpory</label>
+              <input
+                type="datetime-local"
+                value={form.support_start_date}
+                onChange={(e) => setForm({ ...form, support_start_date: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Ukončenie podpory</label>
+              <input
+                type="datetime-local"
+                value={form.support_end_date}
+                onChange={(e) => setForm({ ...form, support_end_date: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+              />
+            </div>
+          </div>
+
 
           {/* Logo upload */}
           <div className="flex items-center gap-2">
