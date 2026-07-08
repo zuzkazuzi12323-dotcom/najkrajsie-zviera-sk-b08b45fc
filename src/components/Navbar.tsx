@@ -22,12 +22,12 @@ const Navbar = () => {
 
   const moreLinks = [
     { to: "/utulky", label: "Podpora útulkov ❤️" },
+    { to: "/historia-utulkov", label: "História útulkov 🐾" },
     { to: "/spolupraca-utulky", label: "Spolupráca s útulkami 🏠" },
     { to: "/ako-funguje", label: "Ako to funguje" },
     { to: "/#o-projekte", label: "O projekte" },
     { to: "/partneri", label: "Partneri" },
     { to: "/kontakt", label: "Kontakt" },
-    { to: "/eshop", label: "E-shop 🛒" },
     { to: "/pravidla", label: "Pravidlá súťaže" },
     { to: "/ochrana-udajov", label: "Ochrana údajov" },
   ];
