@@ -337,6 +337,48 @@ const AdminShelters = () => {
         </button>
       </div>
 
+      {/* Automatické striedanie útulkov */}
+      <div className="bg-card rounded-2xl p-6 border border-border space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 className="font-semibold text-foreground">Automatické striedanie útulkov</h3>
+            <p className="text-sm text-muted-foreground">
+              Systém automaticky prepne na ďalší útulok v poradí po skončení podpory.{" "}
+              <strong className="text-foreground">{rotationSettings?.shelters_auto_rotate ? "Zapnuté" : "Vypnuté"}</strong>
+            </p>
+          </div>
+          <button
+            onClick={toggleAutoRotate}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm ${
+              rotationSettings?.shelters_auto_rotate
+                ? "border border-destructive/30 text-destructive hover:bg-destructive/10"
+                : "gradient-golden text-primary-foreground"
+            }`}
+          >
+            {rotationSettings?.shelters_auto_rotate ? <><EyeOff className="w-4 h-4" /> Vypnúť</> : <><Eye className="w-4 h-4" /> Zapnúť</>}
+          </button>
+        </div>
+        <div className="flex flex-wrap items-end gap-3 border-t border-border pt-4">
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">
+              Predvolená dĺžka podpory (dni) — aktuálne {rotationSettings?.shelter_support_days ?? 7}
+            </label>
+            <input
+              value={daysInput}
+              onChange={(e) => setDaysInput(e.target.value)}
+              placeholder={String(rotationSettings?.shelter_support_days ?? 7)}
+              inputMode="numeric"
+              className="w-32 px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm"
+            />
+          </div>
+          <button onClick={saveDays} className="gradient-golden text-primary-foreground px-5 py-2.5 rounded-xl font-medium text-sm">
+            Uložiť dĺžku
+          </button>
+        </div>
+      </div>
+
+
+
 
 
       {showForm && (
