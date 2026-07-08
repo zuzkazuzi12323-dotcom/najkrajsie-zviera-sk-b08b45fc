@@ -19,23 +19,22 @@ import Winners from "./pages/Winners";
 import Certificate from "./pages/Certificate";
 import Privacy from "./pages/Privacy";
 import Contact from "./pages/Contact";
-import EShop from "./pages/EShop";
-import EShopSuccess from "./pages/EShopSuccess";
-import ProductDetail from "./pages/ProductDetail";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminDogs from "./pages/admin/AdminDogs";
 import AdminComments from "./pages/admin/AdminComments";
 import AdminPayments from "./pages/admin/AdminPayments";
-import AdminProducts from "./pages/admin/AdminProducts";
 import AdminContent from "./pages/admin/AdminContent";
 import AdminSponsors from "./pages/admin/AdminSponsors";
 import AdminShelters from "./pages/admin/AdminShelters";
 import Partners from "./pages/Partners";
 import Shelters from "./pages/Shelters";
+import ShelterDetail from "./pages/ShelterDetail";
+import ShelterHistory from "./pages/ShelterHistory";
 import ShelterApply from "./pages/ShelterApply";
 import AdminShelterApplications from "./pages/admin/AdminShelterApplications";
+import AdminShelterHistory from "./pages/admin/AdminShelterHistory";
 import SupportPlatform from "./pages/SupportPlatform";
 import SupportSuccess from "./pages/SupportSuccess";
 import Transparency from "./pages/Transparency";
@@ -45,7 +44,6 @@ import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import MyOrders from "./pages/MyOrders";
 import Donate from "./pages/Donate";
 import DonateSuccess from "./pages/DonateSuccess";
 import AccountSettings from "./pages/AccountSettings";
@@ -79,10 +77,6 @@ const App = () => (
             <Route path="/certifikat/:id" element={<Certificate />} />
             <Route path="/ochrana-udajov" element={<Privacy />} />
             <Route path="/kontakt" element={<Contact />} />
-            <Route path="/eshop" element={<EShop />} />
-            <Route path="/eshop/:id" element={<ProductDetail />} />
-            <Route path="/eshop-dakujeme" element={<EShopSuccess />} />
-            <Route path="/moje-objednavky" element={<MyOrders />} />
             <Route path="/podporit" element={<Donate />} />
             <Route path="/dakujeme-za-prispevok" element={<DonateSuccess />} />
             <Route path="/nastavenia" element={<AccountSettings />} />
@@ -90,6 +84,8 @@ const App = () => (
             <Route path="/moj-profil" element={<MyProfile />} />
             <Route path="/partneri" element={<Partners />} />
             <Route path="/utulky" element={<Shelters />} />
+            <Route path="/utulok/:id" element={<ShelterDetail />} />
+            <Route path="/historia-utulkov" element={<ShelterHistory />} />
             <Route path="/spolupraca-utulky" element={<ShelterApply />} />
             <Route path="/podpora" element={<SupportPlatform />} />
             <Route path="/podpora-dakujeme" element={<SupportSuccess />} />
@@ -102,9 +98,9 @@ const App = () => (
               <Route path="psy" element={<AdminDogs />} />
               <Route path="komentare" element={<AdminComments />} />
               <Route path="platby" element={<AdminPayments />} />
-              <Route path="produkty" element={<AdminProducts />} />
               <Route path="partneri" element={<AdminSponsors />} />
               <Route path="utulky" element={<AdminShelters />} />
+              <Route path="historia-utulkov" element={<AdminShelterHistory />} />
               <Route path="ziadosti-utulkov" element={<AdminShelterApplications />} />
               <Route path="podporovatelia" element={<AdminSupporters />} />
               <Route path="transparentnost" element={<AdminTransparency />} />

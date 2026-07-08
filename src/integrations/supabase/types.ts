@@ -78,6 +78,8 @@ export type Database = {
           active: boolean
           end_date: string | null
           id: string
+          shelter_support_days: number
+          shelters_auto_rotate: boolean
           shelters_visible: boolean
           updated_at: string
         }
@@ -85,6 +87,8 @@ export type Database = {
           active?: boolean
           end_date?: string | null
           id?: string
+          shelter_support_days?: number
+          shelters_auto_rotate?: boolean
           shelters_visible?: boolean
           updated_at?: string
         }
@@ -92,6 +96,8 @@ export type Database = {
           active?: boolean
           end_date?: string | null
           id?: string
+          shelter_support_days?: number
+          shelters_auto_rotate?: boolean
           shelters_visible?: boolean
           updated_at?: string
         }
@@ -419,6 +425,48 @@ export type Database = {
         }
         Relationships: []
       }
+      shelter_support_history: {
+        Row: {
+          collected_cents: number
+          created_at: string
+          id: string
+          period_end: string
+          period_start: string
+          shelter_id: string
+        }
+        Insert: {
+          collected_cents?: number
+          created_at?: string
+          id?: string
+          period_end: string
+          period_start: string
+          shelter_id: string
+        }
+        Update: {
+          collected_cents?: number
+          created_at?: string
+          id?: string
+          period_end?: string
+          period_start?: string
+          shelter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shelter_support_history_shelter_id_fkey"
+            columns: ["shelter_id"]
+            isOneToOne: false
+            referencedRelation: "shelters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shelter_support_history_shelter_id_fkey"
+            columns: ["shelter_id"]
+            isOneToOne: false
+            referencedRelation: "shelters_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shelters: {
         Row: {
           active: boolean
@@ -429,11 +477,14 @@ export type Database = {
           description: string | null
           display_order: number
           featured: boolean
+          goal_cents: number
           iban: string | null
           id: string
           logo_url: string | null
           name: string
           show_iban: boolean
+          support_end_date: string | null
+          support_start_date: string | null
           support_url: string | null
           updated_at: string
         }
@@ -446,11 +497,14 @@ export type Database = {
           description?: string | null
           display_order?: number
           featured?: boolean
+          goal_cents?: number
           iban?: string | null
           id?: string
           logo_url?: string | null
           name: string
           show_iban?: boolean
+          support_end_date?: string | null
+          support_start_date?: string | null
           support_url?: string | null
           updated_at?: string
         }
@@ -463,11 +517,14 @@ export type Database = {
           description?: string | null
           display_order?: number
           featured?: boolean
+          goal_cents?: number
           iban?: string | null
           id?: string
           logo_url?: string | null
           name?: string
           show_iban?: boolean
+          support_end_date?: string | null
+          support_start_date?: string | null
           support_url?: string | null
           updated_at?: string
         }
@@ -763,11 +820,14 @@ export type Database = {
           description: string | null
           display_order: number | null
           featured: boolean | null
+          goal_cents: number | null
           iban: string | null
           id: string | null
           logo_url: string | null
           name: string | null
           show_iban: boolean | null
+          support_end_date: string | null
+          support_start_date: string | null
           support_url: string | null
           updated_at: string | null
         }
@@ -780,11 +840,14 @@ export type Database = {
           description?: string | null
           display_order?: number | null
           featured?: boolean | null
+          goal_cents?: number | null
           iban?: never
           id?: string | null
           logo_url?: string | null
           name?: string | null
           show_iban?: boolean | null
+          support_end_date?: string | null
+          support_start_date?: string | null
           support_url?: string | null
           updated_at?: string | null
         }
@@ -797,11 +860,14 @@ export type Database = {
           description?: string | null
           display_order?: number | null
           featured?: boolean | null
+          goal_cents?: number | null
           iban?: never
           id?: string | null
           logo_url?: string | null
           name?: string | null
           show_iban?: boolean | null
+          support_end_date?: string | null
+          support_start_date?: string | null
           support_url?: string | null
           updated_at?: string | null
         }
@@ -818,6 +884,7 @@ export type Database = {
         Returns: boolean
       }
       is_blocked: { Args: never; Returns: boolean }
+      rotate_featured_shelter: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
