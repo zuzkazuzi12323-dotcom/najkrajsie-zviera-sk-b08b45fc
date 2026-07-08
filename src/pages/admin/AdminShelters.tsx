@@ -207,6 +207,9 @@ const AdminShelters = () => {
       featured: s.featured,
       show_iban: s.show_iban,
       collected_euros: ((s.collected_cents || 0) / 100).toFixed(2),
+      goal_euros: ((s.goal_cents || 0) / 100).toFixed(2),
+      support_start_date: s.support_start_date ? s.support_start_date.slice(0, 16) : "",
+      support_end_date: s.support_end_date ? s.support_end_date.slice(0, 16) : "",
     });
     setEditId(s.id);
     setShowForm(true);
