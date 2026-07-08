@@ -88,6 +88,51 @@ const AdminShelters = () => {
     toast.success(!sheltersVisible ? "Sekcia zapnutá" : "Sekcia vypnutá");
   };
 
+  const { data: rotationSettings } = useQuery({
+    queryKey: ["admin-shelters-rotation"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("contest_settings")
+        .select("shelters_auto_rotate, shelter_support_days")
+        .eq("id", CONTEST_ID)
+        .maybeSingle();
+      return (data as any) || { shelters_auto_rotate: true, shelter_support_days: 7 };
+    },
+  });
+  const [daysInput, setDaysInput] = useState("");
+
+  const toggleAutoRotate = async () => {
+    const next = !(rotationSettings?.shelters_auto_rotate ?? true);
+    const { error } = await supabase
+      .from("contest_settings")
+      .update({ shelters_auto_rotate: next } as any)
+      .eq("id", CONTEST_ID);
+    if (error) return toast.error("Chyba pri ukladaní");
+    queryClient.invalidateQueries({ queryKey: ["admin-shelters-rotation"] });
+    toast.success(next ? "Automatické striedanie zapnuté" : "Automatické striedanie vypnuté");
+  };
+
+  const saveDays = async () => {
+    const n = parseInt(daysInput, 10);
+    if (isNaN(n) || n < 1) return toast.error("Zadajte počet dní (min. 1)");
+    const { error } = await supabase
+      .from("contest_settings")
+      .update({ shelter_support_days: n } as any)
+      .eq("id", CONTEST_ID);
+    if (error) return toast.error("Chyba pri ukladaní");
+    queryClient.invalidateQueries({ queryKey: ["admin-shelters-rotation"] });
+    toast.success(`Dĺžka podpory: ${n} dní`);
+  };
+
+  const extendSupport = async (s: ShelterRow, extraDays: number) => {
+    const base = s.support_end_date ? new Date(s.support_end_date) : new Date();
+    const end = new Date(base.getTime() + extraDays * 24 * 60 * 60 * 1000);
+    await supabase.from("shelters").update({ support_end_date: end.toISOString() }).eq("id", s.id);
+    invalidate();
+    queryClient.invalidateQueries({ queryKey: ["featured-shelter"] });
+    toast.success(`Podpora predĺžená o ${extraDays} dní`);
+  };
+
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["admin-shelters"] });
