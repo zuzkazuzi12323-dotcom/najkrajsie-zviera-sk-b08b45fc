@@ -216,8 +216,22 @@ const AdminShelters = () => {
   };
 
   const setFeatured = async (s: ShelterRow) => {
+    const days = rotationSettings?.shelter_support_days ?? 7;
+    const start = new Date();
+    const end = new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
     await supabase.from("shelters").update({ featured: false }).neq("id", s.id);
-    await supabase.from("shelters").update({ featured: true }).eq("id", s.id);
+    await supabase.from("shelters").update({
+      featured: true,
+      support_start_date: start.toISOString(),
+      support_end_date: end.toISOString(),
+    }).eq("id", s.id);
+    // Announce the new supported shelter
+    await supabase.from("site_announcements").insert({
+      title: "Aktuálne podporovaný útulok",
+      message: `🐾 Tento týždeň podporujeme ${s.name}. Pomôžte zvieratkám priamym príspevkom na účet útulku.`,
+      variant: "info",
+      active: true,
+    } as any);
     invalidate();
     queryClient.invalidateQueries({ queryKey: ["featured-shelter"] });
     toast.success(`Aktuálne podporovaný útulok: ${s.name}`);
