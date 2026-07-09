@@ -7,17 +7,29 @@ import Footer from "@/components/Footer";
 import { useShelter } from "@/hooks/useShelters";
 import { generateSepaQr } from "@/lib/sepaQr";
 
+const PRESETS = [500, 1000, 2000, 5000];
+
 const ShelterDetail = () => {
   const { id } = useParams();
   const { data: shelter, isLoading } = useShelter(id);
   const [qr, setQr] = useState<string | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [custom, setCustom] = useState("");
+
+  const amountCents = (() => {
+    if (custom) {
+      const parsed = parseFloat(custom.replace(",", "."));
+      return !isNaN(parsed) && parsed > 0 ? Math.round(parsed * 100) : 0;
+    }
+    return selected || 0;
+  })();
 
   useEffect(() => {
     if (shelter?.iban && shelter.show_iban) {
       generateSepaQr({
         iban: shelter.iban,
         name: shelter.bank_holder || shelter.name,
-        amountCents: 0,
+        amountCents,
         message: `Podpora ${shelter.name}`,
       })
         .then(setQr)
@@ -25,7 +37,7 @@ const ShelterDetail = () => {
     } else {
       setQr(null);
     }
-  }, [shelter]);
+  }, [shelter, amountCents]);
 
   const collected = ((shelter?.collected_cents || 0) / 100);
   const goal = ((shelter?.goal_cents || 0) / 100);
