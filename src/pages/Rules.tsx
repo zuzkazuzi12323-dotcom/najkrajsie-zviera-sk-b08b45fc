@@ -97,6 +97,18 @@ const Rules = () => {
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> Organizátor si vyhradzuje právo žiadosť <strong>zamietnuť alebo odstrániť</strong> pri podozrení na podvod alebo pri nepravdivých údajoch.</li>
               </ul>
             </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <Handshake className="w-5 h-5 text-primary" /> ❤️ Útulok týždňa
+              </h2>
+              <ul className="space-y-3 text-foreground/80">
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Každý týždeň zverejňujeme jeden <strong>aktuálne podporovaný útulok</strong>, ktorý sa automaticky strieda.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Útulku môžete prispieť priamo cez <strong>SEPA QR kód</strong> na jeho profile – <strong>100 %</strong> vášho príspevku ide priamo na účet útulku.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> NajkrajšíPes.sk nie je sprostredkovateľ platby a tieto finančné prostriedky neprijíma.</li>
+              </ul>
+            </div>
+
           </div>
 
         </motion.div>
