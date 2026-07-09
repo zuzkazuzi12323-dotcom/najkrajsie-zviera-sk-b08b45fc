@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Download, Eye, EyeOff, Trash2, UserX, UserCheck } from "lucide-react";
+import { Download, Eye, EyeOff, Trash2, UserX, UserCheck, Star, StarOff } from "lucide-react";
 
 type Supporter = {
   id: string;
   name: string | null;
   is_anonymous: boolean;
+  is_main: boolean;
   comment: string | null;
   show_comment: boolean;
   amount_cents: number;
