@@ -88,7 +88,7 @@ const SupportPlatform = () => {
             <div className="w-16 h-16 rounded-2xl gradient-golden flex items-center justify-center mx-auto mb-6">
               <PawPrint className="w-8 h-8 text-primary-foreground" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Podporovatelia 🐾</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Podporovatelia</h1>
             <p className="text-muted-foreground mb-8 text-pretty max-w-xl mx-auto">
               Podporte vývoj a prevádzku projektu NajkrajšíPes.sk.
               Z každej podpory venujeme <strong>20 % na útulky pre zvieratá</strong>.
