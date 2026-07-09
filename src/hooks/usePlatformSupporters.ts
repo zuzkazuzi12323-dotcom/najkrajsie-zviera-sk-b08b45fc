@@ -6,6 +6,7 @@ export type PublicSupporter = {
   name: string;
   amount_cents: number;
   comment: string | null;
+  is_main: boolean;
   created_at: string;
 };
 
@@ -17,6 +18,7 @@ export const usePlatformSupporters = () =>
       const { data } = await supabase
         .from("platform_supporters_public")
         .select("*")
+        .order("is_main", { ascending: false })
         .order("created_at", { ascending: false })
         .limit(200);
       return (data || []) as PublicSupporter[];
