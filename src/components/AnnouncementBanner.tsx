@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Info, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { X, Info, AlertTriangle, CheckCircle2, BadgeCheck } from "lucide-react";
 import { useActiveAnnouncements } from "@/hooks/useAnnouncements";
 
 const VARIANTS: Record<string, { icon: typeof Info; className: string }> = {
@@ -41,8 +41,15 @@ const AnnouncementBanner = () => {
           >
             <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-sm">{a.title}</p>
-              <p className="text-sm whitespace-pre-line">{a.message}</p>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="inline-flex items-center gap-1 font-bold text-sm text-primary">
+                  NajkrajšíPes
+                  <BadgeCheck className="w-4 h-4 text-blue-500 fill-blue-500/15" aria-label="Overené oficiálne oznámenie" />
+                </span>
+                <span className="text-xs text-muted-foreground">· oficiálne oznámenie</span>
+              </div>
+              <p className="font-semibold text-sm mt-0.5">{a.title}</p>
+              <p className="text-sm whitespace-pre-line break-words">{a.message}</p>
             </div>
             <button
               onClick={() => dismiss(a.id)}

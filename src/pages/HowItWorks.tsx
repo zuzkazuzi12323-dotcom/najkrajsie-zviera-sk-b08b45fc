@@ -41,6 +41,15 @@ const HowItWorks = () => {
             ))}
           </div>
 
+          <div className="mt-8 bg-card rounded-2xl p-6 shadow-soft border border-primary/20">
+            <h3 className="text-lg font-bold text-foreground mb-2">❤️ Útulok týždňa</h3>
+            <p className="text-muted-foreground">
+              Okrem súťaže každý týždeň vyberáme jeden <strong>útulok týždňa</strong>, ktorý spoločne podporujeme.
+              Prispieť mu môžete priamo cez SEPA QR kód na jeho profile — 100 % vášho príspevku ide priamo na účet útulku.
+            </p>
+          </div>
+
+
           <div className="text-center mt-10">
             <Link to="/pridat">
               <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg">

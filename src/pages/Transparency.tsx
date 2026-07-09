@@ -61,7 +61,8 @@ const Transparency = () => {
           <p className="text-muted-foreground text-pretty">
             Všetky finančné dary útulkom, sponzorské príspevky a darované predmety sú tu verejne archivované a overiteľné.
             Z každej registrácie a podpory venujeme 20 % na útulky pre zvieratá ❤️. Citlivé údaje (napr. IBAN) zverejňujeme
-            len so súhlasom útulku a v primeranom rozsahu.
+            len so súhlasom útulku a v primeranom rozsahu. V sekcii <strong>❤️ Útulok týždňa</strong> každý týždeň
+            zverejňujeme jeden aktuálne podporovaný útulok, ktorému môžete prispieť priamo cez SEPA QR kód.
           </p>
         </div>
 

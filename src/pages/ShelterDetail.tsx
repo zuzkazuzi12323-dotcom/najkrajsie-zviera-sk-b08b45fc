@@ -7,17 +7,29 @@ import Footer from "@/components/Footer";
 import { useShelter } from "@/hooks/useShelters";
 import { generateSepaQr } from "@/lib/sepaQr";
 
+const PRESETS = [500, 1000, 2000, 5000];
+
 const ShelterDetail = () => {
   const { id } = useParams();
   const { data: shelter, isLoading } = useShelter(id);
   const [qr, setQr] = useState<string | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [custom, setCustom] = useState("");
+
+  const amountCents = (() => {
+    if (custom) {
+      const parsed = parseFloat(custom.replace(",", "."));
+      return !isNaN(parsed) && parsed > 0 ? Math.round(parsed * 100) : 0;
+    }
+    return selected || 0;
+  })();
 
   useEffect(() => {
     if (shelter?.iban && shelter.show_iban) {
       generateSepaQr({
         iban: shelter.iban,
         name: shelter.bank_holder || shelter.name,
-        amountCents: 0,
+        amountCents,
         message: `Podpora ${shelter.name}`,
       })
         .then(setQr)
@@ -25,7 +37,7 @@ const ShelterDetail = () => {
     } else {
       setQr(null);
     }
-  }, [shelter]);
+  }, [shelter, amountCents]);
 
   const collected = ((shelter?.collected_cents || 0) / 100);
   const goal = ((shelter?.goal_cents || 0) / 100);
@@ -97,12 +109,47 @@ const ShelterDetail = () => {
                     </button>
                   </div>
 
+                  <div className="mt-5">
+                    <p className="text-sm font-medium text-foreground mb-2">Vyberte sumu daru ❤️</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {PRESETS.map((c) => (
+                        <button
+                          key={c}
+                          onClick={() => { setSelected(c); setCustom(""); }}
+                          className={`py-2.5 rounded-xl font-bold text-sm transition-all ${
+                            selected === c && !custom
+                              ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow"
+                              : "bg-background border border-border text-foreground hover:border-primary/40"
+                          }`}
+                        >
+                          {(c / 100).toFixed(0)} €
+                        </button>
+                      ))}
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={custom}
+                        onChange={(e) => { setCustom(e.target.value); setSelected(null); }}
+                        placeholder="Vlastná suma"
+                        className="flex-1 px-4 py-2.5 rounded-xl bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                      <span className="font-bold text-foreground">€</span>
+                    </div>
+                  </div>
+
                   {qr && (
                     <div className="mt-4 flex flex-col items-center">
-                      <p className="text-xs text-muted-foreground mb-2">Naskenujte QR kód v mobilnej aplikácii vašej banky</p>
+                      <p className="text-xs text-muted-foreground mb-2 text-center">
+                        {amountCents > 0
+                          ? `Naskenujte QR kód pre dar ${(amountCents / 100).toFixed(2)} € v aplikácii vašej banky`
+                          : "Naskenujte QR kód v mobilnej aplikácii vašej banky (sumu zadáte v banke)"}
+                      </p>
                       <img src={qr} alt="QR platba" className="w-48 h-48 rounded-xl bg-white p-2 border border-border" />
                     </div>
                   )}
+
                 </div>
               )}
 
