@@ -227,6 +227,7 @@ export type Database = {
           hidden: boolean
           id: string
           is_anonymous: boolean
+          is_main: boolean
           name: string | null
           show_comment: boolean
           status: string
@@ -239,6 +240,7 @@ export type Database = {
           hidden?: boolean
           id?: string
           is_anonymous?: boolean
+          is_main?: boolean
           name?: string | null
           show_comment?: boolean
           status?: string
@@ -251,6 +253,7 @@ export type Database = {
           hidden?: boolean
           id?: string
           is_anonymous?: boolean
+          is_main?: boolean
           name?: string | null
           show_comment?: boolean
           status?: string
@@ -774,6 +777,7 @@ export type Database = {
           comment: string | null
           created_at: string | null
           id: string | null
+          is_main: boolean | null
           name: string | null
         }
         Insert: {
@@ -781,6 +785,7 @@ export type Database = {
           comment?: never
           created_at?: string | null
           id?: string | null
+          is_main?: boolean | null
           name?: never
         }
         Update: {
@@ -788,6 +793,7 @@ export type Database = {
           comment?: never
           created_at?: string | null
           id?: string | null
+          is_main?: boolean | null
           name?: never
         }
         Relationships: []

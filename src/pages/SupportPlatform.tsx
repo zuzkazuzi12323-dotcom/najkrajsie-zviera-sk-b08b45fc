@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, ArrowLeft, PawPrint, Users } from "lucide-react";
+import { Heart, ArrowLeft, PawPrint, Users, Award, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { usePlatformSupporters } from "@/hooks/usePlatformSupporters";
+import { useActiveSponsors } from "@/hooks/useSponsors";
 
 const presetAmounts = [
   { value: 100, label: "1 €" },
@@ -26,6 +27,11 @@ const SupportPlatform = () => {
   const [loading, setLoading] = useState(false);
 
   const { data: supporters = [], isLoading } = usePlatformSupporters();
+  const { data: sponsors = [] } = useActiveSponsors();
+
+  const partners = sponsors.filter((s) => s.logo_url);
+  const mainSupporters = supporters.filter((s) => s.is_main);
+  const regularSupporters = supporters.filter((s) => !s.is_main);
 
   const getAmountCents = () => {
     if (selected) return selected;
@@ -77,21 +83,20 @@ const SupportPlatform = () => {
           <ArrowLeft className="w-4 h-4" /> Späť na hlavnú stránku
         </Link>
 
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
             <div className="w-16 h-16 rounded-2xl gradient-golden flex items-center justify-center mx-auto mb-6">
               <PawPrint className="w-8 h-8 text-primary-foreground" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Podpora platformy 🐾</h1>
-            <p className="text-muted-foreground mb-8 text-pretty">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Podporovatelia</h1>
+            <p className="text-muted-foreground mb-8 text-pretty max-w-xl mx-auto">
               Podporte vývoj a prevádzku projektu NajkrajšíPes.sk.
-              <br />
-              Z každej podpory venujeme <strong>20 % na útulky pre zvieratá</strong> 🐾
+              Z každej podpory venujeme <strong>20 % na útulky pre zvieratá</strong>.
             </p>
           </motion.div>
 
           {/* Amount selection */}
-          <div className="flex justify-center gap-3 mb-4">
+          <div className="flex flex-wrap justify-center gap-3 mb-4">
             {presetAmounts.map((a) => (
               <button
                 key={a.value}
@@ -109,7 +114,7 @@ const SupportPlatform = () => {
 
           <div className="mb-8 text-center">
             <p className="text-sm text-muted-foreground mb-2">alebo zadajte vlastnú sumu</p>
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-2">
               <input
                 type="text"
                 inputMode="decimal"
@@ -180,8 +185,68 @@ const SupportPlatform = () => {
             </p>
           </div>
 
+          {/* Main supporters */}
+          {mainSupporters.length > 0 && (
+            <div className="mt-16">
+              <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2 justify-center">
+                <Award className="w-6 h-6 text-primary" /> Hlavní podporovatelia
+              </h2>
+              <p className="text-muted-foreground text-sm mb-6 text-center">Ďakujeme za výnimočnú podporu projektu ❤️</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {mainSupporters.map((s) => (
+                  <div key={s.id} className="bg-card border border-primary/20 rounded-2xl p-5 shadow-soft relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-3 opacity-10">
+                      <Award className="w-16 h-16 text-primary" />
+                    </div>
+                    <p className="font-bold text-foreground text-lg truncate">{s.name}</p>
+                    {s.comment && <p className="text-sm text-muted-foreground mt-2 text-pretty">„{s.comment}"</p>}
+                    <p className="text-sm font-semibold text-primary mt-3">{formatEur(s.amount_cents)}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Partners */}
+          {partners.length > 0 && (
+            <div className="mt-16">
+              <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2 justify-center">
+                <Users className="w-6 h-6 text-primary" /> Naši partneri
+              </h2>
+              <p className="text-muted-foreground text-sm mb-6 text-center">Firmy a značky, ktoré stoja za projektom</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {partners.map((p) => {
+                  const Wrapper: any = p.link_url ? "a" : "div";
+                  const wrapperProps = p.link_url
+                    ? { href: p.link_url, target: "_blank", rel: "noopener noreferrer" }
+                    : {};
+                  return (
+                    <Wrapper key={p.id} {...wrapperProps}
+                      className={`bg-card rounded-2xl p-5 shadow-soft border border-border flex flex-col items-center text-center ${p.link_url ? "hover:border-primary/40 hover:shadow-elevated transition-all cursor-pointer" : ""}`}>
+                      <div className="w-full h-28 bg-white rounded-xl border border-border flex items-center justify-center p-4 mb-4">
+                        <img src={p.logo_url!} alt={p.title} className="max-w-full max-h-full object-contain" loading="lazy" />
+                      </div>
+                      <h3 className="font-bold text-foreground">{p.title}</h3>
+                      {p.description && <p className="text-sm text-muted-foreground mt-1 text-pretty">{p.description}</p>}
+                      {p.link_url && (
+                        <span className="mt-3 inline-flex items-center gap-1 text-sm text-primary font-semibold">
+                          Navštíviť partnera <ExternalLink className="w-4 h-4" />
+                        </span>
+                      )}
+                    </Wrapper>
+                  );
+                })}
+              </div>
+              <p className="text-center mt-6">
+                <Link to="/partneri" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
+                  Zobraziť všetkých partnerov <ExternalLink className="w-3.5 h-3.5" />
+                </Link>
+              </p>
+            </div>
+          )}
+
           {/* Public supporters list */}
-          <div className="mt-14">
+          <div className="mt-16">
             <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
               <Users className="w-6 h-6 text-primary" /> Naši podporovatelia
             </h2>
@@ -193,8 +258,8 @@ const SupportPlatform = () => {
               <p className="text-muted-foreground">Zatiaľ žiadni podporovatelia — buď prvý! 🐶</p>
             ) : (
               <ul className="space-y-3">
-                {supporters.map((s) => (
-                  <li key={s.id} className="bg-card border border-border rounded-xl p-4 flex items-start justify-between gap-4">
+                {regularSupporters.map((s) => (
+                  <li key={s.id} className="bg-card border border-border rounded-xl p-4 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="min-w-0">
                       <p className="font-semibold text-foreground truncate">{s.name}</p>
                       {s.comment && <p className="text-sm text-muted-foreground mt-1 break-words">„{s.comment}"</p>}

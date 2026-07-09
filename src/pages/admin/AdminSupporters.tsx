@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Download, Eye, EyeOff, Trash2, UserX, UserCheck } from "lucide-react";
+import { Download, Eye, EyeOff, Trash2, UserX, UserCheck, Star, StarOff } from "lucide-react";
 
 type Supporter = {
   id: string;
   name: string | null;
   is_anonymous: boolean;
+  is_main: boolean;
   comment: string | null;
   show_comment: boolean;
   amount_cents: number;
@@ -115,6 +116,11 @@ const AdminSupporters = () => {
                 <span className="font-bold text-primary">{formatEur(s.amount_cents)}</span>
               </div>
               <div className="flex flex-wrap gap-2 mt-3">
+                <button disabled={busyId === s.id} onClick={() => update(s.id, { is_main: !s.is_main })}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium ${s.is_main ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-secondary text-foreground hover:bg-secondary/80"}`}>
+                  {s.is_main ? <Star className="w-3.5 h-3.5 fill-current" /> : <StarOff className="w-3.5 h-3.5" />}
+                  {s.is_main ? "Hlavný podporovateľ" : "Označiť ako hlavný"}
+                </button>
                 <button disabled={busyId === s.id} onClick={() => update(s.id, { hidden: !s.hidden })}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-foreground text-xs font-medium hover:bg-secondary/80">
                   {s.hidden ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
