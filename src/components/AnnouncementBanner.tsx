@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Info, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { X, Info, AlertTriangle, CheckCircle2, BadgeCheck } from "lucide-react";
 import { useActiveAnnouncements } from "@/hooks/useAnnouncements";
 
 const VARIANTS: Record<string, { icon: typeof Info; className: string }> = {
