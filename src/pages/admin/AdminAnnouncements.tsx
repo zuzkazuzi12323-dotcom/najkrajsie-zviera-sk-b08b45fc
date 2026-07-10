@@ -23,6 +23,12 @@ const QUICK_TEMPLATES: { title: string; message: string; variant: string }[] = [
   { title: "Plánovaná údržba aplikácie", message: "Oznamujeme, že v najbližšom čase prebehne plánovaná údržba stránky. Ďakujeme za pochopenie a trpezlivosť. 🔧", variant: "warning" },
   { title: "Hlasovanie je spustené", message: "Hlasovanie v súťaži o najkrajšieho psa je spustené! Zahlasujte za svojho favorita – jeden hlas denne. 🗳️", variant: "success" },
   { title: "Blíži sa koniec hlasovania", message: "Nezabudnite zahlasovať – hlasovanie sa čoskoro uzatvára. Podporte svojho favorita, kým je čas! ⏰", variant: "warning" },
+  { title: "Útulok týždňa", message: "Aktuálne podporujeme vybraný útulok týždňa. Pozrite si jeho profil a pomôžte priamym príspevkom alebo zdieľaním. 🐾", variant: "info" },
+  { title: "Nový dôkaz o dare", message: "V transparentnosti pribudol nový zverejnený doklad o podpore útulkov. Ďakujeme všetkým, ktorí pomáhajú. 🔍", variant: "success" },
+  { title: "Registrácie sú otvorené", message: "Registrácie psíkov do súťaže sú otvorené. Pridajte svojho psíka a zapojte sa do hlasovania. 🐶", variant: "info" },
+  { title: "Výsledky kola", message: "Výsledky aktuálneho kola sú pripravené. Pozrite si rebríček a víťazov súťaže. 🏆", variant: "success" },
+  { title: "Dôležité upozornenie", message: "Prosíme používateľov, aby si skontrolovali údaje vo svojom profile a pri platbách uvádzali správny e-mail. 📩", variant: "warning" },
+  { title: "Podpora platformy", message: "Ak sa vám projekt páči, môžete dobrovoľne podporiť jeho prevádzku. Časť podpory zároveň pomáha útulkom. 💛", variant: "info" },
 ];
 
 
@@ -131,7 +137,7 @@ const AdminAnnouncements = () => {
           <Megaphone className="w-6 h-6 text-primary" /> Upozornenia pre používateľov
         </h1>
         <p className="text-sm text-muted-foreground">
-          Vytvorte vlastné oznámenie, ktoré sa zobrazí návštevníkom priamo na stránke. Celý text píšete ručne.
+          Vytvorte vlastné oznámenie, ktoré sa zobrazí prihláseným používateľom v tlačidle upozornení hore v menu.
         </p>
       </div>
 

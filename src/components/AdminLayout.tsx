@@ -46,9 +46,7 @@ const AdminLayout = () => {
   const unreadCount = notifications.filter((n: any) => !n.read).length;
 
   const markAllRead = async () => {
-    const unread = notifications.filter((n: any) => !n.read).map((n: any) => n.id);
-    if (unread.length === 0) return;
-    await supabase.from("admin_notifications").update({ read: true }).in("id", unread);
+    await supabase.from("admin_notifications").update({ read: true }).eq("read", false);
     queryClient.invalidateQueries({ queryKey: ["admin-header-notifications"] });
     queryClient.invalidateQueries({ queryKey: ["admin-notifications"] });
   };
@@ -169,7 +167,7 @@ const AdminLayout = () => {
                 <div className="p-3 border-b border-border flex items-center justify-between">
                   <span className="font-semibold text-sm text-foreground">Notifikácie</span>
                   {unreadCount > 0 && (
-                    <button onClick={markAllRead} className="text-xs text-primary hover:underline">Označiť prečítané</button>
+                    <button onClick={markAllRead} className="text-xs text-primary hover:underline">Označiť všetko prečítané</button>
                   )}
                 </div>
                 <div className="max-h-72 overflow-y-auto divide-y divide-border">
