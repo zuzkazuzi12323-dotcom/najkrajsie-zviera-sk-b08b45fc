@@ -1,4 +1,6 @@
 // Sends a payment confirmation email after successful dog registration (2,99 €)
+import { createClient } from 'npm:@supabase/supabase-js@2.57.2';
+
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/google_mail/gmail/v1';
 
 const corsHeaders = {
@@ -28,10 +30,25 @@ function toBase64Url(str: string): string {
   return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-function buildEmail(to: string, dogName: string, dogId: string): string {
+async function isAuthorized(req: Request): Promise<boolean> {
+  const authHeader = req.headers.get('authorization');
+  const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (authHeader && authHeader === `Bearer ${SERVICE_KEY}`) return true;
+  if (!authHeader?.startsWith('Bearer ')) return false;
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  if (!supabaseUrl || !SERVICE_KEY) return false;
+  const admin = createClient(supabaseUrl, SERVICE_KEY, { auth: { persistSession: false } });
+  const { data } = await admin.auth.getUser(authHeader.replace('Bearer ', ''));
+  if (!data.user) return false;
+  const { data: allowed } = await admin.rpc('has_role', { _user_id: data.user.id, _role: 'admin' });
+  return allowed === true;
+}
+
+function buildEmail(to: string, dogName: string, dogId: string, variableSymbol = dogId, paymentId = '', amountCents = 299): string {
   const subject = encodeRFC2047(`Potvrdenie platby – ${dogName} je v súťaži! 🐾`);
   const fromHeader = `${encodeRFC2047(FROM_NAME)} <${FROM_EMAIL}>`;
   const dogUrl = `${SITE_URL}/pes/${dogId}`;
+  const amountLabel = `${(amountCents / 100).toFixed(2).replace('.', ',')} €`;
 
   const html = `<!DOCTYPE html>
 <html lang="sk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -47,13 +64,16 @@ function buildEmail(to: string, dogName: string, dogId: string): string {
         <tr><td style="padding:36px 32px 24px;">
           <h2 style="margin:0 0 16px;font-size:22px;color:#c47b2a;">Ďakujeme za platbu! ✅</h2>
           <p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#333;">
-            Vaša platba <strong>2,99 €</strong> za registráciu psa <strong>${dogName}</strong> bola úspešne prijatá.
+            Vaša platba <strong>${amountLabel}</strong> za registráciu psa <strong>${dogName}</strong> bola úspešne prijatá.
             ${dogName} je teraz oficiálne zaradený do súťaže <strong>${SITE_NAME}</strong>! 🎉
           </p>
           <div style="background:#fdf6ec;border-radius:12px;padding:16px 20px;margin:20px 0;">
             <table width="100%" cellpadding="4" cellspacing="0" style="font-size:14px;color:#444;">
+              <tr><td style="color:#888;">Typ platby:</td><td align="right"><strong>Registrácia psa</strong></td></tr>
               <tr><td style="color:#888;">Pes:</td><td align="right"><strong>${dogName}</strong></td></tr>
-              <tr><td style="color:#888;">Registračný poplatok:</td><td align="right"><strong>2,99 €</strong></td></tr>
+              <tr><td style="color:#888;">Suma:</td><td align="right"><strong>${amountLabel}</strong></td></tr>
+              <tr><td style="color:#888;">Variabilný symbol / ID:</td><td align="right"><strong>${variableSymbol}</strong></td></tr>
+              ${paymentId ? `<tr><td style="color:#888;">Interné ID platby:</td><td align="right"><strong>${paymentId}</strong></td></tr>` : ''}
               <tr><td style="color:#888;">Stav:</td><td align="right"><strong style="color:#16a34a;">Zaplatené</strong></td></tr>
               <tr><td style="color:#888;">Darované útulkom (20 %):</td><td align="right"><strong>0,60 €</strong></td></tr>
             </table>
@@ -113,10 +133,7 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
-    // Only the Stripe webhook (service role) may call this
-    const authHeader = req.headers.get('authorization');
-    const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    if (!authHeader || authHeader !== `Bearer ${SERVICE_KEY}`) {
+    if (!(await isAuthorized(req))) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -127,14 +144,14 @@ Deno.serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
     if (!GOOGLE_MAIL_API_KEY) throw new Error('GOOGLE_MAIL_API_KEY is not configured');
 
-    const { email, dogName, dogId } = await req.json();
+    const { email, dogName, dogId, variableSymbol, paymentId, amount } = await req.json();
     if (!email || !dogName || !dogId) {
       return new Response(JSON.stringify({ error: 'email, dogName, dogId required' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const raw = buildEmail(email, dogName, dogId);
+    const raw = buildEmail(email, dogName, dogId, String(variableSymbol || dogId), String(paymentId || ''), Number(amount || 299));
     const res = await fetch(`${GATEWAY_URL}/users/me/messages/send`, {
       method: 'POST',
       headers: {
