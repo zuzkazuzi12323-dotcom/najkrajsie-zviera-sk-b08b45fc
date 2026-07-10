@@ -177,9 +177,11 @@ export type Database = {
       }
       email_delivery_log: {
         Row: {
+          amount_cents: number | null
           attempts: number
           created_at: string
           id: string
+          item_name: string | null
           last_error: string | null
           payment_id: string | null
           payment_type: string
@@ -192,9 +194,11 @@ export type Database = {
           variable_symbol: string | null
         }
         Insert: {
+          amount_cents?: number | null
           attempts?: number
           created_at?: string
           id?: string
+          item_name?: string | null
           last_error?: string | null
           payment_id?: string | null
           payment_type: string
@@ -207,9 +211,11 @@ export type Database = {
           variable_symbol?: string | null
         }
         Update: {
+          amount_cents?: number | null
           attempts?: number
           created_at?: string
           id?: string
+          item_name?: string | null
           last_error?: string | null
           payment_id?: string | null
           payment_type?: string
