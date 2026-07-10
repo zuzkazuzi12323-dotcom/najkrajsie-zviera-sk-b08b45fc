@@ -103,6 +103,49 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-2">
           {user ? (
             <>
+              <div className="relative">
+                <button
+                  onClick={() => setNotifOpen(!notifOpen)}
+                  className="relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  aria-label="Upozornenia"
+                >
+                  <Bell className="w-5 h-5" />
+                  {visibleAnnouncements.length > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                      {visibleAnnouncements.length}
+                    </span>
+                  )}
+                </button>
+                {notifOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-80 bg-card rounded-xl shadow-elevated border border-border overflow-hidden z-50">
+                    <div className="p-3 border-b border-border flex items-center justify-between gap-3">
+                      <span className="font-semibold text-sm text-foreground">Upozornenia</span>
+                      {visibleAnnouncements.length > 0 && (
+                        <button onClick={markAllAnnouncementsRead} className="text-xs text-primary hover:underline whitespace-nowrap">
+                          Všetko prečítané
+                        </button>
+                      )}
+                    </div>
+                    <div className="max-h-80 overflow-y-auto divide-y divide-border">
+                      {visibleAnnouncements.map((a) => (
+                        <div key={a.id} className="px-3 py-3 bg-primary/5">
+                          <div className="flex items-center gap-1.5 text-xs font-semibold text-primary mb-1">
+                            NajkrajšíPes <BadgeCheck className="w-3.5 h-3.5" />
+                          </div>
+                          <p className="text-sm font-semibold text-foreground">{a.title}</p>
+                          <p className="text-sm text-muted-foreground whitespace-pre-line break-words mt-1">{a.message}</p>
+                          <button onClick={() => dismissAnnouncement(a.id)} className="mt-2 text-xs text-primary hover:underline">
+                            Označiť ako prečítané
+                          </button>
+                        </div>
+                      ))}
+                      {visibleAnnouncements.length === 0 && (
+                        <p className="px-3 py-8 text-center text-sm text-muted-foreground">Žiadne nové upozornenia</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
               {isAdmin && (
                 <Link to="/admin" className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
                   <Shield className="w-4 h-4" /> Admin
@@ -136,53 +179,7 @@ const Navbar = () => {
 
       {/* Close more dropdown on outside click */}
       {moreOpen && <div className="fixed inset-0 z-40" onClick={() => setMoreOpen(false)} />}
-        {notifOpen && <div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />}
-
-        {user && (
-          <div className="relative z-50 hidden md:block">
-            <button
-              onClick={() => setNotifOpen(!notifOpen)}
-              className="relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-              aria-label="Upozornenia"
-            >
-              <Bell className="w-5 h-5" />
-              {visibleAnnouncements.length > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                  {visibleAnnouncements.length}
-                </span>
-              )}
-            </button>
-            {notifOpen && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-card rounded-xl shadow-elevated border border-border overflow-hidden">
-                <div className="p-3 border-b border-border flex items-center justify-between gap-3">
-                  <span className="font-semibold text-sm text-foreground">Upozornenia</span>
-                  {visibleAnnouncements.length > 0 && (
-                    <button onClick={markAllAnnouncementsRead} className="text-xs text-primary hover:underline whitespace-nowrap">
-                      Všetko prečítané
-                    </button>
-                  )}
-                </div>
-                <div className="max-h-80 overflow-y-auto divide-y divide-border">
-                  {visibleAnnouncements.map((a) => (
-                    <div key={a.id} className="px-3 py-3 bg-primary/5">
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-primary mb-1">
-                        NajkrajšíPes <BadgeCheck className="w-3.5 h-3.5" />
-                      </div>
-                      <p className="text-sm font-semibold text-foreground">{a.title}</p>
-                      <p className="text-sm text-muted-foreground whitespace-pre-line break-words mt-1">{a.message}</p>
-                      <button onClick={() => dismissAnnouncement(a.id)} className="mt-2 text-xs text-primary hover:underline">
-                        Označiť ako prečítané
-                      </button>
-                    </div>
-                  ))}
-                  {visibleAnnouncements.length === 0 && (
-                    <p className="px-3 py-8 text-center text-sm text-muted-foreground">Žiadne nové upozornenia</p>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+      {notifOpen && <div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />}
 
       {/* Mobile menu */}
       <AnimatePresence>
