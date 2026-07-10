@@ -1,14 +1,40 @@
 import { Link, useLocation } from "react-router-dom";
-import { Heart, Menu, X, User, LogIn, LogOut, Shield, ChevronDown, Settings } from "lucide-react";
-import { useState } from "react";
+import { Heart, Menu, X, User, LogIn, LogOut, Shield, ChevronDown, Bell, BadgeCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useActiveAnnouncements } from "@/hooks/useAnnouncements";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [dismissedAnnouncements, setDismissedAnnouncements] = useState<string[]>([]);
   const location = useLocation();
   const { user, isAdmin, profile, signOut } = useAuth();
+  const { data: announcements = [] } = useActiveAnnouncements();
+
+  useEffect(() => {
+    try {
+      setDismissedAnnouncements(JSON.parse(localStorage.getItem("dismissed-announcements") || "[]"));
+    } catch {
+      setDismissedAnnouncements([]);
+    }
+  }, []);
+
+  const visibleAnnouncements = user ? announcements.filter((a) => !dismissedAnnouncements.includes(a.id)) : [];
+
+  const dismissAnnouncement = (id: string) => {
+    const next = [...new Set([...dismissedAnnouncements, id])];
+    setDismissedAnnouncements(next);
+    localStorage.setItem("dismissed-announcements", JSON.stringify(next));
+  };
+
+  const markAllAnnouncementsRead = () => {
+    const next = [...new Set([...dismissedAnnouncements, ...announcements.map((a) => a.id)])];
+    setDismissedAnnouncements(next);
+    localStorage.setItem("dismissed-announcements", JSON.stringify(next));
+  };
 
   const mainLinks = [
     { to: "/", label: "Domov" },
@@ -77,6 +103,49 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-2">
           {user ? (
             <>
+              <div className="relative">
+                <button
+                  onClick={() => setNotifOpen(!notifOpen)}
+                  className="relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  aria-label="Upozornenia"
+                >
+                  <Bell className="w-5 h-5" />
+                  {visibleAnnouncements.length > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                      {visibleAnnouncements.length}
+                    </span>
+                  )}
+                </button>
+                {notifOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-80 bg-card rounded-xl shadow-elevated border border-border overflow-hidden z-50">
+                    <div className="p-3 border-b border-border flex items-center justify-between gap-3">
+                      <span className="font-semibold text-sm text-foreground">Upozornenia</span>
+                      {visibleAnnouncements.length > 0 && (
+                        <button onClick={markAllAnnouncementsRead} className="text-xs text-primary hover:underline whitespace-nowrap">
+                          Všetko prečítané
+                        </button>
+                      )}
+                    </div>
+                    <div className="max-h-80 overflow-y-auto divide-y divide-border">
+                      {visibleAnnouncements.map((a) => (
+                        <div key={a.id} className="px-3 py-3 bg-primary/5">
+                          <div className="flex items-center gap-1.5 text-xs font-semibold text-primary mb-1">
+                            NajkrajšíPes <BadgeCheck className="w-3.5 h-3.5" />
+                          </div>
+                          <p className="text-sm font-semibold text-foreground">{a.title}</p>
+                          <p className="text-sm text-muted-foreground whitespace-pre-line break-words mt-1">{a.message}</p>
+                          <button onClick={() => dismissAnnouncement(a.id)} className="mt-2 text-xs text-primary hover:underline">
+                            Označiť ako prečítané
+                          </button>
+                        </div>
+                      ))}
+                      {visibleAnnouncements.length === 0 && (
+                        <p className="px-3 py-8 text-center text-sm text-muted-foreground">Žiadne nové upozornenia</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
               {isAdmin && (
                 <Link to="/admin" className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
                   <Shield className="w-4 h-4" /> Admin
@@ -110,6 +179,7 @@ const Navbar = () => {
 
       {/* Close more dropdown on outside click */}
       {moreOpen && <div className="fixed inset-0 z-40" onClick={() => setMoreOpen(false)} />}
+      {notifOpen && <div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />}
 
       {/* Mobile menu */}
       <AnimatePresence>
@@ -130,6 +200,26 @@ const Navbar = () => {
                   }`}>{link.label}</Link>
               ))}
               <div className="h-px bg-border my-2" />
+              {user && (
+                <div className="rounded-xl border border-border bg-card overflow-hidden">
+                  <div className="px-4 py-3 flex items-center justify-between gap-3 border-b border-border">
+                    <span className="text-sm font-semibold text-foreground flex items-center gap-2"><Bell className="w-4 h-4 text-primary" /> Upozornenia</span>
+                    {visibleAnnouncements.length > 0 && (
+                      <button onClick={markAllAnnouncementsRead} className="text-xs text-primary font-medium">Všetko prečítané</button>
+                    )}
+                  </div>
+                  <div className="divide-y divide-border">
+                    {visibleAnnouncements.slice(0, 3).map((a) => (
+                      <div key={a.id} className="px-4 py-3 bg-primary/5">
+                        <p className="text-sm font-semibold text-foreground">{a.title}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{a.message}</p>
+                        <button onClick={() => dismissAnnouncement(a.id)} className="mt-2 text-xs text-primary font-medium">Prečítané</button>
+                      </div>
+                    ))}
+                    {visibleAnnouncements.length === 0 && <p className="px-4 py-4 text-sm text-muted-foreground">Žiadne nové upozornenia</p>}
+                  </div>
+                </div>
+              )}
               {user ? (
                 <>
                   {isAdmin && (

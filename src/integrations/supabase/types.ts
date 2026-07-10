@@ -175,12 +175,78 @@ export type Database = {
         }
         Relationships: []
       }
+      email_delivery_log: {
+        Row: {
+          amount_cents: number | null
+          attempts: number
+          created_at: string
+          id: string
+          item_name: string | null
+          last_error: string | null
+          payment_id: string | null
+          payment_type: string
+          recipient_email: string
+          sent_at: string | null
+          status: string
+          stripe_session_id: string | null
+          template_name: string
+          updated_at: string
+          variable_symbol: string | null
+        }
+        Insert: {
+          amount_cents?: number | null
+          attempts?: number
+          created_at?: string
+          id?: string
+          item_name?: string | null
+          last_error?: string | null
+          payment_id?: string | null
+          payment_type: string
+          recipient_email: string
+          sent_at?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          template_name: string
+          updated_at?: string
+          variable_symbol?: string | null
+        }
+        Update: {
+          amount_cents?: number | null
+          attempts?: number
+          created_at?: string
+          id?: string
+          item_name?: string | null
+          last_error?: string | null
+          payment_id?: string | null
+          payment_type?: string
+          recipient_email?: string
+          sent_at?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          template_name?: string
+          updated_at?: string
+          variable_symbol?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_delivery_log_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           amount: number
+          confirmation_email_at: string | null
+          confirmation_email_error: string | null
+          confirmation_email_sent: boolean
           created_at: string
           dog_id: string | null
           id: string
+          payer_email: string | null
           product_name: string | null
           status: string
           stripe_payment_intent_id: string | null
@@ -189,9 +255,13 @@ export type Database = {
         }
         Insert: {
           amount: number
+          confirmation_email_at?: string | null
+          confirmation_email_error?: string | null
+          confirmation_email_sent?: boolean
           created_at?: string
           dog_id?: string | null
           id?: string
+          payer_email?: string | null
           product_name?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
@@ -200,9 +270,13 @@ export type Database = {
         }
         Update: {
           amount?: number
+          confirmation_email_at?: string | null
+          confirmation_email_error?: string | null
+          confirmation_email_sent?: boolean
           created_at?: string
           dog_id?: string | null
           id?: string
+          payer_email?: string | null
           product_name?: string | null
           status?: string
           stripe_payment_intent_id?: string | null

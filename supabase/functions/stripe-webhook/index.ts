@@ -2,14 +2,91 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, stripe-signature",
+};
+
+const sendConfirmationWithRetry = async (
+  supabase: ReturnType<typeof createClient>,
+  supabaseUrl: string,
+  serviceKey: string,
+  opts: {
+    functionName: "send-payment-confirmation" | "send-support-confirmation";
+    paymentId?: string | null;
+    stripeSessionId: string;
+    recipientEmail: string;
+    templateName: string;
+    paymentType: string;
+    variableSymbol: string;
+    amountCents: number;
+    itemName: string;
+    body: Record<string, unknown>;
+  },
+) => {
+  const { data: logRow } = await supabase
+    .from("email_delivery_log")
+    .insert({
+      payment_id: opts.paymentId || null,
+      stripe_session_id: opts.stripeSessionId,
+      recipient_email: opts.recipientEmail,
+      template_name: opts.templateName,
+      payment_type: opts.paymentType,
+      variable_symbol: opts.variableSymbol,
+      amount_cents: opts.amountCents,
+      item_name: opts.itemName,
+      status: "pending",
+    })
+    .select("id")
+    .single();
+
+  let lastError = "";
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const response = await fetch(`${supabaseUrl}/functions/v1/${opts.functionName}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${serviceKey}` },
+        body: JSON.stringify(opts.body),
+      });
+      const text = await response.text();
+      if (!response.ok) throw new Error(`Email function failed [${response.status}]: ${text}`);
+
+      if (logRow?.id) {
+        await supabase
+          .from("email_delivery_log")
+          .update({ status: "sent", attempts: attempt, sent_at: new Date().toISOString(), last_error: null })
+          .eq("id", logRow.id);
+      }
+      if (opts.paymentId) {
+        await supabase
+          .from("payments")
+          .update({ confirmation_email_sent: true, confirmation_email_at: new Date().toISOString(), confirmation_email_error: null, payer_email: opts.recipientEmail })
+          .eq("id", opts.paymentId);
+      }
+      return;
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error);
+      console.error(`Confirmation email attempt ${attempt} failed:`, lastError);
+    }
+  }
+
+  if (logRow?.id) {
+    await supabase
+      .from("email_delivery_log")
+      .update({ status: "failed", attempts: 3, last_error: lastError })
+      .eq("id", logRow.id);
+  }
+  if (opts.paymentId) {
+    await supabase
+      .from("payments")
+      .update({ confirmation_email_sent: false, confirmation_email_error: lastError, payer_email: opts.recipientEmail })
+      .eq("id", opts.paymentId);
+  }
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, stripe-signature",
-      },
-    });
+    return new Response(null, { headers: corsHeaders });
   }
 
   const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
@@ -107,20 +184,18 @@ serve(async (req) => {
         // Send confirmation email to the payer
         const recipient = session.customer_details?.email;
         if (recipient) {
-          try {
-            await fetch(`${supabaseUrl}/functions/v1/send-support-confirmation`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json", Authorization: `Bearer ${serviceKey}` },
-              body: JSON.stringify({
-                email: recipient,
-                type: "donation",
-                amount: amountCents,
-                name: session.customer_details?.name || "",
-              }),
-            });
-          } catch (e) {
-            console.error("Donation confirmation email error:", e);
-          }
+          await sendConfirmationWithRetry(supabase, supabaseUrl, serviceKey, {
+            functionName: "send-support-confirmation",
+            paymentId: null,
+            stripeSessionId: session.id,
+            recipientEmail: recipient,
+            templateName: "support-confirmation",
+            paymentType: "donation",
+            variableSymbol: session.id,
+            amountCents,
+            itemName: "Príspevok útulkom",
+            body: { email: recipient, type: "donation", amount: amountCents, name: session.customer_details?.name || "", variableSymbol: session.id, paymentId: session.id },
+          });
         }
       }
     }
@@ -148,20 +223,18 @@ serve(async (req) => {
         // Send confirmation email to the payer
         const recipient = session.customer_details?.email;
         if (recipient) {
-          try {
-            await fetch(`${supabaseUrl}/functions/v1/send-support-confirmation`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json", Authorization: `Bearer ${serviceKey}` },
-              body: JSON.stringify({
-                email: recipient,
-                type: "platform_support",
-                amount: amountCents,
-                name: meta.name || session.customer_details?.name || "",
-              }),
-            });
-          } catch (e) {
-            console.error("Support confirmation email error:", e);
-          }
+          await sendConfirmationWithRetry(supabase, supabaseUrl, serviceKey, {
+            functionName: "send-support-confirmation",
+            paymentId: null,
+            stripeSessionId: session.id,
+            recipientEmail: recipient,
+            templateName: "support-confirmation",
+            paymentType: "platform_support",
+            variableSymbol: session.id,
+            amountCents,
+            itemName: "Podpora platformy",
+            body: { email: recipient, type: "platform_support", amount: amountCents, name: meta.name || session.customer_details?.name || "", variableSymbol: session.id, paymentId: session.id },
+          });
         }
       }
     }
@@ -188,13 +261,22 @@ serve(async (req) => {
             .single();
           const recipient = profile?.email || session.customer_details?.email;
           if (recipient && dogRow) {
-            await fetch(`${supabaseUrl}/functions/v1/send-payment-confirmation`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${serviceKey}`,
-              },
-              body: JSON.stringify({ email: recipient, dogName: dogRow.name, dogId }),
+            const { data: paymentRow } = await supabase
+              .from("payments")
+              .select("id, amount")
+              .eq("stripe_payment_intent_id", session.id)
+              .single();
+            await sendConfirmationWithRetry(supabase, supabaseUrl, serviceKey, {
+              functionName: "send-payment-confirmation",
+              paymentId: paymentRow?.id || existingPayment?.id || null,
+              stripeSessionId: session.id,
+              recipientEmail: recipient,
+              templateName: "registration-confirmation",
+              paymentType: "registration",
+              variableSymbol: session.id,
+              amountCents: paymentRow?.amount || existingPayment?.amount || 299,
+              itemName: `Registrácia psa: ${dogRow.name}`,
+              body: { email: recipient, dogName: dogRow.name, dogId, variableSymbol: session.id, paymentId: paymentRow?.id || existingPayment?.id || session.id, amount: paymentRow?.amount || existingPayment?.amount || 299 },
             });
           }
         } catch (e) {

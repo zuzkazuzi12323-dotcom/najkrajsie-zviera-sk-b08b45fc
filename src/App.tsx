@@ -41,7 +41,6 @@ import Transparency from "./pages/Transparency";
 import AdminSupporters from "./pages/admin/AdminSupporters";
 import AdminTransparency from "./pages/admin/AdminTransparency";
 import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
-import AnnouncementBanner from "./components/AnnouncementBanner";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Donate from "./pages/Donate";
@@ -60,7 +59,7 @@ const App = () => (
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<><AnnouncementBanner /><Index /></>} />
+            <Route path="/" element={<Index />} />
             <Route path="/galeria" element={<Gallery />} />
 
             <Route path="/pes/:id" element={<DogProfile />} />

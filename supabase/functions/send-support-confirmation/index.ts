@@ -1,4 +1,6 @@
 // Sends a confirmation email after a successful shelter donation or platform support payment
+import { createClient } from 'npm:@supabase/supabase-js@2.57.2';
+
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/google_mail/gmail/v1';
 
 const corsHeaders = {
@@ -30,7 +32,21 @@ function toBase64Url(str: string): string {
   return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-function buildEmail(to: string, type: SupportType, amountCents: number, name: string): string {
+async function isAuthorized(req: Request): Promise<boolean> {
+  const authHeader = req.headers.get('authorization');
+  const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (authHeader && authHeader === `Bearer ${SERVICE_KEY}`) return true;
+  if (!authHeader?.startsWith('Bearer ')) return false;
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  if (!supabaseUrl || !SERVICE_KEY) return false;
+  const admin = createClient(supabaseUrl, SERVICE_KEY, { auth: { persistSession: false } });
+  const { data } = await admin.auth.getUser(authHeader.replace('Bearer ', ''));
+  if (!data.user) return false;
+  const { data: allowed } = await admin.rpc('has_role', { _user_id: data.user.id, _role: 'admin' });
+  return allowed === true;
+}
+
+function buildEmail(to: string, type: SupportType, amountCents: number, name: string, variableSymbol = '', paymentId = ''): string {
   const amountLabel = `${(amountCents / 100).toFixed(2).replace('.', ',')} €`;
   const isPlatform = type === 'platform_support';
 
@@ -68,7 +84,9 @@ function buildEmail(to: string, type: SupportType, amountCents: number, name: st
           <div style="background:#fdf6ec;border-radius:12px;padding:16px 20px;margin:20px 0;">
             <table width="100%" cellpadding="4" cellspacing="0" style="font-size:14px;color:#444;">
               <tr><td style="color:#888;">Suma:</td><td align="right"><strong>${amountLabel}</strong></td></tr>
-              <tr><td style="color:#888;">Účel:</td><td align="right"><strong>${isPlatform ? 'Podpora platformy' : 'Príspevok útulkom'}</strong></td></tr>
+              <tr><td style="color:#888;">Typ platby:</td><td align="right"><strong>${isPlatform ? 'Podpora platformy' : 'Príspevok útulkom'}</strong></td></tr>
+              ${variableSymbol ? `<tr><td style="color:#888;">Variabilný symbol / ID:</td><td align="right"><strong>${variableSymbol}</strong></td></tr>` : ''}
+              ${paymentId ? `<tr><td style="color:#888;">Interné ID platby:</td><td align="right"><strong>${paymentId}</strong></td></tr>` : ''}
               <tr><td style="color:#888;">Stav:</td><td align="right"><strong style="color:#16a34a;">Zaplatené</strong></td></tr>
             </table>
           </div>
@@ -115,10 +133,7 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
-    // Only the Stripe webhook (service role) may call this
-    const authHeader = req.headers.get('authorization');
-    const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    if (!authHeader || authHeader !== `Bearer ${SERVICE_KEY}`) {
+    if (!(await isAuthorized(req))) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -129,14 +144,14 @@ Deno.serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
     if (!GOOGLE_MAIL_API_KEY) throw new Error('GOOGLE_MAIL_API_KEY is not configured');
 
-    const { email, type, amount, name } = await req.json();
+    const { email, type, amount, name, variableSymbol, paymentId } = await req.json();
     if (!email || !type || !amount) {
       return new Response(JSON.stringify({ error: 'email, type, amount required' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const raw = buildEmail(email, type as SupportType, Number(amount), String(name ?? '').trim());
+    const raw = buildEmail(email, type as SupportType, Number(amount), String(name ?? '').trim(), String(variableSymbol || ''), String(paymentId || ''));
     const res = await fetch(`${GATEWAY_URL}/users/me/messages/send`, {
       method: 'POST',
       headers: {

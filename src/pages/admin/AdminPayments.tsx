@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreditCard, Award, CheckCircle, Trash2, Download, Filter } from "lucide-react";
+import { CreditCard, Award, CheckCircle, Trash2, Download, Filter, Mail, RefreshCw } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -7,6 +7,7 @@ import { toast } from "sonner";
 const AdminPayments = () => {
   const queryClient = useQueryClient();
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [resendingId, setResendingId] = useState<string | null>(null);
   const [typeFilter, setTypeFilter] = useState<string>("all");
 
   const { data } = useQuery({
@@ -43,6 +44,66 @@ const AdminPayments = () => {
   });
 
   const filteredItems = data?.items.filter((p) => typeFilter === "all" || p.type === typeFilter) || [];
+
+  const { data: emailLogs = [] } = useQuery({
+    queryKey: ["admin-email-delivery-log"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("email_delivery_log" as any)
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(30);
+      return (data || []) as any[];
+    },
+  });
+
+  const resendEmail = async (log: any) => {
+    setResendingId(log.id);
+    try {
+      const baseBody = {
+        email: log.recipient_email,
+        amount: log.amount_cents,
+        variableSymbol: log.variable_symbol || log.stripe_session_id,
+        paymentId: log.payment_id || log.stripe_session_id,
+      };
+      const functionName = log.payment_type === "registration" ? "send-payment-confirmation" : "send-support-confirmation";
+      const body = log.payment_type === "registration"
+        ? {
+            ...baseBody,
+            dogName: String(log.item_name || "Registrácia psa").replace("Registrácia psa: ", "") || "Pes",
+            dogId: log.variable_symbol || log.stripe_session_id,
+          }
+        : {
+            ...baseBody,
+            type: log.payment_type,
+            name: "",
+          };
+
+      const { error } = await supabase.functions.invoke(functionName, { body });
+      if (error) throw error;
+
+      await supabase.from("email_delivery_log" as any).update({
+        status: "sent",
+        attempts: Number(log.attempts || 0) + 1,
+        sent_at: new Date().toISOString(),
+        last_error: null,
+      }).eq("id", log.id);
+
+      toast.success("Potvrdenie bolo znovu odoslané");
+      queryClient.invalidateQueries({ queryKey: ["admin-email-delivery-log"] });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Odoslanie zlyhalo";
+      await supabase.from("email_delivery_log" as any).update({
+        status: "failed",
+        attempts: Number(log.attempts || 0) + 1,
+        last_error: message,
+      }).eq("id", log.id);
+      toast.error("Nepodarilo sa znovu odoslať e-mail");
+      queryClient.invalidateQueries({ queryKey: ["admin-email-delivery-log"] });
+    } finally {
+      setResendingId(null);
+    }
+  };
 
   const approvePayment = async (payment: any) => {
     setLoadingId(payment.id);
@@ -264,6 +325,63 @@ const AdminPayments = () => {
           </table>
         </div>
         {filteredItems.length === 0 && <p className="text-center py-10 text-muted-foreground">Žiadne platby</p>}
+      </div>
+
+      <div className="bg-card rounded-2xl shadow-soft overflow-hidden">
+        <div className="p-5 border-b border-border flex items-center justify-between gap-3">
+          <h3 className="font-bold text-foreground flex items-center gap-2">
+            <Mail className="w-4 h-4" /> Odoslané platobné potvrdenia
+          </h3>
+          <button onClick={() => queryClient.invalidateQueries({ queryKey: ["admin-email-delivery-log"] })} className="p-2 rounded-lg hover:bg-secondary text-muted-foreground" title="Obnoviť">
+            <RefreshCw className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Čas</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">E-mail</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Typ / ID</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Stav</th>
+                <th className="text-right px-5 py-3 text-xs font-semibold text-muted-foreground uppercase">Akcia</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {emailLogs.map((log) => (
+                <tr key={log.id} className="hover:bg-secondary/30 transition-colors">
+                  <td className="px-5 py-3 text-sm text-muted-foreground whitespace-nowrap">
+                    {new Date(log.created_at).toLocaleString("sk")}
+                  </td>
+                  <td className="px-5 py-3 text-sm font-medium text-foreground">{log.recipient_email}</td>
+                  <td className="px-5 py-3 text-sm text-muted-foreground">
+                    <div>{typeLabels[log.payment_type] || log.payment_type}</div>
+                    <div className="text-xs tabular-nums">VS/ID: {log.variable_symbol || log.stripe_session_id}</div>
+                  </td>
+                  <td className="px-5 py-3">
+                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                      log.status === "sent" ? "bg-green-100 text-green-700" :
+                      log.status === "pending" ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"
+                    }`}>
+                      {log.status === "sent" ? "Odoslané" : log.status === "pending" ? "Čaká" : "Zlyhalo"}
+                    </span>
+                    {log.last_error && <p className="text-xs text-destructive mt-1 max-w-xs truncate" title={log.last_error}>{log.last_error}</p>}
+                  </td>
+                  <td className="px-5 py-3 text-right">
+                    <button
+                      onClick={() => resendEmail(log)}
+                      disabled={resendingId === log.id}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:opacity-50"
+                    >
+                      <Mail className="w-3.5 h-3.5" /> {resendingId === log.id ? "Odosielam..." : "Znovu odoslať"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {emailLogs.length === 0 && <p className="text-center py-10 text-muted-foreground">Zatiaľ žiadne odoslané potvrdenia</p>}
       </div>
     </div>
   );
