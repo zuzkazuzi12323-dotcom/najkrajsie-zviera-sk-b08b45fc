@@ -103,6 +103,25 @@ serve(async (req) => {
           .update({ total_cents: (current?.total_cents || 0) + amountCents, updated_at: new Date().toISOString() })
           .eq("id", "00000000-0000-0000-0000-000000000001");
         console.log("Direct donation of", amountCents, "cents added to total");
+
+        // Send confirmation email to the payer
+        const recipient = session.customer_details?.email;
+        if (recipient) {
+          try {
+            await fetch(`${supabaseUrl}/functions/v1/send-support-confirmation`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${serviceKey}` },
+              body: JSON.stringify({
+                email: recipient,
+                type: "donation",
+                amount: amountCents,
+                name: session.customer_details?.name || "",
+              }),
+            });
+          } catch (e) {
+            console.error("Donation confirmation email error:", e);
+          }
+        }
       }
     }
 
