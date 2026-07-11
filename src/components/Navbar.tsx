@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Heart, Menu, X, User, LogIn, LogOut, Shield, ChevronDown, Bell, BadgeCheck } from "lucide-react";
+import { Heart, Menu, X, User, LogIn, LogOut, Shield, ChevronDown, Bell, BadgeCheck, Receipt } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
