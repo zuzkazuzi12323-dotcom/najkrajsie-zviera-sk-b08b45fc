@@ -123,7 +123,7 @@ export const TikTokVideo = () => {
       <Sequence from={S.s1[0]} durationInFrames={S.s1[1]}>
         <KenBurns src="tiktok/v1.jpg" dir={1} />
         <TopBrand />
-        <Caption text="Každý psík je výnimočný a zaslúži si" accent="lásku 🐾" />
+        <Caption text="Každý psík je výnimočný a zaslúži si" accent="lásku" />
       </Sequence>
       <Sequence from={S.s2[0]} durationInFrames={S.s2[1]}>
         <KenBurns src="tiktok/v6.jpg" dir={-1} />
@@ -143,7 +143,7 @@ export const TikTokVideo = () => {
       <Sequence from={S.s5[0]} durationInFrames={S.s5[1]}>
         <KenBurns src="tiktok/v5.jpg" dir={1} />
         <TopBrand />
-        <Caption text="Podporte nás cez Donio alebo" accent="zdieľaním ❤️" />
+        <Caption text="Podporte nás cez Donio alebo" accent="zdieľaním" />
       </Sequence>
       <Sequence from={S.outro[0]} durationInFrames={S.outro[1]}>
         <Outro />
