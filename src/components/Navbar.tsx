@@ -191,10 +191,15 @@ const Navbar = () => {
                 )}
               </button>
               {notifOpen && (
-                <div className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] max-w-sm bg-card rounded-xl shadow-elevated border border-border overflow-hidden z-50">
+                <div className="fixed left-4 right-4 top-16 max-w-sm ml-auto bg-card rounded-xl shadow-elevated border border-border overflow-hidden z-50">
                   <div className="p-3 border-b border-border flex items-center justify-between gap-3">
                     <span className="font-semibold text-sm text-foreground flex items-center gap-2">
                       NajkrajšíPes <BadgeCheck className="w-4 h-4 text-primary" />
+                      {visibleAnnouncements.length > 0 && (
+                        <span className="min-w-5 h-5 px-1.5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                          {visibleAnnouncements.length}
+                        </span>
+                      )}
                     </span>
                     {visibleAnnouncements.length > 0 && (
                       <button onClick={markAllAnnouncementsRead} className="text-xs text-primary hover:underline whitespace-nowrap">
