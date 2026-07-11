@@ -48,6 +48,7 @@ import DonateSuccess from "./pages/DonateSuccess";
 import AccountSettings from "./pages/AccountSettings";
 import Leaderboard from "./pages/Leaderboard";
 import MyProfile from "./pages/MyProfile";
+import MyConfirmations from "./pages/MyConfirmations";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -81,6 +82,7 @@ const App = () => (
             <Route path="/nastavenia" element={<AccountSettings />} />
             <Route path="/rebricek" element={<Leaderboard />} />
             <Route path="/moj-profil" element={<MyProfile />} />
+            <Route path="/moje-potvrdenia" element={<MyConfirmations />} />
             <Route path="/partneri" element={<Partners />} />
             <Route path="/utulky" element={<Shelters />} />
             <Route path="/utulok/:id" element={<ShelterDetail />} />
