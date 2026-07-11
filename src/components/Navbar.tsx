@@ -271,6 +271,12 @@ const Navbar = () => {
               )}
               {user ? (
                 <>
+                  <Link to="/moj-profil" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:bg-secondary flex items-center gap-2">
+                    <User className="w-4 h-4" /> Môj profil
+                  </Link>
+                  <Link to="/moje-potvrdenia" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:bg-secondary flex items-center gap-2">
+                    <Receipt className="w-4 h-4" /> Moje potvrdenia
+                  </Link>
                   {isAdmin && (
                     <Link to="/admin" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:bg-secondary flex items-center gap-2">
                       <Shield className="w-4 h-4" /> Admin Panel
