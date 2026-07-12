@@ -328,16 +328,44 @@ const Index = () => {
       {/* Partners */}
       <PartnersSection compact />
 
+      {/* Podporte vznik projektu – Donio */}
+      <section className="container mx-auto px-4 pb-12">
+        <div className="bg-card rounded-3xl p-6 md:p-10 shadow-elevated border border-primary/10 max-w-3xl mx-auto">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">❤️🐾 Podporte vznik projektu NajkrajšíPes.sk</h2>
+            <p className="text-muted-foreground text-pretty mb-3">
+              Pomôžte nám vybudovať slovenskú platformu pre milovníkov psov, ktorá spája komunitu a zároveň podporuje útulky pre zvieratá.
+            </p>
+            <p className="text-foreground font-medium text-pretty mb-3">
+              Počas kampane na Donio je registrácia psa do súťaže úplne ZADARMO.
+            </p>
+            <p className="text-muted-foreground text-pretty">
+              Ak sa vám projekt páči, môžete nás podporiť priamo cez našu Donio kampaň.
+            </p>
+          </div>
+          <div className="rounded-2xl overflow-hidden bg-secondary/30">
+            <iframe
+              src="https://donio.sk/widget2/17673"
+              title="Donio kampaň NajkrajšíPes.sk"
+              width="100%"
+              height="600"
+              className="w-full border-0"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="container mx-auto px-4 py-16">
         <div className="gradient-golden rounded-3xl p-10 md:p-16 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojte sa do súťaže</h2>
           <p className="text-primary-foreground/90 mb-8 max-w-lg mx-auto text-pretty">
-            Pridajte svojho miláčika za jednorazový poplatok <strong>2,99 €</strong> a súťažte o titul najkrajšieho psa. 20 % z každej platby ide útulkom ❤️
+            Počas kampane na Donio môžete pridať svojho miláčika zadarmo. Po skončení kampane bude registrácia 2,99 €, pričom 20 % z každej platenej registrácie bude venovaných útulkom ❤️
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to="/pridat" className="inline-flex items-center gap-2 bg-card text-card-foreground px-8 py-4 rounded-full font-bold shadow-elevated text-lg hover:shadow-golden active:scale-95 transition-all">
-              <PawPrint className="w-5 h-5" /> Pridať psa za 2,99 €
+              <PawPrint className="w-5 h-5" /> Pridať psa ZADARMO
             </Link>
             <Link to="/galeria" className="inline-flex items-center gap-2 bg-foreground/10 backdrop-blur-sm text-primary-foreground border border-primary-foreground/40 px-8 py-4 rounded-full font-bold text-lg hover:bg-foreground/20 active:scale-95 transition-all">
               <Vote className="w-5 h-5" /> Hlasovať v súťaži
