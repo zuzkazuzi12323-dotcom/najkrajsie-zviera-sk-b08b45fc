@@ -56,7 +56,8 @@ const AddDog = () => {
         .from("dog-images")
         .getPublicUrl(filePath);
 
-      const { data: dogData, error: insertError } = await supabase
+      // Počas kampane na Donio je registrácia ZADARMO – pes sa zaradí ihneď
+      const { error: insertError } = await supabase
         .from("dogs")
         .insert({
           owner_id: user.id,
@@ -65,22 +66,16 @@ const AddDog = () => {
           age: form.age,
           description: form.description,
           image_url: urlData.publicUrl,
-          approved: false,
+          approved: true,
         })
         .select("id")
         .single();
 
       if (insertError) throw insertError;
 
-      // Create Stripe checkout for 2,99 € registration fee
-      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke(
-        "create-registration-checkout",
-        { body: { dogId: dogData.id, dogName: form.name } }
-      );
-      if (checkoutError || !checkoutData?.url) {
-        throw new Error(checkoutError?.message || "Nepodarilo sa vytvoriť platbu");
-      }
-      window.location.href = checkoutData.url;
+      toast.success("Váš pes bol pridaný do súťaže ZADARMO! 🐾");
+      navigate("/moj-profil");
+      return;
     } catch (error: any) {
       toast.error(error.message || "Niečo sa pokazilo");
     } finally {
@@ -111,7 +106,7 @@ const AddDog = () => {
       <Navbar />
       <div className="container mx-auto px-4 py-10 max-w-2xl">
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Pridať psa do súťaže</h1>
-        <p className="text-muted-foreground mb-8">Jednorazový registračný poplatok <strong>2,99 €</strong> 🐾 Vyplňte formulár, pridajte fotku a po platbe sa pes okamžite zaradí do súťaže.</p>
+        <p className="text-muted-foreground mb-8">🎉 Počas kampane na Donio je registrácia psa <strong>ZADARMO</strong> 🐾 Vyplňte formulár, pridajte fotku a pes sa okamžite zaradí do súťaže.</p>
 
         {/* Stepper */}
         <div className="flex items-center gap-2 mb-10">
