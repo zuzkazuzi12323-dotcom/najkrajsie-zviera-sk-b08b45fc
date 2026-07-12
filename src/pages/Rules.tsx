@@ -28,7 +28,7 @@ const Rules = () => {
               </h2>
               <ol className="space-y-3 text-foreground/80">
                 <li className="flex gap-3"><span className="font-bold text-primary">1.</span> Majiteľ psa pridá profil psa s fotkou.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">2.</span> Registrácia psa do súťaže stojí jednorazovo <strong>2,99 €</strong>. Z každej platby venujeme <strong>20 %</strong> útulkom pre opustené zvieratá ❤️</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">2.</span> Počas kampane na Donio je registrácia psa <strong>zdarma</strong>. Po skončení kampane bude registračný poplatok <strong>2,99 €</strong>, pričom 20 % z každej platenej registrácie pôjde útulkom pre opustené zvieratá ❤️</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">2a.</span> Hlasovať môžete <strong>1× za 24 hodín</strong> z jedného účtu.</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">3.</span> Po úspešnej platbe sa pes okamžite zobrazí v galérii a môže získavať hlasy od návštevníkov.</li>
               </ol>
@@ -39,10 +39,10 @@ const Rules = () => {
                 <CreditCard className="w-5 h-5 text-primary" /> Registrácia a platba
               </h2>
               <ul className="space-y-3 text-foreground/80">
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa do súťaže zaradí <strong>automaticky až po úspešnej úhrade</strong> registračného poplatku 2,99 €.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Schválenie nie je manuálne – o zaradení rozhoduje výhradne úspešná platba.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Počas kampane na Donio sa pes zaradí do súťaže <strong>ihneď a zdarma</strong>. Po skončení kampane sa pes zaradí <strong>až po úhrade</strong> registračného poplatku 2,99 €.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Počas kampane na Donio sa pes zaradí do galérie a rebríčka <strong>ihneď a bez poplatku</strong>.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Po skončení kampane sa pes bez zaplatenia <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Po skončení kampane platí: ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
               </ul>
             </div>
 

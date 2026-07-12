@@ -113,8 +113,8 @@ const AdminDogs = () => {
   return (
     <div className="space-y-4">
       <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-800">
-        🔒 Psy sa do súťaže pridávajú <strong>automaticky až po úhrade</strong> registračného poplatku 2,99 €.
-        Nezaplatené psy sa v galérii ani v rebríčku nezobrazujú a po zrušení platby sa automaticky odstránia.
+        🎉 Počas kampane na Donio sa psy pridávajú do súťaže <strong>ihneď a ZADARMO</strong>.
+        Po skončení kampane sa psy budú pridávať automaticky až po úhrade registračného poplatku 2,99 €.
         Manuálne schvaľovanie nie je potrebné.
       </div>
       <div className="flex flex-col sm:flex-row gap-3">

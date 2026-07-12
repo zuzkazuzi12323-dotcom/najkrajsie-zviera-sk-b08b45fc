@@ -46,9 +46,21 @@ const AdminLayout = () => {
   const unreadCount = notifications.filter((n: any) => !n.read).length;
 
   const markAllRead = async () => {
-    await supabase.from("admin_notifications").update({ read: true }).eq("read", false);
+    // Optimistic UI update
+    queryClient.setQueryData(["admin-header-notifications"], (old: any) =>
+      (old || []).map((n: any) => ({ ...n, read: true }))
+    );
+    const { error } = await supabase
+      .from("admin_notifications")
+      .update({ read: true })
+      .eq("read", false);
+    if (error) {
+      queryClient.invalidateQueries({ queryKey: ["admin-header-notifications"] });
+      return;
+    }
     queryClient.invalidateQueries({ queryKey: ["admin-header-notifications"] });
     queryClient.invalidateQueries({ queryKey: ["admin-notifications"] });
+    setNotifOpen(false);
   };
 
   useEffect(() => {

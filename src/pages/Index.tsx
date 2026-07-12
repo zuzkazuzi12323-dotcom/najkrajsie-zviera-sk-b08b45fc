@@ -82,8 +82,8 @@ const Index = () => {
 
   const steps = [
     { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
-    { icon: CreditCard, title: "Zaplaťte 2,99 €", desc: "Jednorazový registračný poplatok. 20 % ide útulkom ❤️" },
-    { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po zaplatení sa pes ihneď zaradí do verejného hlasovania." },
+    { icon: Gift, title: "Registrácia ZADARMO počas kampane", desc: "Počas kampane na Donio je registrácia psa bez poplatku. Po skončení kampane bude poplatok 2,99 €, pričom 20 % z každej platenej registrácie pôjde útulkom ❤️" },
+    { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
     { icon: Share2, title: "Zdieľajte a zbierajte hlasy", desc: "Zdieľajte profil psa s rodinou a priateľmi." },
     { icon: Trophy, title: "Víťaz vyhráva", desc: "Pes s najviac hlasmi vyhráva súťaž." },
   ];
@@ -96,7 +96,7 @@ const Index = () => {
   ];
 
   const rules = [
-    "Registrácia psa stojí jednorazovo 2,99 €",
+    "Počas kampane na Donio je registrácia psa zdarma. Po skončení kampane bude registračný poplatok 2,99 €.",
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
     "Víťazom je pes s najviac hlasmi",
@@ -129,14 +129,14 @@ const Index = () => {
               NajkrajšíPes.sk
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
-              Pridajte svojho psa do súťaže za jednorazový poplatok <strong>2,99 €</strong> a zapojte ho do verejného hlasovania o titul Najkrajší pes Slovenska 🐶
+              🎉 Počas kampane na Donio je registrácia vášho psa do súťaže úplne <strong>ZADARMO</strong>. Zapojte svojho miláčika do verejného hlasovania o titul Najkrajší pes Slovenska 🐶
             </p>
             <p className="text-base md:text-lg text-background/80 mb-8 text-pretty">
               Z každej registrácie venujeme <strong>20 %</strong> na podporu útulkov pre zvieratá ❤️
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
-                <PawPrint className="w-5 h-5" /> Pridať psa za 2,99 €
+                <PawPrint className="w-5 h-5" /> Pridať psa ZADARMO
               </Link>
               <Link to="/galeria" className="bg-background/20 backdrop-blur-sm text-background border border-background/40 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg hover:bg-background/30 active:scale-95 transition-all">
                 <Vote className="w-5 h-5" /> Hlasovať v súťaži
@@ -189,7 +189,7 @@ const Index = () => {
         </div>
         <div className="text-center mt-8">
           <Link to="/pridat" className="inline-flex items-center gap-2 gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg active:scale-95 transition-transform">
-            <PawPrint className="w-5 h-5" /> Pridať psa za 2,99 €
+            <PawPrint className="w-5 h-5" /> Pridať psa ZADARMO
           </Link>
         </div>
       </section>
@@ -328,16 +328,44 @@ const Index = () => {
       {/* Partners */}
       <PartnersSection compact />
 
+      {/* Podporte vznik projektu – Donio */}
+      <section className="container mx-auto px-4 pb-12">
+        <div className="bg-card rounded-3xl p-6 md:p-10 shadow-elevated border border-primary/10 max-w-3xl mx-auto">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">❤️🐾 Podporte vznik projektu NajkrajšíPes.sk</h2>
+            <p className="text-muted-foreground text-pretty mb-3">
+              Pomôžte nám vybudovať slovenskú platformu pre milovníkov psov, ktorá spája komunitu a zároveň podporuje útulky pre zvieratá.
+            </p>
+            <p className="text-foreground font-medium text-pretty mb-3">
+              Počas kampane na Donio je registrácia psa do súťaže úplne ZADARMO.
+            </p>
+            <p className="text-muted-foreground text-pretty">
+              Ak sa vám projekt páči, môžete nás podporiť priamo cez našu Donio kampaň.
+            </p>
+          </div>
+          <div className="rounded-2xl overflow-hidden bg-secondary/30">
+            <iframe
+              src="https://donio.sk/widget2/17673"
+              title="Donio kampaň NajkrajšíPes.sk"
+              width="100%"
+              height="600"
+              className="w-full border-0"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="container mx-auto px-4 py-16">
         <div className="gradient-golden rounded-3xl p-10 md:p-16 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojte sa do súťaže</h2>
           <p className="text-primary-foreground/90 mb-8 max-w-lg mx-auto text-pretty">
-            Pridajte svojho miláčika za jednorazový poplatok <strong>2,99 €</strong> a súťažte o titul najkrajšieho psa. 20 % z každej platby ide útulkom ❤️
+            Počas kampane na Donio môžete pridať svojho miláčika zadarmo. Po skončení kampane bude registrácia 2,99 €, pričom 20 % z každej platenej registrácie bude venovaných útulkom ❤️
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to="/pridat" className="inline-flex items-center gap-2 bg-card text-card-foreground px-8 py-4 rounded-full font-bold shadow-elevated text-lg hover:shadow-golden active:scale-95 transition-all">
-              <PawPrint className="w-5 h-5" /> Pridať psa za 2,99 €
+              <PawPrint className="w-5 h-5" /> Pridať psa ZADARMO
             </Link>
             <Link to="/galeria" className="inline-flex items-center gap-2 bg-foreground/10 backdrop-blur-sm text-primary-foreground border border-primary-foreground/40 px-8 py-4 rounded-full font-bold text-lg hover:bg-foreground/20 active:scale-95 transition-all">
               <Vote className="w-5 h-5" /> Hlasovať v súťaži
