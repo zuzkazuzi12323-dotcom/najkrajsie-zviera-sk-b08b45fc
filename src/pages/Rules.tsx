@@ -40,9 +40,9 @@ const Rules = () => {
               </h2>
               <ul className="space-y-3 text-foreground/80">
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> Počas kampane na Donio sa pes zaradí do súťaže <strong>ihneď a zdarma</strong>. Po skončení kampane sa pes zaradí <strong>až po úhrade</strong> registračného poplatku 2,99 €.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Schválenie nie je manuálne – o zaradení rozhoduje výhradne úspešná platba.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Počas kampane na Donio sa pes zaradí do galérie a rebríčka <strong>ihneď a bez poplatku</strong>.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Po skončení kampane sa pes bez zaplatenia <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Po skončení kampane platí: ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
               </ul>
             </div>
 
