@@ -203,7 +203,7 @@ const AddDog = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground">Skoro hotovo! 🎉</h3>
-                <p className="text-muted-foreground mt-1">Posledný krok — jednorazový registračný poplatok</p>
+                <p className="text-muted-foreground mt-1">Posledný krok — registrácia je počas kampane ZADARMO</p>
               </div>
               <div className="bg-secondary/50 rounded-xl p-4 text-left space-y-2">
                 <div className="flex justify-between text-sm">
@@ -217,10 +217,10 @@ const AddDog = () => {
                 <div className="h-px bg-border" />
                 <div className="flex justify-between font-bold">
                   <span className="text-foreground">Cena registrácie:</span>
-                  <span className="text-primary">2,99 €</span>
+                  <span className="text-primary">ZADARMO 🎉</span>
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">
-                  Z každej registrácie venujeme <strong>20 %</strong> útulkom pre opustené zvieratá ❤️
+                  Počas kampane na Donio je registrácia bezplatná. Po skončení kampane bude poplatok 2,99 €, pričom 20 % pôjde útulkom ❤️
                 </p>
               </div>
               <div className="flex gap-3">
@@ -230,7 +230,7 @@ const AddDog = () => {
                 </button>
                 <motion.button whileTap={{ scale: 0.95 }} onClick={handleSubmit} disabled={loading}
                   className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50">
-                  {loading ? "Spracovávam..." : "Zaplatiť 2,99 € a pridať psa 🐾"}
+                  {loading ? "Spracovávam..." : "Pridať psa ZADARMO 🐾"}
                 </motion.button>
               </div>
             </div>
