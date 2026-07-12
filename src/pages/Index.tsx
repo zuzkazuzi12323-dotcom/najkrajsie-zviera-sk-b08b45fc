@@ -82,8 +82,8 @@ const Index = () => {
 
   const steps = [
     { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
-    { icon: CreditCard, title: "Zaplaťte 2,99 €", desc: "Jednorazový registračný poplatok. 20 % ide útulkom ❤️" },
-    { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po zaplatení sa pes ihneď zaradí do verejného hlasovania." },
+    { icon: Gift, title: "Registrácia ZADARMO počas kampane", desc: "Počas kampane na Donio je registrácia psa bez poplatku. Po skončení kampane bude poplatok 2,99 €, pričom 20 % z každej platenej registrácie pôjde útulkom ❤️" },
+    { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
     { icon: Share2, title: "Zdieľajte a zbierajte hlasy", desc: "Zdieľajte profil psa s rodinou a priateľmi." },
     { icon: Trophy, title: "Víťaz vyhráva", desc: "Pes s najviac hlasmi vyhráva súťaž." },
   ];
@@ -96,7 +96,7 @@ const Index = () => {
   ];
 
   const rules = [
-    "Registrácia psa stojí jednorazovo 2,99 €",
+    "Počas kampane na Donio je registrácia psa zdarma. Po skončení kampane bude registračný poplatok 2,99 €.",
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
     "Víťazom je pes s najviac hlasmi",
@@ -129,7 +129,7 @@ const Index = () => {
               NajkrajšíPes.sk
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
-              Pridajte svojho psa do súťaže za jednorazový poplatok <strong>2,99 €</strong> a zapojte ho do verejného hlasovania o titul Najkrajší pes Slovenska 🐶
+              🎉 Počas kampane na Donio je registrácia vášho psa do súťaže úplne <strong>ZADARMO</strong>. Zapojte svojho miláčika do verejného hlasovania o titul Najkrajší pes Slovenska 🐶
             </p>
             <p className="text-base md:text-lg text-background/80 mb-8 text-pretty">
               Z každej registrácie venujeme <strong>20 %</strong> na podporu útulkov pre zvieratá ❤️
@@ -189,7 +189,7 @@ const Index = () => {
         </div>
         <div className="text-center mt-8">
           <Link to="/pridat" className="inline-flex items-center gap-2 gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg active:scale-95 transition-transform">
-            <PawPrint className="w-5 h-5" /> Pridať psa za 2,99 €
+            <PawPrint className="w-5 h-5" /> Pridať psa ZADARMO
           </Link>
         </div>
       </section>
