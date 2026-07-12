@@ -136,7 +136,7 @@ const Index = () => {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
-                <PawPrint className="w-5 h-5" /> Pridať psa za 2,99 €
+                <PawPrint className="w-5 h-5" /> Pridať psa ZADARMO
               </Link>
               <Link to="/galeria" className="bg-background/20 backdrop-blur-sm text-background border border-background/40 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg hover:bg-background/30 active:scale-95 transition-all">
                 <Vote className="w-5 h-5" /> Hlasovať v súťaži
