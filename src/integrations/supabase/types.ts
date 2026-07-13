@@ -502,6 +502,93 @@ export type Database = {
         }
         Relationships: []
       }
+      shelter_payouts: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          id: string
+          note: string | null
+          shelter_id: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          shelter_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          shelter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shelter_payouts_shelter_id_fkey"
+            columns: ["shelter_id"]
+            isOneToOne: false
+            referencedRelation: "shelters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shelter_payouts_shelter_id_fkey"
+            columns: ["shelter_id"]
+            isOneToOne: false
+            referencedRelation: "shelters_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shelter_referrals: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          dog_id: string | null
+          id: string
+          is_paid: boolean
+          registrant_id: string | null
+          reward_cents: number
+          shelter_id: string
+        }
+        Insert: {
+          amount_cents?: number
+          created_at?: string
+          dog_id?: string | null
+          id?: string
+          is_paid?: boolean
+          registrant_id?: string | null
+          reward_cents?: number
+          shelter_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          dog_id?: string | null
+          id?: string
+          is_paid?: boolean
+          registrant_id?: string | null
+          reward_cents?: number
+          shelter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shelter_referrals_shelter_id_fkey"
+            columns: ["shelter_id"]
+            isOneToOne: false
+            referencedRelation: "shelters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shelter_referrals_shelter_id_fkey"
+            columns: ["shelter_id"]
+            isOneToOne: false
+            referencedRelation: "shelters_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shelter_support_history: {
         Row: {
           collected_cents: number
@@ -550,6 +637,7 @@ export type Database = {
           bank_holder: string | null
           city: string | null
           collected_cents: number
+          contact_email: string | null
           created_at: string
           description: string | null
           display_order: number
@@ -559,17 +647,21 @@ export type Database = {
           id: string
           logo_url: string | null
           name: string
+          referral_code: string | null
+          referral_visits: number
           show_iban: boolean
           support_end_date: string | null
           support_start_date: string | null
           support_url: string | null
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           active?: boolean
           bank_holder?: string | null
           city?: string | null
           collected_cents?: number
+          contact_email?: string | null
           created_at?: string
           description?: string | null
           display_order?: number
@@ -579,17 +671,21 @@ export type Database = {
           id?: string
           logo_url?: string | null
           name: string
+          referral_code?: string | null
+          referral_visits?: number
           show_iban?: boolean
           support_end_date?: string | null
           support_start_date?: string | null
           support_url?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           active?: boolean
           bank_holder?: string | null
           city?: string | null
           collected_cents?: number
+          contact_email?: string | null
           created_at?: string
           description?: string | null
           display_order?: number
@@ -599,11 +695,14 @@ export type Database = {
           id?: string
           logo_url?: string | null
           name?: string
+          referral_code?: string | null
+          referral_visits?: number
           show_iban?: boolean
           support_end_date?: string | null
           support_start_date?: string | null
           support_url?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -956,6 +1055,7 @@ export type Database = {
     }
     Functions: {
       add_donation: { Args: { payment_amount: number }; Returns: undefined }
+      claim_shelter_for_user: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -964,7 +1064,17 @@ export type Database = {
         Returns: boolean
       }
       is_blocked: { Args: never; Returns: boolean }
+      record_shelter_referral: {
+        Args: {
+          _amount: number
+          _code: string
+          _dog_id: string
+          _is_paid: boolean
+        }
+        Returns: undefined
+      }
       rotate_featured_shelter: { Args: never; Returns: undefined }
+      track_shelter_visit: { Args: { _code: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

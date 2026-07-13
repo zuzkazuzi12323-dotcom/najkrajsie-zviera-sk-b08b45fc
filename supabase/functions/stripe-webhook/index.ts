@@ -241,6 +241,43 @@ serve(async (req) => {
 
     // If registration payment, approve dog & send confirmation email
     if (type === "registration" && dogId) {
+      // Attribute a paid registration to a shelter partner link (20% reward)
+      const refCode = session.metadata?.ref;
+      if (refCode) {
+        try {
+          const { data: shelterRow } = await supabase
+            .from("shelters")
+            .select("id")
+            .eq("referral_code", refCode)
+            .maybeSingle();
+          if (shelterRow?.id) {
+            const { data: dup } = await supabase
+              .from("shelter_referrals")
+              .select("id")
+              .eq("dog_id", dogId)
+              .maybeSingle();
+            const amountCents = existingPayment?.amount || 299;
+            if (!dup) {
+              await supabase.from("shelter_referrals").insert({
+                shelter_id: shelterRow.id,
+                dog_id: dogId,
+                registrant_id: userId || null,
+                amount_cents: amountCents,
+                reward_cents: Math.floor((amountCents * 20) / 100),
+                is_paid: true,
+              });
+            } else {
+              await supabase
+                .from("shelter_referrals")
+                .update({ amount_cents: amountCents, reward_cents: Math.floor((amountCents * 20) / 100), is_paid: true })
+                .eq("dog_id", dogId);
+            }
+          }
+        } catch (e) {
+          console.error("Shelter referral attribution error:", e);
+        }
+      }
+
       const { data: dogRow, error: approveError } = await supabase
         .from("dogs")
         .update({ approved: true })

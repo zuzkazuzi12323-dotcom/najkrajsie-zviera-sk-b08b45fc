@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Upload, ArrowRight, Check, PawPrint } from "lucide-react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+
+const REF_STORAGE_KEY = "shelter_ref";
 
 const steps = ["Základné info", "Fotka", "Odoslať"];
 
@@ -23,6 +25,17 @@ const AddDog = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Capture the partner referral code from the URL (?ref=...) and count a visit
+  useEffect(() => {
+    const ref = searchParams.get("ref");
+    if (ref) {
+      try { localStorage.setItem(REF_STORAGE_KEY, ref); } catch { /* ignore */ }
+      supabase.rpc("track_shelter_visit", { _code: ref });
+    }
+  }, [searchParams]);
+
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -57,7 +70,7 @@ const AddDog = () => {
         .getPublicUrl(filePath);
 
       // Počas kampane na Donio je registrácia ZADARMO – pes sa zaradí ihneď
-      const { error: insertError } = await supabase
+      const { data: newDog, error: insertError } = await supabase
         .from("dogs")
         .insert({
           owner_id: user.id,
@@ -73,9 +86,22 @@ const AddDog = () => {
 
       if (insertError) throw insertError;
 
+      // Attribute this registration to a shelter partner link if present (free during campaign)
+      let ref: string | null = null;
+      try { ref = localStorage.getItem(REF_STORAGE_KEY); } catch { /* ignore */ }
+      if (ref && newDog?.id) {
+        await supabase.rpc("record_shelter_referral", {
+          _code: ref,
+          _dog_id: newDog.id,
+          _amount: 0,
+          _is_paid: false,
+        });
+      }
+
       toast.success("Váš pes bol pridaný do súťaže ZADARMO! 🐾");
       navigate("/moj-profil");
       return;
+
     } catch (error: any) {
       toast.error(error.message || "Niečo sa pokazilo");
     } finally {
