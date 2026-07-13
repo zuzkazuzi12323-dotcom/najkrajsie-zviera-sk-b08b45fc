@@ -93,6 +93,22 @@ const AdminShelterApplications = () => {
     }
   };
 
+  // Automatically emails the shelter its unique partner referral link
+  const sendPartnerEmail = async (shelterId: string, email: string) => {
+    const toastId = toast.loading(`Odosielam partnerský odkaz na ${email}...`);
+    try {
+      const { data, error } = await supabase.functions.invoke("send-shelter-partner-email", {
+        body: { shelterId },
+      });
+      if (error) throw new Error(error.message);
+      if (data && (data as any).success === false) throw new Error((data as any).error || "Neznáma chyba");
+      toast.success(`Partnerský odkaz bol odoslaný na ${email}`, { id: toastId });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Neznáma chyba";
+      toast.error(`Partnerský e-mail sa nepodarilo odoslať: ${msg}`, { id: toastId, duration: 8000 });
+    }
+  };
+
   const setStatus = async (app: Application, status: Application["status"]) => {
     const { error } = await supabase
       .from("shelter_applications")
@@ -103,13 +119,28 @@ const AdminShelterApplications = () => {
       return;
     }
     if (status === "approved") {
+      // Look up the applicant's user account (if they already registered) to link the shelter
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("user_id")
+        .ilike("email", app.contact_email)
+        .maybeSingle();
+      const linkedUserId = (profile as any)?.user_id || null;
+
       // Add to approved shelters (only once)
+      let shelterId: string | null = null;
       const { data: existing } = await supabase
         .from("shelters")
         .select("id")
         .eq("name", app.name)
         .maybeSingle();
-      if (!existing) {
+      if (existing) {
+        shelterId = (existing as any).id;
+        await supabase
+          .from("shelters")
+          .update({ contact_email: app.contact_email, user_id: linkedUserId } as any)
+          .eq("id", shelterId);
+      } else {
         const { data: maxRow } = await supabase
           .from("shelters")
           .select("display_order")
@@ -117,29 +148,41 @@ const AdminShelterApplications = () => {
           .limit(1)
           .maybeSingle();
         const nextOrder = ((maxRow as any)?.display_order || 0) + 1;
-        const { error: insErr } = await supabase.from("shelters").insert({
-          name: app.name,
-          city: app.city,
-          description: app.description,
-          logo_url: app.logo_url,
-          support_url: app.support_url,
-          iban: app.iban,
-          bank_holder: app.bank_holder,
-          active: true,
-          featured: false,
-          show_iban: !!app.iban,
-          display_order: nextOrder,
-        });
+        const { data: insRow, error: insErr } = await supabase
+          .from("shelters")
+          .insert({
+            name: app.name,
+            city: app.city,
+            description: app.description,
+            logo_url: app.logo_url,
+            support_url: app.support_url,
+            iban: app.iban,
+            bank_holder: app.bank_holder,
+            contact_email: app.contact_email,
+            user_id: linkedUserId,
+            active: true,
+            featured: false,
+            show_iban: !!app.iban,
+            display_order: nextOrder,
+          } as any)
+          .select("id")
+          .single();
         if (insErr) toast.error("Stav zmenený, ale útulok sa nepodarilo pridať");
         else {
+          shelterId = (insRow as any)?.id || null;
           queryClient.invalidateQueries({ queryKey: ["admin-shelters"] });
           queryClient.invalidateQueries({ queryKey: ["active-shelters"] });
         }
       }
+      queryClient.invalidateQueries({ queryKey: ["admin-partner-referrals"] });
       toast.success("Žiadosť schválená a útulok pridaný");
-    } else {
-      toast.success(`Stav zmenený: ${STATUS[status].label}`);
+      invalidate();
+      // Automatically email the shelter its unique partner referral link
+      if (shelterId) await sendPartnerEmail(shelterId, app.contact_email);
+      return;
     }
+
+    toast.success(`Stav zmenený: ${STATUS[status].label}`);
     invalidate();
     // Automatically send the notification email for emailable states
     if ((EMAILABLE as readonly string[]).includes(status)) {

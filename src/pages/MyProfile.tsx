@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { User, Dog, Heart, Settings, Pencil, Upload, Save, X } from "lucide-react";
+import { User, Dog, Heart, Settings, Pencil, Upload, Save, X, Link2, Copy, Check, Share2, Eye, MousePointerClick, Wallet } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -9,6 +9,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+const PUBLIC_SITE_URL = "https://najkrajsie-zviera-sk.lovable.app";
+
 const MyProfile = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
@@ -17,6 +19,69 @@ const MyProfile = () => {
   const [editForm, setEditForm] = useState({ name: "", description: "", breed: "", age: "" });
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [copied, setCopied] = useState(false);
+
+  // Partner shelter linked to this account (if the user is an approved shelter partner)
+  const { data: partnerShelter } = useQuery({
+    queryKey: ["my-partner-shelter", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      // Link any approved shelter whose contact e-mail matches this account
+      await supabase.rpc("claim_shelter_for_user");
+      const { data: shelter } = await supabase
+        .from("shelters")
+        .select("id, name, referral_code, referral_visits")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      if (!shelter) return null;
+      const { data: refs } = await supabase
+        .from("shelter_referrals")
+        .select("reward_cents, is_paid")
+        .eq("shelter_id", (shelter as any).id);
+      const { data: payouts } = await supabase
+        .from("shelter_payouts")
+        .select("amount_cents")
+        .eq("shelter_id", (shelter as any).id);
+      const registrations = refs?.length || 0;
+      const totalReward = (refs || []).reduce((s: number, r: any) => s + (r.reward_cents || 0), 0);
+      const paidOut = (payouts || []).reduce((s: number, p: any) => s + (p.amount_cents || 0), 0);
+      return {
+        ...(shelter as any),
+        registrations,
+        totalReward,
+        pendingReward: Math.max(totalReward - paidOut, 0),
+      };
+    },
+  });
+
+  const partnerLink = partnerShelter ? `${PUBLIC_SITE_URL}/pridat?ref=${partnerShelter.referral_code}` : "";
+
+  const copyPartnerLink = async () => {
+    try {
+      await navigator.clipboard.writeText(partnerLink);
+      setCopied(true);
+      toast.success("Partnerský odkaz skopírovaný");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Odkaz sa nepodarilo skopírovať");
+    }
+  };
+
+  const sharePartnerLink = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${partnerShelter?.name} – NajkrajšíPes.sk`,
+          text: "Zapojte svojho psa do súťaže NajkrajšíPes.sk a podporte náš útulok 🐾",
+          url: partnerLink,
+        });
+      } catch { /* canceled */ }
+    } else {
+      copyPartnerLink();
+    }
+  };
+
+
 
   const { data: myDogs = [] } = useQuery({
     queryKey: ["my-dogs", user?.id],
@@ -124,7 +189,54 @@ const MyProfile = () => {
           </div>
         </motion.div>
 
+        {/* Partner referral link (only for approved shelter partners) */}
+        {partnerShelter && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            className="bg-card rounded-2xl p-6 shadow-soft mb-8 border border-primary/20">
+            <div className="flex items-center gap-2 mb-1">
+              <Link2 className="w-5 h-5 text-primary" />
+              <h2 className="text-xl font-bold text-foreground">Môj partnerský odkaz</h2>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Útulok <strong>{partnerShelter.name}</strong> — zdieľajte tento odkaz. Za každú platenú
+              registráciu (2,99 €) cez tento odkaz získava útulok 20 % odmenu.
+            </p>
+            <div className="flex flex-col sm:flex-row items-stretch gap-2 mb-4">
+              <div className="flex-1 px-3 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground truncate flex items-center">
+                {partnerLink}
+              </div>
+              <button onClick={copyPartnerLink}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-secondary text-foreground text-sm font-medium hover:bg-secondary/70">
+                {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
+                {copied ? "Skopírované" : "Kopírovať odkaz"}
+              </button>
+              <button onClick={sharePartnerLink}
+                className="flex items-center justify-center gap-2 gradient-golden text-primary-foreground px-4 py-2.5 rounded-xl text-sm font-semibold">
+                <Share2 className="w-4 h-4" /> Zdieľať
+              </button>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="text-center p-3 rounded-xl bg-secondary/50">
+                <Eye className="w-5 h-5 mx-auto mb-1 text-primary" />
+                <p className="text-xl font-bold tabular-nums text-foreground">{partnerShelter.referral_visits}</p>
+                <p className="text-xs text-muted-foreground">Návštevy</p>
+              </div>
+              <div className="text-center p-3 rounded-xl bg-secondary/50">
+                <MousePointerClick className="w-5 h-5 mx-auto mb-1 text-primary" />
+                <p className="text-xl font-bold tabular-nums text-foreground">{partnerShelter.registrations}</p>
+                <p className="text-xs text-muted-foreground">Registrácie</p>
+              </div>
+              <div className="text-center p-3 rounded-xl bg-secondary/50">
+                <Wallet className="w-5 h-5 mx-auto mb-1 text-primary" />
+                <p className="text-xl font-bold tabular-nums text-foreground">{(partnerShelter.pendingReward / 100).toFixed(2)} €</p>
+                <p className="text-xs text-muted-foreground">Na vyplatenie</p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* My dogs */}
+
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-foreground">🐕 Moji psy v súťaži</h2>
           <Link to="/pridat" className="gradient-golden text-primary-foreground px-4 py-2 rounded-full text-sm font-semibold">

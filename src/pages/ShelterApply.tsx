@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HousePlus, CheckCircle2, Loader2, Copy, Check, Share2 } from "lucide-react";
+import { HousePlus, CheckCircle2, Loader2, ShieldCheck, LinkIcon, Percent, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
@@ -25,42 +25,8 @@ const ShelterApply = () => {
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [done, setDone] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  // Always share the public, published site URL (never the preview/editor URL that
-  // would ask visitors to log in) so social links open the page directly.
-  const PUBLIC_SITE_URL = "https://najkrajsie-zviera-sk.lovable.app";
-  const shareUrl = `${PUBLIC_SITE_URL}/spolupraca-utulky`;
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      toast.success("Odkaz bol skopírovaný");
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error("Odkaz sa nepodarilo skopírovať");
-    }
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Spolupráca s útulkami – NajkrajšíPes.sk",
-          text: "Ste slovenský útulok? Zapojte sa do projektu NajkrajšíPes.sk.",
-          url: shareUrl,
-        });
-      } catch {
-        /* user canceled */
-      }
-    } else {
-      handleCopy();
-    }
-  };
 
   const set = (k: keyof typeof emptyForm, v: string) => setForm((f) => ({ ...f, [k]: v }));
-
 
   const handleLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -123,44 +89,58 @@ const ShelterApply = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-foreground">Spolupráca s útulkami</h1>
         </div>
         <p className="text-center text-muted-foreground max-w-xl mx-auto text-pretty mb-8">
-          Ste slovenský útulok a chcete sa zapojiť do projektu NajkrajšíPes.sk? Vyplňte formulár nižšie.
-          Každú žiadosť ručne skontrolujeme a schválime. Útulok sa zverejní až po schválení organizátorom.
+          Ste slovenský útulok a chcete sa zapojiť do projektu NajkrajšíPes.sk? Staňte sa naším
+          partnerom a získavajte odmeny za registrácie, ktoré prídu cez váš jedinečný partnerský odkaz.
         </p>
 
-        <div className="max-w-xl mx-auto mb-8 bg-card rounded-2xl p-4 md:p-5 border border-border shadow-soft">
-          <p className="text-sm font-semibold text-foreground mb-3 text-center">
-            Zdieľajte túto sekciu s útulkami na sociálnych sieťach
-          </p>
-          <div className="flex flex-col sm:flex-row items-stretch gap-2">
-            <div className="flex-1 px-3 py-2.5 rounded-xl border border-border bg-background text-sm text-muted-foreground truncate flex items-center">
-              {shareUrl}
-            </div>
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-secondary text-foreground text-sm font-medium hover:bg-secondary/70"
-            >
-              {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
-              {copied ? "Skopírované" : "Kopírovať odkaz"}
-            </button>
-            <button
-              type="button"
-              onClick={handleShare}
-              className="flex items-center justify-center gap-2 gradient-golden text-primary-foreground px-4 py-2.5 rounded-xl text-sm font-semibold"
-            >
-              <Share2 className="w-4 h-4" /> Zdieľať
-            </button>
-          </div>
+        {/* How the partnership works */}
+        <div className="max-w-xl mx-auto mb-8 bg-card rounded-2xl p-5 md:p-6 border border-border shadow-soft">
+          <h2 className="text-lg font-bold text-foreground mb-4 text-center">Ako funguje partnerská spolupráca</h2>
+          <ul className="space-y-4 text-sm text-foreground/90">
+            <li className="flex items-start gap-3">
+              <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <span>
+                <strong>1. Schválenie administrátorom.</strong> Po odoslaní žiadosti sa váš útulok uloží
+                ako <em>čakajúci na schválenie</em>. Každú žiadosť ručne posúdime a schválime. Kým nie je
+                schválená, útulok sa nikde verejne nezobrazuje.
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <LinkIcon className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <span>
+                <strong>2. Vlastný partnerský odkaz.</strong> Po schválení vám systém automaticky
+                vygeneruje jedinečný partnerský odkaz a pošle ho e-mailom. Odkaz nájdete aj vo vašom účte
+                po prihlásení. Odkaz nie je verejne viditeľný – patrí len vášmu útulku.
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <Percent className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <span>
+                <strong>3. Získavajte registrácie.</strong> Cez tento odkaz môžete pozývať majiteľov
+                psov do súťaže. Útulku patrí <strong>20 % z každej platenej registrácie</strong>
+                (2,99 €) vytvorenej cez jeho partnerský odkaz. Systém automaticky eviduje návštevy aj
+                registrácie prišlé cez váš odkaz.
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <Wallet className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <span>
+                <strong>4. Pravidlá vyplácania.</strong> Nazbierané odmeny vyplácame na IBAN útulku, ktorý
+                uvediete v žiadosti. Vyplatenie prebieha po dosiahnutí minimálnej sumy 20 € alebo na konci
+                kampane, a to najneskôr do 30 dní. Prehľad návštev, registrácií a odmien máte kedykoľvek
+                dostupný vo svojom účte.
+              </span>
+            </li>
+          </ul>
         </div>
-
-
 
         {done ? (
           <div className="bg-card rounded-2xl p-8 text-center shadow-elevated border border-border">
             <CheckCircle2 className="w-12 h-12 text-primary mx-auto mb-4" />
             <h2 className="text-xl font-bold text-foreground mb-2">Žiadosť bola odoslaná</h2>
             <p className="text-muted-foreground text-pretty mb-6">
-              Ďakujeme! Vašu žiadosť sme prijali a čaká na manuálne schválenie. Ozveme sa vám na uvedený e-mail.
+              Ďakujeme! Vašu žiadosť sme prijali a čaká na manuálne schválenie. Po schválení vám na uvedený
+              e-mail automaticky pošleme váš jedinečný partnerský odkaz.
             </p>
             <Link to="/" className="text-primary font-semibold hover:underline">← Späť na hlavnú stránku</Link>
           </div>
@@ -180,6 +160,10 @@ const ShelterApply = () => {
               <input value={form.contact_name} onChange={(e) => set("contact_name", e.target.value)} placeholder="Kontaktná osoba" className={inputClass} />
               <input value={form.contact_email} onChange={(e) => set("contact_email", e.target.value)} type="email" placeholder="Kontaktný e-mail *" className={inputClass} />
             </div>
+            <p className="text-xs text-muted-foreground -mt-2">
+              Tip: použite rovnaký e-mail, s akým sa prihlasujete na NajkrajšíPes.sk – po schválení sa vám
+              partnerský odkaz automaticky zobrazí vo vašom účte.
+            </p>
             <input value={form.contact_phone} onChange={(e) => set("contact_phone", e.target.value)} placeholder="Telefón (nepovinné)" className={inputClass} />
 
             <div>
@@ -192,8 +176,9 @@ const ShelterApply = () => {
             <label className="flex items-start gap-2 text-sm text-foreground border-t border-border pt-4">
               <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-1" />
               <span>
-                Potvrdzujem pravdivosť uvedených údajov a súhlasím so spracovaním osobných údajov na účely
-                posúdenia žiadosti o spoluprácu v súlade so{" "}
+                Potvrdzujem pravdivosť uvedených údajov, súhlasím s podmienkami partnerskej spolupráce
+                (vrátane odmeny 20 % z platenej registrácie cez partnerský odkaz) a so spracovaním osobných
+                údajov v súlade so{" "}
                 <Link to="/ochrana-udajov" className="text-primary hover:underline">Zásadami ochrany osobných údajov</Link>. *
               </span>
             </label>

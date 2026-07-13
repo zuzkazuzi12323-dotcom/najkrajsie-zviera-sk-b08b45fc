@@ -28,6 +28,7 @@ import AdminPayments from "./pages/admin/AdminPayments";
 import AdminContent from "./pages/admin/AdminContent";
 import AdminSponsors from "./pages/admin/AdminSponsors";
 import AdminShelters from "./pages/admin/AdminShelters";
+import AdminReferrals from "./pages/admin/AdminReferrals";
 import Partners from "./pages/Partners";
 import Shelters from "./pages/Shelters";
 import ShelterDetail from "./pages/ShelterDetail";
@@ -103,6 +104,7 @@ const App = () => (
               <Route path="utulky" element={<AdminShelters />} />
               <Route path="historia-utulkov" element={<AdminShelterHistory />} />
               <Route path="ziadosti-utulkov" element={<AdminShelterApplications />} />
+              <Route path="partnerske-odkazy" element={<AdminReferrals />} />
               <Route path="podporovatelia" element={<AdminSupporters />} />
               <Route path="transparentnost" element={<AdminTransparency />} />
               <Route path="upozornenia" element={<AdminAnnouncements />} />

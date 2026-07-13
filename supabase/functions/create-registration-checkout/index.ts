@@ -58,10 +58,12 @@ serve(async (req) => {
     const payload = await req.json();
     const dogId = typeof payload?.dogId === "string" ? payload.dogId : "";
     const dogName = typeof payload?.dogName === "string" ? payload.dogName : "Pes";
+    const ref = typeof payload?.ref === "string" ? payload.ref : "";
 
     if (!dogId) {
       return jsonResponse({ error: "Missing dogId" }, 400);
     }
+
 
     // Verify dog belongs to the user and is not yet approved
     const admin = createClient(supabaseUrl, serviceRoleKey);
@@ -103,7 +105,9 @@ serve(async (req) => {
         userId: userData.user.id,
         dogId,
         type: "registration",
+        ref: ref || "",
       },
+
     });
 
     if (!session.url) {
