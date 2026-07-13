@@ -18,6 +18,7 @@ const navItems = [
   { to: "/admin/utulky", icon: HousePlus, label: "Útulky" },
   { to: "/admin/historia-utulkov", icon: History, label: "História útulkov" },
   { to: "/admin/ziadosti-utulkov", icon: FileText, label: "Žiadosti útulkov" },
+  { to: "/admin/partnerske-odkazy", icon: Link2, label: "Partnerské odkazy" },
   { to: "/admin/podporovatelia", icon: PawPrint, label: "Podporovatelia" },
   { to: "/admin/transparentnost", icon: ShieldCheck, label: "Transparentnosť" },
   { to: "/admin/upozornenia", icon: Megaphone, label: "Upozornenia" },
