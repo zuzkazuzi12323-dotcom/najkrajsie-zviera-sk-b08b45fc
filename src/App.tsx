@@ -104,6 +104,7 @@ const App = () => (
               <Route path="utulky" element={<AdminShelters />} />
               <Route path="historia-utulkov" element={<AdminShelterHistory />} />
               <Route path="ziadosti-utulkov" element={<AdminShelterApplications />} />
+              <Route path="partnerske-odkazy" element={<AdminReferrals />} />
               <Route path="podporovatelia" element={<AdminSupporters />} />
               <Route path="transparentnost" element={<AdminTransparency />} />
               <Route path="upozornenia" element={<AdminAnnouncements />} />
