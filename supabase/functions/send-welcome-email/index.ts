@@ -49,7 +49,7 @@ function buildEmail(to: string, displayName: string): string {
             Vitaj v komunite <strong>${SITE_NAME}</strong>. Sme veľmi radi, že si súčasťou nášho projektu.
           </p>
           <p style="margin:0 0 24px;font-size:15px;line-height:1.65;color:#333;">
-            Spolu pomáhame opusteným psíkom v útulkoch — <strong>20 % zo všetkých registrácií a nákupov</strong> a <strong>100 % z priamych darov</strong> putuje útulkom. ❤️
+            Spolu pomáhame opusteným psíkom v útulkoch — <strong>100 % z priamych darov</strong> putuje priamo útulkom cez overené SEPA prevody. ❤️
           </p>
           <div style="text-align:center;margin:28px 0;">
             <a href="${SITE_URL}" style="display:inline-block;background:linear-gradient(135deg,#e89534,#c47b2a);color:#ffffff;text-decoration:none;padding:14px 36px;border-radius:999px;font-weight:700;font-size:15px;box-shadow:0 4px 12px rgba(196,123,42,0.3);">
@@ -59,9 +59,10 @@ function buildEmail(to: string, displayName: string): string {
           <div style="background:#fdf6ec;border-radius:12px;padding:18px 22px;margin:24px 0;">
             <p style="margin:0 0 10px;font-size:14px;font-weight:600;color:#c47b2a;">Čo môžeš robiť hneď teraz:</p>
             <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.8;color:#444;">
-              <li>Prihlásiť svojho psa do súťaže (jednorazový poplatok <strong>2,99 €</strong>) 🐕</li>
+              <li>Prihlásiť svojho psa do súťaže — počas kampane <strong>ZADARMO</strong> 🐕</li>
               <li>Hlasovať za obľúbeného psíka (1 hlas / 24 hod)</li>
-              <li>Podporiť útulky priamym darom alebo nákupom v e-shope</li>
+              <li>Podporiť aktuálny útulok priamym darom cez SEPA QR kód</li>
+              <li>Pozrieť si sekciu <strong>Transparentnosť</strong> — kam idú všetky dary</li>
             </ul>
           </div>
           <div style="text-align:center;margin:24px 0 8px;padding:18px;background:#eff6ff;border-radius:12px;">
