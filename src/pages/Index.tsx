@@ -141,10 +141,17 @@ const Index = () => {
               NajkrajšíPes.sk
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
-              🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>. Registrácia psa je jednorazovo <strong>2,99 €</strong>.
+              🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>.{" "}
+              {free ? (
+                <>Registrácia psa je <strong>ZADARMO do {FREE_UNTIL_LABEL}</strong> 🎉</>
+              ) : (
+                <>Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>.</>
+              )}
             </p>
             <p className="text-base md:text-lg text-background/80 mb-8 text-pretty">
-              Z každej registrácie venujeme <strong>20 %</strong> na podporu útulkov pre zvieratá ❤️
+              {free
+                ? <>Po skončení akcie bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong>. 20 % z každej platenej registrácie ide útulkom ❤️</>
+                : <>Z každej registrácie venujeme <strong>20 %</strong> na podporu útulkov pre zvieratá ❤️</>}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
