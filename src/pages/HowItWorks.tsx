@@ -3,10 +3,19 @@ import { PawPrint, CreditCard, Users, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
+
+const free = isFreeRegistration();
 
 const steps = [
   { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
-  { icon: CreditCard, title: "Registrácia za 2,99 €", desc: "Jednorazový registračný poplatok 2,99 € za psa. 20 % z každej platenej registrácie pôjde útulkom pre opustené zvieratá ❤️" },
+  {
+    icon: CreditCard,
+    title: free ? `Registrácia ZADARMO do ${FREE_UNTIL_LABEL}` : `Registrácia za ${PAID_PRICE_LABEL}`,
+    desc: free
+      ? `Počas akcie je registrácia psa úplne ZADARMO do ${FREE_UNTIL_LABEL}. Po skončení akcie bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
+      : `Jednorazový registračný poplatok ${PAID_PRICE_LABEL} za psa. 20 % z každej platenej registrácie pôjde útulkom pre opustené zvieratá ❤️`,
+  },
   { icon: Users, title: "Získavajte hlasy od priateľov", desc: "Zdieľajte profil psa a zbierajte hlasy od rodiny a priateľov." },
   { icon: Trophy, title: "Pes s najviac hlasmi vyhrá", desc: "Víťaz získa titul Najkrajší pes Slovenska a darčeky!" },
 ];
