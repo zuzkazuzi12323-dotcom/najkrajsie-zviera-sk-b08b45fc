@@ -247,7 +247,11 @@ const AddDog = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground">Skoro hotovo! 🎉</h3>
-                <p className="text-muted-foreground mt-1">Posledný krok — úhrada registračného poplatku</p>
+                <p className="text-muted-foreground mt-1">
+                  {isFreeRegistration()
+                    ? "Skontrolujte údaje a odošlite prihlášku"
+                    : "Posledný krok — úhrada registračného poplatku"}
+                </p>
               </div>
               <div className="bg-secondary/50 rounded-xl p-4 text-left space-y-2">
                 <div className="flex justify-between text-sm">
@@ -261,10 +265,14 @@ const AddDog = () => {
                 <div className="h-px bg-border" />
                 <div className="flex justify-between font-bold">
                   <span className="text-foreground">Cena registrácie:</span>
-                  <span className="text-primary">2,99 €</span>
+                  <span className="text-primary">
+                    {isFreeRegistration() ? `ZADARMO (akcia do ${FREE_UNTIL_LABEL})` : PAID_PRICE_LABEL}
+                  </span>
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">
-                  Jednorazový poplatok. 20 % z každej registrácie ide útulkom ❤️
+                  {isFreeRegistration()
+                    ? `Po ${FREE_UNTIL_LABEL} bude poplatok automaticky ${PAID_PRICE_LABEL}. 20 % z každej platenej registrácie ide útulkom ❤️`
+                    : "Jednorazový poplatok. 20 % z každej registrácie ide útulkom ❤️"}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -274,7 +282,9 @@ const AddDog = () => {
                 </button>
                 <motion.button whileTap={{ scale: 0.95 }} onClick={handleSubmit} disabled={loading}
                   className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50">
-                  {loading ? "Presmerovávam na platbu..." : "Zaplatiť 2,99 € a pridať psa 🐾"}
+                  {loading
+                    ? (isFreeRegistration() ? "Odosielam..." : "Presmerovávam na platbu...")
+                    : (isFreeRegistration() ? "Pridať psa ZADARMO 🐾" : `Zaplatiť ${PAID_PRICE_LABEL} a pridať psa 🐾`)}
                 </motion.button>
               </div>
             </div>
