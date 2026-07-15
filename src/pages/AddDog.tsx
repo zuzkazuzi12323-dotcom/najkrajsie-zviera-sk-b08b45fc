@@ -231,7 +231,7 @@ const AddDog = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground">Skoro hotovo! 🎉</h3>
-                <p className="text-muted-foreground mt-1">Posledný krok — registrácia je počas kampane ZADARMO</p>
+                <p className="text-muted-foreground mt-1">Posledný krok — úhrada registračného poplatku</p>
               </div>
               <div className="bg-secondary/50 rounded-xl p-4 text-left space-y-2">
                 <div className="flex justify-between text-sm">
@@ -245,10 +245,10 @@ const AddDog = () => {
                 <div className="h-px bg-border" />
                 <div className="flex justify-between font-bold">
                   <span className="text-foreground">Cena registrácie:</span>
-                  <span className="text-primary">ZADARMO 🎉</span>
+                  <span className="text-primary">2,99 €</span>
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">
-                  Počas kampane na Donio je registrácia bezplatná. Po skončení kampane bude poplatok 2,99 €, pričom 20 % pôjde útulkom ❤️
+                  Jednorazový poplatok. 20 % z každej registrácie ide útulkom ❤️
                 </p>
               </div>
               <div className="flex gap-3">
