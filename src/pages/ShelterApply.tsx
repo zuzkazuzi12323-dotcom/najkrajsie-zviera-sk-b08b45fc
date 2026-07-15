@@ -118,7 +118,7 @@ const ShelterApply = () => {
               <span>
                 <strong>3. Získavajte registrácie.</strong> Cez tento odkaz môžete pozývať majiteľov
                 psov do súťaže. Útulku patrí <strong>20 % z každej platenej registrácie</strong>
-                (2,99 €) vytvorenej cez jeho partnerský odkaz. Systém automaticky eviduje návštevy aj
+                (1,99 €) vytvorenej cez jeho partnerský odkaz. Systém automaticky eviduje návštevy aj
                 registrácie prišlé cez váš odkaz.
               </span>
             </li>
