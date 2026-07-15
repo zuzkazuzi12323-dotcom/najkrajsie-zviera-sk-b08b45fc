@@ -258,7 +258,7 @@ const AddDog = () => {
                 </button>
                 <motion.button whileTap={{ scale: 0.95 }} onClick={handleSubmit} disabled={loading}
                   className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50">
-                  {loading ? "Spracovávam..." : "Pridať psa ZADARMO 🐾"}
+                  {loading ? "Presmerovávam na platbu..." : "Zaplatiť 2,99 € a pridať psa 🐾"}
                 </motion.button>
               </div>
             </div>
