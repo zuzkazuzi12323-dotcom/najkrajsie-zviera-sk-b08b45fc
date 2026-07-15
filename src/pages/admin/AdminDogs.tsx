@@ -113,8 +113,7 @@ const AdminDogs = () => {
   return (
     <div className="space-y-4">
       <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-800">
-        ℹ️ Psy sa do súťaže pridávajú automaticky <strong>až po úhrade</strong> registračného poplatku <strong>2,99 €</strong>.
-        20 % z každej registrácie ide útulkom. Manuálne schvaľovanie nie je potrebné.
+        ℹ️ Počas akcie (<strong>ZADARMO do 15. augusta 2026</strong>) sa psy pridávajú do súťaže <strong>automaticky ihneď</strong> po odoslaní prihlášky. Po skončení akcie bude poplatok automaticky <strong>1,99 €</strong> a pes sa zaradí až po úhrade. 20 % z každej platenej registrácie ide útulkom.
       </div>
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 max-w-sm">
