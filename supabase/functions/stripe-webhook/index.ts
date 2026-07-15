@@ -256,7 +256,7 @@ serve(async (req) => {
               .select("id")
               .eq("dog_id", dogId)
               .maybeSingle();
-            const amountCents = existingPayment?.amount || 299;
+            const amountCents = existingPayment?.amount || 199;
             if (!dup) {
               await supabase.from("shelter_referrals").insert({
                 shelter_id: shelterRow.id,
@@ -311,9 +311,9 @@ serve(async (req) => {
               templateName: "registration-confirmation",
               paymentType: "registration",
               variableSymbol: session.id,
-              amountCents: paymentRow?.amount || existingPayment?.amount || 299,
+              amountCents: paymentRow?.amount || existingPayment?.amount || 199,
               itemName: `Registrácia psa: ${dogRow.name}`,
-              body: { email: recipient, dogName: dogRow.name, dogId, variableSymbol: session.id, paymentId: paymentRow?.id || existingPayment?.id || session.id, amount: paymentRow?.amount || existingPayment?.amount || 299 },
+              body: { email: recipient, dogName: dogRow.name, dogId, variableSymbol: session.id, paymentId: paymentRow?.id || existingPayment?.id || session.id, amount: paymentRow?.amount || existingPayment?.amount || 199 },
             });
           }
         } catch (e) {

@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
 
 const REF_STORAGE_KEY = "shelter_ref";
 
@@ -69,7 +70,9 @@ const AddDog = () => {
         .from("dog-images")
         .getPublicUrl(filePath);
 
-      // Vytvoríme psa ako neschváleného – schváli sa až po úspešnej platbe cez Stripe webhook
+      const isFree = isFreeRegistration();
+
+      // Vytvoríme psa – počas promo obdobia hneď schválený, inak čaká na Stripe úhradu.
       const { data: newDog, error: insertError } = await supabase
         .from("dogs")
         .insert({
@@ -79,7 +82,7 @@ const AddDog = () => {
           age: form.age,
           description: form.description,
           image_url: urlData.publicUrl,
-          approved: false,
+          approved: isFree,
         })
         .select("id")
         .single();
@@ -90,7 +93,13 @@ const AddDog = () => {
       let ref: string | null = null;
       try { ref = localStorage.getItem(REF_STORAGE_KEY); } catch { /* ignore */ }
 
-      // Presmerujeme na Stripe checkout na úhradu registračného poplatku 2,99 €
+      if (isFree) {
+        toast.success("Pes bol pridaný do súťaže! 🐾");
+        navigate(`/pes/${newDog.id}`);
+        return;
+      }
+
+      // Po skončení promo obdobia presmerujeme na Stripe checkout (1,99 €)
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke(
         "create-registration-checkout",
         { body: { dogId: newDog.id, dogName: form.name, ref: ref || "" } }
@@ -102,6 +111,7 @@ const AddDog = () => {
 
       window.location.href = checkoutData.url;
       return;
+
 
 
     } catch (error: any) {
@@ -134,7 +144,13 @@ const AddDog = () => {
       <Navbar />
       <div className="container mx-auto px-4 py-10 max-w-2xl">
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Pridať psa do súťaže</h1>
-        <p className="text-muted-foreground mb-8">Registrácia psa je jednorazovo <strong>2,99 €</strong>. Vyplňte formulár, pridajte fotku a po úhrade sa pes okamžite zaradí do súťaže. <strong>20 %</strong> z každej registrácie ide útulkom ❤️</p>
+        {isFreeRegistration() ? (
+          <div className="mb-8 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-900">
+            🎉 <strong>Akcia – registrácia ZADARMO do {FREE_UNTIL_LABEL}.</strong> Pes sa po odoslaní automaticky zaradí do súťaže. Po skončení akcie bude poplatok automaticky {PAID_PRICE_LABEL}.
+          </div>
+        ) : (
+          <p className="text-muted-foreground mb-8">Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>. Vyplňte formulár, pridajte fotku a po úhrade sa pes okamžite zaradí do súťaže. <strong>20 %</strong> z každej registrácie ide útulkom ❤️</p>
+        )}
 
         {/* Stepper */}
         <div className="flex items-center gap-2 mb-10">
@@ -231,7 +247,11 @@ const AddDog = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground">Skoro hotovo! 🎉</h3>
-                <p className="text-muted-foreground mt-1">Posledný krok — úhrada registračného poplatku</p>
+                <p className="text-muted-foreground mt-1">
+                  {isFreeRegistration()
+                    ? "Skontrolujte údaje a odošlite prihlášku"
+                    : "Posledný krok — úhrada registračného poplatku"}
+                </p>
               </div>
               <div className="bg-secondary/50 rounded-xl p-4 text-left space-y-2">
                 <div className="flex justify-between text-sm">
@@ -245,10 +265,14 @@ const AddDog = () => {
                 <div className="h-px bg-border" />
                 <div className="flex justify-between font-bold">
                   <span className="text-foreground">Cena registrácie:</span>
-                  <span className="text-primary">2,99 €</span>
+                  <span className="text-primary">
+                    {isFreeRegistration() ? `ZADARMO (akcia do ${FREE_UNTIL_LABEL})` : PAID_PRICE_LABEL}
+                  </span>
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">
-                  Jednorazový poplatok. 20 % z každej registrácie ide útulkom ❤️
+                  {isFreeRegistration()
+                    ? `Po ${FREE_UNTIL_LABEL} bude poplatok automaticky ${PAID_PRICE_LABEL}. 20 % z každej platenej registrácie ide útulkom ❤️`
+                    : "Jednorazový poplatok. 20 % z každej registrácie ide útulkom ❤️"}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -258,7 +282,9 @@ const AddDog = () => {
                 </button>
                 <motion.button whileTap={{ scale: 0.95 }} onClick={handleSubmit} disabled={loading}
                   className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50">
-                  {loading ? "Presmerovávam na platbu..." : "Zaplatiť 2,99 € a pridať psa 🐾"}
+                  {loading
+                    ? (isFreeRegistration() ? "Odosielam..." : "Presmerovávam na platbu...")
+                    : (isFreeRegistration() ? "Pridať psa ZADARMO 🐾" : `Zaplatiť ${PAID_PRICE_LABEL} a pridať psa 🐾`)}
                 </motion.button>
               </div>
             </div>

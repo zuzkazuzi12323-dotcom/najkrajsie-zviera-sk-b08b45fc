@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { BookOpen, CheckCircle, Trophy, Gift, CreditCard, Handshake } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
 
 const Rules = () => {
+  const free = isFreeRegistration();
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -28,9 +30,15 @@ const Rules = () => {
               </h2>
               <ol className="space-y-3 text-foreground/80">
                 <li className="flex gap-3"><span className="font-bold text-primary">1.</span> Majiteľ psa pridá profil psa s fotkou.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">2.</span> Registračný poplatok je <strong>2,99 €</strong>, pričom 20 % z každej platenej registrácie pôjde útulkom pre opustené zvieratá ❤️</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">2.</span> {free
+                  ? <>Počas akcie je registrácia psa <strong>ZADARMO do {FREE_UNTIL_LABEL}</strong>. Po tomto dátume bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong> (20 % ide útulkom ❤️).</>
+                  : <>Registračný poplatok je <strong>{PAID_PRICE_LABEL}</strong>, pričom 20 % z každej platenej registrácie pôjde útulkom pre opustené zvieratá ❤️</>}
+                </li>
                 <li className="flex gap-3"><span className="font-bold text-primary">2a.</span> Hlasovať môžete <strong>1× za 24 hodín</strong> z jedného účtu.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">3.</span> Po úspešnej platbe sa pes okamžite zobrazí v galérii a môže získavať hlasy od návštevníkov.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">3.</span> {free
+                  ? <>Po odoslaní prihlášky sa pes <strong>okamžite zaradí do súťaže</strong> a môže získavať hlasy.</>
+                  : <>Po úspešnej platbe sa pes okamžite zobrazí v galérii a môže získavať hlasy od návštevníkov.</>}
+                </li>
               </ol>
             </div>
 
@@ -39,9 +47,19 @@ const Rules = () => {
                 <CreditCard className="w-5 h-5 text-primary" /> Registrácia a platba
               </h2>
               <ul className="space-y-3 text-foreground/80">
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa zaradí do súťaže <strong>až po úhrade</strong> registračného poplatku 2,99 €.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
+                {free ? (
+                  <>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Počas akcie je registrácia psa <strong>ZADARMO do {FREE_UNTIL_LABEL}</strong> — bez akéhokoľvek poplatku.</li>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Po skončení akcie bude poplatok <strong>automaticky {PAID_PRICE_LABEL}</strong> za registráciu psa.</li>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa v akcii <strong>ihneď zaradí do galérie a rebríčka</strong> po odoslaní prihlášky.</li>
+                  </>
+                ) : (
+                  <>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa zaradí do súťaže <strong>až po úhrade</strong> registračného poplatku {PAID_PRICE_LABEL}.</li>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
+                  </>
+                )}
               </ul>
             </div>
 

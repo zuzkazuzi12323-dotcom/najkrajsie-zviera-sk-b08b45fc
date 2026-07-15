@@ -11,6 +11,7 @@ import SheltersSection from "@/components/SheltersSection";
 import FeaturedShelterSection from "@/components/FeaturedShelterSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
 
 const fetchDogsWithVotes = async () => {
   const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).eq("archived", false);
@@ -80,9 +81,18 @@ const Index = () => {
     { icon: Trophy, label: "Registrovaných", value: stats?.users?.toLocaleString() || "0" },
   ];
 
+  const free = isFreeRegistration();
+  const priceLabel = free ? "ZADARMO" : PAID_PRICE_LABEL;
+
   const steps = [
     { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
-    { icon: Gift, title: "Registračný poplatok 2,99 €", desc: "Jednorazový poplatok 2,99 € za registráciu psa. 20 % z každej registrácie pôjde útulkom ❤️" },
+    {
+      icon: Gift,
+      title: free ? `Registrácia ZADARMO do ${FREE_UNTIL_LABEL}` : `Registračný poplatok ${PAID_PRICE_LABEL}`,
+      desc: free
+        ? `Počas akcie je registrácia psa úplne ZADARMO. Po ${FREE_UNTIL_LABEL} bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
+        : `Jednorazový poplatok ${PAID_PRICE_LABEL} za registráciu psa. 20 % z každej platenej registrácie pôjde útulkom ❤️`,
+    },
     { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
     { icon: Share2, title: "Zdieľajte a zbierajte hlasy", desc: "Zdieľajte profil psa s rodinou a priateľmi." },
     { icon: Trophy, title: "Víťaz vyhráva", desc: "Pes s najviac hlasmi vyhráva súťaž." },
@@ -96,7 +106,9 @@ const Index = () => {
   ];
 
   const rules = [
-    "Registračný poplatok za psa je 2,99 €. 20 % z každej registrácie pôjde útulkom.",
+    free
+      ? `Počas akcie je registrácia psa ZADARMO do ${FREE_UNTIL_LABEL}. Po tomto dátume bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom).`
+      : `Registračný poplatok za psa je ${PAID_PRICE_LABEL}. 20 % z každej registrácie pôjde útulkom.`,
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
     "Víťazom je pes s najviac hlasmi",
@@ -129,10 +141,17 @@ const Index = () => {
               NajkrajšíPes.sk
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
-              🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>. Registrácia psa je jednorazovo <strong>2,99 €</strong>.
+              🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>.{" "}
+              {free ? (
+                <>Registrácia psa je <strong>ZADARMO do {FREE_UNTIL_LABEL}</strong> 🎉</>
+              ) : (
+                <>Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>.</>
+              )}
             </p>
             <p className="text-base md:text-lg text-background/80 mb-8 text-pretty">
-              Z každej registrácie venujeme <strong>20 %</strong> na podporu útulkov pre zvieratá ❤️
+              {free
+                ? <>Po skončení akcie bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong>. 20 % z každej platenej registrácie ide útulkom ❤️</>
+                : <>Z každej registrácie venujeme <strong>20 %</strong> na podporu útulkov pre zvieratá ❤️</>}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
@@ -333,7 +352,9 @@ const Index = () => {
         <div className="gradient-golden rounded-3xl p-10 md:p-16 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojte sa do súťaže</h2>
           <p className="text-primary-foreground/90 mb-8 max-w-lg mx-auto text-pretty">
-            Registrácia psa je jednorazovo 2,99 €, pričom 20 % z každej platenej registrácie venujeme útulkom ❤️
+            {free
+              ? `Počas akcie je registrácia psa ZADARMO do ${FREE_UNTIL_LABEL}. Po skončení akcie automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
+              : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}, pričom 20 % z každej platenej registrácie venujeme útulkom ❤️`}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to="/pridat" className="inline-flex items-center gap-2 bg-card text-card-foreground px-8 py-4 rounded-full font-bold shadow-elevated text-lg hover:shadow-golden active:scale-95 transition-all">

@@ -7,7 +7,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const REGISTRATION_PRICE_CENTS = 299; // 2,99 €
+const REGISTRATION_PRICE_CENTS = 199; // 1,99 €
 
 const jsonResponse = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
