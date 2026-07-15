@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, CheckCircle, Trophy, Gift, CreditCard, Handshake } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
 
 const Rules = () => {
   return (
