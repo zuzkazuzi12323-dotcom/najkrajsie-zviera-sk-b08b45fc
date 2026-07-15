@@ -189,7 +189,7 @@ const Index = () => {
         </div>
         <div className="text-center mt-8">
           <Link to="/pridat" className="inline-flex items-center gap-2 gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg active:scale-95 transition-transform">
-            <PawPrint className="w-5 h-5" /> Pridať psa ZADARMO
+            <PawPrint className="w-5 h-5" /> Pridať psa
           </Link>
         </div>
       </section>
