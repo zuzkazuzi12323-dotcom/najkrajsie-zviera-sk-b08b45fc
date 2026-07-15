@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
 
 const Rules = () => {
-  return (
+  const free = isFreeRegistration();
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="container mx-auto px-4 py-10 max-w-3xl">
