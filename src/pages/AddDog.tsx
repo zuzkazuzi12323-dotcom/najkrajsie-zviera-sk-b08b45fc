@@ -70,7 +70,9 @@ const AddDog = () => {
         .from("dog-images")
         .getPublicUrl(filePath);
 
-      // Vytvoríme psa ako neschváleného – schváli sa až po úspešnej platbe cez Stripe webhook
+      const isFree = isFreeRegistration();
+
+      // Vytvoríme psa – počas promo obdobia hneď schválený, inak čaká na Stripe úhradu.
       const { data: newDog, error: insertError } = await supabase
         .from("dogs")
         .insert({
@@ -80,7 +82,7 @@ const AddDog = () => {
           age: form.age,
           description: form.description,
           image_url: urlData.publicUrl,
-          approved: false,
+          approved: isFree,
         })
         .select("id")
         .single();
@@ -91,7 +93,13 @@ const AddDog = () => {
       let ref: string | null = null;
       try { ref = localStorage.getItem(REF_STORAGE_KEY); } catch { /* ignore */ }
 
-      // Presmerujeme na Stripe checkout na úhradu registračného poplatku 2,99 €
+      if (isFree) {
+        toast.success("Pes bol pridaný do súťaže! 🐾");
+        navigate(`/pes/${newDog.id}`);
+        return;
+      }
+
+      // Po skončení promo obdobia presmerujeme na Stripe checkout (1,99 €)
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke(
         "create-registration-checkout",
         { body: { dogId: newDog.id, dogName: form.name, ref: ref || "" } }
@@ -103,6 +111,7 @@ const AddDog = () => {
 
       window.location.href = checkoutData.url;
       return;
+
 
 
     } catch (error: any) {
