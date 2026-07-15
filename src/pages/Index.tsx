@@ -82,7 +82,7 @@ const Index = () => {
 
   const steps = [
     { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
-    { icon: Gift, title: "Registrácia ZADARMO počas kampane", desc: "Počas kampane na Donio je registrácia psa bez poplatku. Po skončení kampane bude poplatok 2,99 €, pričom 20 % z každej platenej registrácie pôjde útulkom ❤️" },
+    { icon: Gift, title: "Registračný poplatok 2,99 €", desc: "Jednorazový poplatok 2,99 € za registráciu psa. 20 % z každej registrácie pôjde útulkom ❤️" },
     { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
     { icon: Share2, title: "Zdieľajte a zbierajte hlasy", desc: "Zdieľajte profil psa s rodinou a priateľmi." },
     { icon: Trophy, title: "Víťaz vyhráva", desc: "Pes s najviac hlasmi vyhráva súťaž." },
