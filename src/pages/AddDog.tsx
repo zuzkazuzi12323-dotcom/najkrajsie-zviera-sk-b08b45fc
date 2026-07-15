@@ -69,7 +69,7 @@ const AddDog = () => {
         .from("dog-images")
         .getPublicUrl(filePath);
 
-      // Počas kampane na Donio je registrácia ZADARMO – pes sa zaradí ihneď
+      // Vytvoríme psa ako neschváleného – schváli sa až po úspešnej platbe cez Stripe webhook
       const { data: newDog, error: insertError } = await supabase
         .from("dogs")
         .insert({
@@ -79,28 +79,30 @@ const AddDog = () => {
           age: form.age,
           description: form.description,
           image_url: urlData.publicUrl,
-          approved: true,
+          approved: false,
         })
         .select("id")
         .single();
 
       if (insertError) throw insertError;
 
-      // Attribute this registration to a shelter partner link if present (free during campaign)
+      // Získame partnerský referral kód, ak existuje
       let ref: string | null = null;
       try { ref = localStorage.getItem(REF_STORAGE_KEY); } catch { /* ignore */ }
-      if (ref && newDog?.id) {
-        await supabase.rpc("record_shelter_referral", {
-          _code: ref,
-          _dog_id: newDog.id,
-          _amount: 0,
-          _is_paid: false,
-        });
+
+      // Presmerujeme na Stripe checkout na úhradu registračného poplatku 2,99 €
+      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke(
+        "create-registration-checkout",
+        { body: { dogId: newDog.id, dogName: form.name, ref: ref || "" } }
+      );
+
+      if (checkoutError || !checkoutData?.url) {
+        throw new Error(checkoutError?.message || "Nepodarilo sa vytvoriť platbu");
       }
 
-      toast.success("Váš pes bol pridaný do súťaže ZADARMO! 🐾");
-      navigate("/moj-profil");
+      window.location.href = checkoutData.url;
       return;
+
 
     } catch (error: any) {
       toast.error(error.message || "Niečo sa pokazilo");
