@@ -40,7 +40,7 @@ const RegistrationCanceled = () => {
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Pes nebol pridaný</h1>
         <p className="text-muted-foreground mb-2">
-          Registrácia bola zrušená a platba <strong>2,99 €</strong> nebola vykonaná.
+          Registrácia bola zrušená a platba <strong>1,99 €</strong> nebola vykonaná.
         </p>
         <p className="text-sm text-muted-foreground mb-8">
           Bez úhrady poplatku sa pes do súťaže nepridáva. Skúste to znova kedykoľvek.
