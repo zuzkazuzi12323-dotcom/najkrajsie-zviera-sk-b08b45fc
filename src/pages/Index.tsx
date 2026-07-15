@@ -96,7 +96,7 @@ const Index = () => {
   ];
 
   const rules = [
-    "Počas kampane na Donio je registrácia psa zdarma. Po skončení kampane bude registračný poplatok 2,99 €.",
+    "Registračný poplatok za psa je 2,99 €. 20 % z každej registrácie pôjde útulkom.",
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
     "Víťazom je pes s najviac hlasmi",
