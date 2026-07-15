@@ -1,4 +1,4 @@
-// Sends a payment confirmation email after successful dog registration (2,99 €)
+// Sends a payment confirmation email after successful dog registration (1,99 €)
 import { createClient } from 'npm:@supabase/supabase-js@2.57.2';
 
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/google_mail/gmail/v1';
@@ -44,7 +44,7 @@ async function isAuthorized(req: Request): Promise<boolean> {
   return allowed === true;
 }
 
-function buildEmail(to: string, dogName: string, dogId: string, variableSymbol = dogId, paymentId = '', amountCents = 299): string {
+function buildEmail(to: string, dogName: string, dogId: string, variableSymbol = dogId, paymentId = '', amountCents = 199): string {
   const subject = encodeRFC2047(`Potvrdenie platby – ${dogName} je v súťaži! 🐾`);
   const fromHeader = `${encodeRFC2047(FROM_NAME)} <${FROM_EMAIL}>`;
   const dogUrl = `${SITE_URL}/pes/${dogId}`;
@@ -151,7 +151,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const raw = buildEmail(email, dogName, dogId, String(variableSymbol || dogId), String(paymentId || ''), Number(amount || 299));
+    const raw = buildEmail(email, dogName, dogId, String(variableSymbol || dogId), String(paymentId || ''), Number(amount || 199));
     const res = await fetch(`${GATEWAY_URL}/users/me/messages/send`, {
       method: 'POST',
       headers: {
