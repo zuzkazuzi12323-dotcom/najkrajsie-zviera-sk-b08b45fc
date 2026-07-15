@@ -144,7 +144,13 @@ const AddDog = () => {
       <Navbar />
       <div className="container mx-auto px-4 py-10 max-w-2xl">
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Pridať psa do súťaže</h1>
-        <p className="text-muted-foreground mb-8">Registrácia psa je jednorazovo <strong>2,99 €</strong>. Vyplňte formulár, pridajte fotku a po úhrade sa pes okamžite zaradí do súťaže. <strong>20 %</strong> z každej registrácie ide útulkom ❤️</p>
+        {isFreeRegistration() ? (
+          <div className="mb-8 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-900">
+            🎉 <strong>Akcia – registrácia ZADARMO do {FREE_UNTIL_LABEL}.</strong> Pes sa po odoslaní automaticky zaradí do súťaže. Po skončení akcie bude poplatok automaticky {PAID_PRICE_LABEL}.
+          </div>
+        ) : (
+          <p className="text-muted-foreground mb-8">Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>. Vyplňte formulár, pridajte fotku a po úhrade sa pes okamžite zaradí do súťaže. <strong>20 %</strong> z každej registrácie ide útulkom ❤️</p>
+        )}
 
         {/* Stepper */}
         <div className="flex items-center gap-2 mb-10">
