@@ -53,7 +53,7 @@ const HowItWorks = () => {
           <div className="text-center mt-10">
             <Link to="/pridat">
               <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg">
-                Pridať psa ZADARMO 🐾
+                Pridať psa 🐾
               </motion.button>
             </Link>
           </div>
