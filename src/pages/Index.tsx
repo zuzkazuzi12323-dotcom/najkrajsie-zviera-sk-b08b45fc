@@ -129,14 +129,14 @@ const Index = () => {
               NajkrajšíPes.sk
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
-              🎉 Počas kampane na Donio je registrácia vášho psa do súťaže úplne <strong>ZADARMO</strong>. Zapojte svojho miláčika do verejného hlasovania o titul Najkrajší pes Slovenska 🐶
+              🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>. Registrácia psa je jednorazovo <strong>2,99 €</strong>.
             </p>
             <p className="text-base md:text-lg text-background/80 mb-8 text-pretty">
               Z každej registrácie venujeme <strong>20 %</strong> na podporu útulkov pre zvieratá ❤️
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
-                <PawPrint className="w-5 h-5" /> Pridať psa ZADARMO
+                <PawPrint className="w-5 h-5" /> Pridať psa
               </Link>
               <Link to="/galeria" className="bg-background/20 backdrop-blur-sm text-background border border-background/40 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg hover:bg-background/30 active:scale-95 transition-all">
                 <Vote className="w-5 h-5" /> Hlasovať v súťaži
