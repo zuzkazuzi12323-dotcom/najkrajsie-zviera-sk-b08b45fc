@@ -69,7 +69,7 @@ const AddDog = () => {
         .from("dog-images")
         .getPublicUrl(filePath);
 
-      // Počas kampane na Donio je registrácia ZADARMO – pes sa zaradí ihneď
+      // Vytvoríme psa ako neschváleného – schváli sa až po úspešnej platbe cez Stripe webhook
       const { data: newDog, error: insertError } = await supabase
         .from("dogs")
         .insert({
@@ -79,28 +79,30 @@ const AddDog = () => {
           age: form.age,
           description: form.description,
           image_url: urlData.publicUrl,
-          approved: true,
+          approved: false,
         })
         .select("id")
         .single();
 
       if (insertError) throw insertError;
 
-      // Attribute this registration to a shelter partner link if present (free during campaign)
+      // Získame partnerský referral kód, ak existuje
       let ref: string | null = null;
       try { ref = localStorage.getItem(REF_STORAGE_KEY); } catch { /* ignore */ }
-      if (ref && newDog?.id) {
-        await supabase.rpc("record_shelter_referral", {
-          _code: ref,
-          _dog_id: newDog.id,
-          _amount: 0,
-          _is_paid: false,
-        });
+
+      // Presmerujeme na Stripe checkout na úhradu registračného poplatku 2,99 €
+      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke(
+        "create-registration-checkout",
+        { body: { dogId: newDog.id, dogName: form.name, ref: ref || "" } }
+      );
+
+      if (checkoutError || !checkoutData?.url) {
+        throw new Error(checkoutError?.message || "Nepodarilo sa vytvoriť platbu");
       }
 
-      toast.success("Váš pes bol pridaný do súťaže ZADARMO! 🐾");
-      navigate("/moj-profil");
+      window.location.href = checkoutData.url;
       return;
+
 
     } catch (error: any) {
       toast.error(error.message || "Niečo sa pokazilo");
@@ -132,7 +134,7 @@ const AddDog = () => {
       <Navbar />
       <div className="container mx-auto px-4 py-10 max-w-2xl">
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Pridať psa do súťaže</h1>
-        <p className="text-muted-foreground mb-8">🎉 Počas kampane na Donio je registrácia psa <strong>ZADARMO</strong> 🐾 Vyplňte formulár, pridajte fotku a pes sa okamžite zaradí do súťaže.</p>
+        <p className="text-muted-foreground mb-8">Registrácia psa je jednorazovo <strong>2,99 €</strong>. Vyplňte formulár, pridajte fotku a po úhrade sa pes okamžite zaradí do súťaže. <strong>20 %</strong> z každej registrácie ide útulkom ❤️</p>
 
         {/* Stepper */}
         <div className="flex items-center gap-2 mb-10">
@@ -229,7 +231,7 @@ const AddDog = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground">Skoro hotovo! 🎉</h3>
-                <p className="text-muted-foreground mt-1">Posledný krok — registrácia je počas kampane ZADARMO</p>
+                <p className="text-muted-foreground mt-1">Posledný krok — úhrada registračného poplatku</p>
               </div>
               <div className="bg-secondary/50 rounded-xl p-4 text-left space-y-2">
                 <div className="flex justify-between text-sm">
@@ -243,10 +245,10 @@ const AddDog = () => {
                 <div className="h-px bg-border" />
                 <div className="flex justify-between font-bold">
                   <span className="text-foreground">Cena registrácie:</span>
-                  <span className="text-primary">ZADARMO 🎉</span>
+                  <span className="text-primary">2,99 €</span>
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">
-                  Počas kampane na Donio je registrácia bezplatná. Po skončení kampane bude poplatok 2,99 €, pričom 20 % pôjde útulkom ❤️
+                  Jednorazový poplatok. 20 % z každej registrácie ide útulkom ❤️
                 </p>
               </div>
               <div className="flex gap-3">
@@ -256,7 +258,7 @@ const AddDog = () => {
                 </button>
                 <motion.button whileTap={{ scale: 0.95 }} onClick={handleSubmit} disabled={loading}
                   className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50">
-                  {loading ? "Spracovávam..." : "Pridať psa ZADARMO 🐾"}
+                  {loading ? "Presmerovávam na platbu..." : "Zaplatiť 2,99 € a pridať psa 🐾"}
                 </motion.button>
               </div>
             </div>
