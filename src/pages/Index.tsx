@@ -354,7 +354,7 @@ const Index = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojte sa do súťaže</h2>
           <p className="text-primary-foreground/90 mb-8 max-w-lg mx-auto text-pretty">
             {free
-              ? `Počas akcie je registrácia psa ZADARMO do ${FREE_UNTIL_LABEL}. Po skončení akcie automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
+              ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení sa automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
               : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}, pričom 20 % z každej platenej registrácie venujeme útulkom ❤️`}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
