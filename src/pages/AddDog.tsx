@@ -16,6 +16,7 @@ const steps = ["Základné info", "Fotka", "Odoslať"];
 
 const AddDog = () => {
   const [step, setStep] = useState(0);
+  const isFree = useContestActive();
   const [form, setForm] = useState({
     name: "",
     breed: "",
