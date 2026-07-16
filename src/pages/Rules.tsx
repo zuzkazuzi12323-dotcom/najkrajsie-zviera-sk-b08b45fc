@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { BookOpen, CheckCircle, Trophy, Gift, CreditCard, Handshake } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
+import { PAID_PRICE_LABEL } from "@/lib/pricing";
+import { useContestActive } from "@/hooks/useContestActive";
 
 const Rules = () => {
-  const free = isFreeRegistration();
+  const free = useContestActive();
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
