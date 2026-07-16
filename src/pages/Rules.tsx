@@ -50,9 +50,9 @@ const Rules = () => {
               <ul className="space-y-3 text-foreground/80">
                 {free ? (
                   <>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Počas akcie je registrácia psa <strong>ZADARMO do {FREE_UNTIL_LABEL}</strong> — bez akéhokoľvek poplatku.</li>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Po skončení akcie bude poplatok <strong>automaticky {PAID_PRICE_LABEL}</strong> za registráciu psa.</li>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa v akcii <strong>ihneď zaradí do galérie a rebríčka</strong> po odoslaní prihlášky.</li>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Kým prebieha aktuálna súťaž, registrácia psa je <strong>ZADARMO</strong> — bez akéhokoľvek poplatku.</li>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Po ukončení súťaže sa poplatok <strong>automaticky nastaví na {PAID_PRICE_LABEL}</strong> za registráciu psa.</li>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Počas súťaže sa pes <strong>ihneď zaradí do galérie a rebríčka</strong> po odoslaní prihlášky.</li>
                   </>
                 ) : (
                   <>
