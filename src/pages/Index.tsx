@@ -11,7 +11,8 @@ import SheltersSection from "@/components/SheltersSection";
 import FeaturedShelterSection from "@/components/FeaturedShelterSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
+import { PAID_PRICE_LABEL } from "@/lib/pricing";
+import { useContestActive } from "@/hooks/useContestActive";
 
 const fetchDogsWithVotes = async () => {
   const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).eq("archived", false);
@@ -81,16 +82,16 @@ const Index = () => {
     { icon: Trophy, label: "Registrovaných", value: stats?.users?.toLocaleString() || "0" },
   ];
 
-  const free = isFreeRegistration();
+  const free = useContestActive();
   const priceLabel = free ? "ZADARMO" : PAID_PRICE_LABEL;
 
   const steps = [
     { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
     {
       icon: Gift,
-      title: free ? `Registrácia ZADARMO do ${FREE_UNTIL_LABEL}` : `Registračný poplatok ${PAID_PRICE_LABEL}`,
+      title: free ? "Registrácia ZADARMO počas súťaže" : `Registračný poplatok ${PAID_PRICE_LABEL}`,
       desc: free
-        ? `Počas akcie je registrácia psa úplne ZADARMO. Po ${FREE_UNTIL_LABEL} bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
+        ? `Kým prebieha aktuálna súťaž, registrácia psa je úplne ZADARMO. Po jej ukončení sa poplatok automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
         : `Jednorazový poplatok ${PAID_PRICE_LABEL} za registráciu psa. 20 % z každej platenej registrácie pôjde útulkom ❤️`,
     },
     { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
@@ -107,7 +108,7 @@ const Index = () => {
 
   const rules = [
     free
-      ? `Počas akcie je registrácia psa ZADARMO do ${FREE_UNTIL_LABEL}. Po tomto dátume bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom).`
+      ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení súťaže bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom).`
       : `Registračný poplatok za psa je ${PAID_PRICE_LABEL}. 20 % z každej registrácie pôjde útulkom.`,
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
@@ -143,7 +144,7 @@ const Index = () => {
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
               🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>.{" "}
               {free ? (
-                <>Registrácia psa je <strong>ZADARMO do {FREE_UNTIL_LABEL}</strong> 🎉</>
+                <>Registrácia psa je <strong>ZADARMO počas prebiehajúcej súťaže</strong> 🎉</>
               ) : (
                 <>Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>.</>
               )}
@@ -353,7 +354,7 @@ const Index = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojte sa do súťaže</h2>
           <p className="text-primary-foreground/90 mb-8 max-w-lg mx-auto text-pretty">
             {free
-              ? `Počas akcie je registrácia psa ZADARMO do ${FREE_UNTIL_LABEL}. Po skončení akcie automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
+              ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení sa automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
               : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}, pričom 20 % z každej platenej registrácie venujeme útulkom ❤️`}
           </p>
           <div className="flex flex-wrap justify-center gap-3">

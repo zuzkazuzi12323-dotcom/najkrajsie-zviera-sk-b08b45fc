@@ -7,7 +7,8 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
+import { PAID_PRICE_LABEL } from "@/lib/pricing";
+import { useContestActive } from "@/hooks/useContestActive";
 
 const REF_STORAGE_KEY = "shelter_ref";
 
@@ -15,6 +16,7 @@ const steps = ["Základné info", "Fotka", "Odoslať"];
 
 const AddDog = () => {
   const [step, setStep] = useState(0);
+  const isFree = useContestActive();
   const [form, setForm] = useState({
     name: "",
     breed: "",
@@ -70,7 +72,7 @@ const AddDog = () => {
         .from("dog-images")
         .getPublicUrl(filePath);
 
-      const isFree = isFreeRegistration();
+      // isFree je aktuálny stav súťaže (hook v hornej časti komponentu).
 
       // Vytvoríme psa – počas promo obdobia hneď schválený, inak čaká na Stripe úhradu.
       const { data: newDog, error: insertError } = await supabase
@@ -144,9 +146,9 @@ const AddDog = () => {
       <Navbar />
       <div className="container mx-auto px-4 py-10 max-w-2xl">
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Pridať psa do súťaže</h1>
-        {isFreeRegistration() ? (
+        {isFree ? (
           <div className="mb-8 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-900">
-            🎉 <strong>Akcia – registrácia ZADARMO do {FREE_UNTIL_LABEL}.</strong> Pes sa po odoslaní automaticky zaradí do súťaže. Po skončení akcie bude poplatok automaticky {PAID_PRICE_LABEL}.
+            🎉 <strong>Práve prebieha súťaž – registrácia je ZADARMO.</strong> Pes sa po odoslaní automaticky zaradí do súťaže. Po ukončení súťaže bude poplatok automaticky {PAID_PRICE_LABEL}.
           </div>
         ) : (
           <p className="text-muted-foreground mb-8">Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>. Vyplňte formulár, pridajte fotku a po úhrade sa pes okamžite zaradí do súťaže. <strong>20 %</strong> z každej registrácie ide útulkom ❤️</p>
@@ -248,7 +250,7 @@ const AddDog = () => {
               <div>
                 <h3 className="text-xl font-bold text-foreground">Skoro hotovo! 🎉</h3>
                 <p className="text-muted-foreground mt-1">
-                  {isFreeRegistration()
+                  {isFree
                     ? "Skontrolujte údaje a odošlite prihlášku"
                     : "Posledný krok — úhrada registračného poplatku"}
                 </p>
@@ -266,12 +268,12 @@ const AddDog = () => {
                 <div className="flex justify-between font-bold">
                   <span className="text-foreground">Cena registrácie:</span>
                   <span className="text-primary">
-                    {isFreeRegistration() ? `ZADARMO (akcia do ${FREE_UNTIL_LABEL})` : PAID_PRICE_LABEL}
+                    {isFree ? "ZADARMO (počas súťaže)" : PAID_PRICE_LABEL}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">
-                  {isFreeRegistration()
-                    ? `Po ${FREE_UNTIL_LABEL} bude poplatok automaticky ${PAID_PRICE_LABEL}. 20 % z každej platenej registrácie ide útulkom ❤️`
+                  {isFree
+                    ? `Po ukončení aktuálnej súťaže bude poplatok automaticky ${PAID_PRICE_LABEL}. 20 % z každej platenej registrácie ide útulkom ❤️`
                     : "Jednorazový poplatok. 20 % z každej registrácie ide útulkom ❤️"}
                 </p>
               </div>
@@ -283,8 +285,8 @@ const AddDog = () => {
                 <motion.button whileTap={{ scale: 0.95 }} onClick={handleSubmit} disabled={loading}
                   className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50">
                   {loading
-                    ? (isFreeRegistration() ? "Odosielam..." : "Presmerovávam na platbu...")
-                    : (isFreeRegistration() ? "Pridať psa ZADARMO 🐾" : `Zaplatiť ${PAID_PRICE_LABEL} a pridať psa 🐾`)}
+                    ? (isFree ? "Odosielam..." : "Presmerovávam na platbu...")
+                    : (isFree ? "Pridať psa ZADARMO 🐾" : `Zaplatiť ${PAID_PRICE_LABEL} a pridať psa 🐾`)}
                 </motion.button>
               </div>
             </div>

@@ -199,7 +199,7 @@ const MyProfile = () => {
             </div>
             <p className="text-sm text-muted-foreground mb-4">
               Útulok <strong>{partnerShelter.name}</strong> — zdieľajte tento odkaz. Za každú platenú
-              registráciu (1,99 € po skončení promo akcie) cez tento odkaz získava útulok 20 % odmenu.
+              registráciu psa (1,99 €) cez tento odkaz získava útulok 20 % odmenu.
             </p>
             <div className="flex flex-col sm:flex-row items-stretch gap-2 mb-4">
               <div className="flex-1 px-3 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground truncate flex items-center">
