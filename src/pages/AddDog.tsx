@@ -72,7 +72,7 @@ const AddDog = () => {
         .from("dog-images")
         .getPublicUrl(filePath);
 
-      const isFree = isFreeRegistration();
+      // isFree je aktuálny stav súťaže (hook v hornej časti komponentu).
 
       // Vytvoríme psa – počas promo obdobia hneď schválený, inak čaká na Stripe úhradu.
       const { data: newDog, error: insertError } = await supabase
