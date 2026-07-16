@@ -7,7 +7,8 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { isFreeRegistration, PAID_PRICE_LABEL, FREE_UNTIL_LABEL } from "@/lib/pricing";
+import { PAID_PRICE_LABEL } from "@/lib/pricing";
+import { useContestActive } from "@/hooks/useContestActive";
 
 const REF_STORAGE_KEY = "shelter_ref";
 
