@@ -32,7 +32,7 @@ const Rules = () => {
               <ol className="space-y-3 text-foreground/80">
                 <li className="flex gap-3"><span className="font-bold text-primary">1.</span> Majiteľ psa pridá profil psa s fotkou.</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">2.</span> {free
-                  ? <>Počas akcie je registrácia psa <strong>ZADARMO do {FREE_UNTIL_LABEL}</strong>. Po tomto dátume bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong> (20 % ide útulkom ❤️).</>
+                  ? <>Kým prebieha aktuálna súťaž, registrácia psa je <strong>ZADARMO</strong>. Po ukončení súťaže bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong> (20 % ide útulkom ❤️).</>
                   : <>Registračný poplatok je <strong>{PAID_PRICE_LABEL}</strong>, pričom 20 % z každej platenej registrácie pôjde útulkom pre opustené zvieratá ❤️</>}
                 </li>
                 <li className="flex gap-3"><span className="font-bold text-primary">2a.</span> Hlasovať môžete <strong>1× za 24 hodín</strong> z jedného účtu.</li>
