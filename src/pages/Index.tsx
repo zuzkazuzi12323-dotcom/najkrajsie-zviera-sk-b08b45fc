@@ -82,7 +82,7 @@ const Index = () => {
     { icon: Trophy, label: "Registrovaných", value: stats?.users?.toLocaleString() || "0" },
   ];
 
-  const free = isFreeRegistration();
+  const free = useContestActive();
   const priceLabel = free ? "ZADARMO" : PAID_PRICE_LABEL;
 
   const steps = [
