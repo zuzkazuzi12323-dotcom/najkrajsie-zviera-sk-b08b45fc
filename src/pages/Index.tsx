@@ -144,7 +144,7 @@ const Index = () => {
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
               🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>.{" "}
               {free ? (
-                <>Registrácia psa je <strong>ZADARMO do {FREE_UNTIL_LABEL}</strong> 🎉</>
+                <>Registrácia psa je <strong>ZADARMO počas prebiehajúcej súťaže</strong> 🎉</>
               ) : (
                 <>Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>.</>
               )}
