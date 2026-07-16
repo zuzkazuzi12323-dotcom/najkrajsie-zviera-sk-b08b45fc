@@ -108,7 +108,7 @@ const Index = () => {
 
   const rules = [
     free
-      ? `Počas akcie je registrácia psa ZADARMO do ${FREE_UNTIL_LABEL}. Po tomto dátume bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom).`
+      ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení súťaže bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom).`
       : `Registračný poplatok za psa je ${PAID_PRICE_LABEL}. 20 % z každej registrácie pôjde útulkom.`,
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
