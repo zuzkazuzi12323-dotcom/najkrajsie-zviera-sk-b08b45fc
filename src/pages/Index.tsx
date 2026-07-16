@@ -89,9 +89,9 @@ const Index = () => {
     { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
     {
       icon: Gift,
-      title: free ? `Registrácia ZADARMO do ${FREE_UNTIL_LABEL}` : `Registračný poplatok ${PAID_PRICE_LABEL}`,
+      title: free ? "Registrácia ZADARMO počas súťaže" : `Registračný poplatok ${PAID_PRICE_LABEL}`,
       desc: free
-        ? `Počas akcie je registrácia psa úplne ZADARMO. Po ${FREE_UNTIL_LABEL} bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
+        ? `Kým prebieha aktuálna súťaž, registrácia psa je úplne ZADARMO. Po jej ukončení sa poplatok automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
         : `Jednorazový poplatok ${PAID_PRICE_LABEL} za registráciu psa. 20 % z každej platenej registrácie pôjde útulkom ❤️`,
     },
     { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
