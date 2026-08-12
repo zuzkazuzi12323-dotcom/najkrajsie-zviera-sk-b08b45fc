@@ -44,6 +44,7 @@ const Navbar = () => {
     { to: "/podpora", label: "Podporovatelia" },
     { to: "/transparentnost", label: "Transparentnosť 🔍" },
     { to: "/vitazi", label: "Víťazi" },
+    { to: "/archiv", label: "Archív 📦" },
   ];
 
   const moreLinks = [
