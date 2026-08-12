@@ -3,11 +3,10 @@ import { PawPrint, CreditCard, Users, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { PAID_PRICE_LABEL } from "@/lib/pricing";
-import { useContestActive } from "@/hooks/useContestActive";
+import { PAID_PRICE_LABEL, REGISTRATION_FREE } from "@/lib/pricing";
 
 const HowItWorks = () => {
-  const free = useContestActive();
+  const free = REGISTRATION_FREE;
 
   const steps = [
     { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },

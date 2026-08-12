@@ -11,8 +11,7 @@ import SheltersSection from "@/components/SheltersSection";
 import FeaturedShelterSection from "@/components/FeaturedShelterSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { PAID_PRICE_LABEL } from "@/lib/pricing";
-import { useContestActive } from "@/hooks/useContestActive";
+import { PAID_PRICE_LABEL, REGISTRATION_FREE } from "@/lib/pricing";
 
 const fetchDogsWithVotes = async () => {
   const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).eq("archived", false);
@@ -82,7 +81,7 @@ const Index = () => {
     { icon: Trophy, label: "Registrovaných", value: stats?.users?.toLocaleString() || "0" },
   ];
 
-  const free = useContestActive();
+  const free = REGISTRATION_FREE;
   const priceLabel = free ? "ZADARMO" : PAID_PRICE_LABEL;
 
   const steps = [
