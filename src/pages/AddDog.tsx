@@ -7,8 +7,7 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { PAID_PRICE_LABEL } from "@/lib/pricing";
-import { useContestActive } from "@/hooks/useContestActive";
+import { PAID_PRICE_LABEL, REGISTRATION_FREE } from "@/lib/pricing";
 
 const REF_STORAGE_KEY = "shelter_ref";
 
@@ -16,7 +15,7 @@ const steps = ["Základné info", "Fotka", "Odoslať"];
 
 const AddDog = () => {
   const [step, setStep] = useState(0);
-  const isFree = useContestActive();
+  const isFree = REGISTRATION_FREE;
   const [form, setForm] = useState({
     name: "",
     breed: "",

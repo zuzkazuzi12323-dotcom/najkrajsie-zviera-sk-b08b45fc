@@ -17,3 +17,9 @@ export const promoNotice = (contestActive: boolean): string =>
   contestActive
     ? `Počas prebiehajúcej súťaže je registrácia psa ZADARMO. Po ukončení súťaže bude poplatok automaticky ${PAID_PRICE_LABEL}.`
     : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}. 20 % z každej platenej registrácie ide útulkom.`;
+
+/**
+ * Globálny prepínač: registrácia psa je platená (súťaž s promo akciou sa skončila).
+ * Typ je zámerne `boolean`, aby UI vetvenie zostalo funkčné.
+ */
+export const REGISTRATION_FREE: boolean = false;
