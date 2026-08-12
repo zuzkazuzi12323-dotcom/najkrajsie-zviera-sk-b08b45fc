@@ -7,6 +7,7 @@ import CookieConsent from "@/components/CookieConsent";
 import BadgeCover from "@/components/BadgeCover";
 import Index from "./pages/Index";
 import Gallery from "./pages/Gallery";
+import Archive from "./pages/Archive";
 import DogProfile from "./pages/DogProfile";
 import AddDog from "./pages/AddDog";
 import Login from "./pages/Login";
@@ -63,6 +64,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/galeria" element={<Gallery />} />
+            <Route path="/archiv" element={<Archive />} />
 
             <Route path="/pes/:id" element={<DogProfile />} />
             <Route path="/pridat" element={<AddDog />} />

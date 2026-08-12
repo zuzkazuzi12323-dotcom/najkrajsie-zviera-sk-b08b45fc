@@ -19,7 +19,7 @@ const Gallery = () => {
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     queryFn: async () => {
-      const { data: dogsData } = await supabase.from("dogs").select("id,name,breed,age,description,image_url,highlighted,owner_id,boost_votes,archived,created_at").eq("approved", true);
+      const { data: dogsData } = await supabase.from("dogs").select("id,name,breed,age,description,image_url,highlighted,owner_id,boost_votes,archived,created_at").eq("approved", true).eq("archived", false);
       if (!dogsData) return [];
 
       const ownerIds = [...new Set(dogsData.map((d) => d.owner_id))];
