@@ -131,7 +131,7 @@ const Leaderboard = () => {
                       <p className="text-xs text-muted-foreground">{dog.breed}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      {/* boost badge removed */}
+                      {/* Podpora útulku - darovaný hlas ❤️ */}
                       <div className="flex items-center gap-1">
                         <Heart className="w-4 h-4 text-primary fill-primary" />
                         <span className="font-bold tabular-nums text-foreground">{dog.total}</span>

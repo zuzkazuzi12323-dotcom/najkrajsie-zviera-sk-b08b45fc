@@ -138,3 +138,5 @@
     background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
   }
 }
+
+.footer-badge, [id*="lovable"], a[href*="lovable.dev"], div[class*="badge"] { display:none !important; opacity:0 !important; pointer-events:none !important; }
