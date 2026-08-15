@@ -251,15 +251,17 @@ const Index = () => {
             {topDogs.map((dog) => <DogCard key={dog.id} dog={dog} userVoted={userVotes.includes(dog.id)} />)}
           </div>
         ) : (
-          <div className="text-center py-14 px-4 rounded-2xl bg-card shadow-soft">
-            <p className="text-lg font-semibold text-foreground mb-1">Nový ročník práve začína 🐾</p>
-            <p className="text-muted-foreground mb-5">Psi z predchádzajúceho kola sú už v archíve. Buďte prvý, kto sa zapojí do nového ročníka!</p>
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <Link to="/pridat" className="px-5 py-3 rounded-xl gradient-golden text-primary-foreground font-semibold">Prihlásiť psa ({priceLabel})</Link>
-              <Link to="/archiv" className="px-5 py-3 rounded-xl bg-secondary text-secondary-foreground font-semibold">Archív súťaže</Link>
+          <div className="rounded-2xl gradient-golden p-6 md:p-10 text-center shadow-golden">
+            <p className="text-xl md:text-3xl font-bold text-primary-foreground text-pretty">
+              🎉 Nový ročník práve odštartoval! Pridaj svojho psa ako prvý a budeš 48 hodín na vrchole galérie!
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+              <Link to="/pridat" className="px-6 py-3 rounded-xl bg-card text-foreground font-bold shadow-soft">Prihlásiť psa ({priceLabel})</Link>
+              <Link to="/archiv" className="px-6 py-3 rounded-xl bg-foreground/10 text-primary-foreground border border-primary-foreground/40 font-semibold">Archív súťaže</Link>
             </div>
           </div>
         )}
+
 
         <Link to="/galeria" className="md:hidden flex items-center justify-center gap-2 mt-6 text-primary font-semibold">
           Zobraziť všetkých <ArrowRight className="w-4 h-4" />
