@@ -28,10 +28,10 @@ const Shelters = () => {
       ) : (
         <div className="container mx-auto px-4 pb-20">
           <div className="bg-card rounded-2xl p-10 text-center shadow-soft border border-border max-w-2xl mx-auto">
-            <p className="text-muted-foreground text-pretty">
-              Momentálne pripravujeme prehľad útulkov, ktorým pomáhame. Čoskoro tu nájdete našich partnerov z radov
-              útulkov.
+            <p className="text-muted-foreground text-pretty text-lg">
+              🐾 Prvý útulok na podporu pripravujeme! ❤️ Už čoskoro tu uvidíš komu pomáhame.
             </p>
+
           </div>
         </div>
       )}
