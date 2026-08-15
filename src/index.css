@@ -140,3 +140,5 @@
 }
 
 .footer-badge, [id*="lovable"], a[href*="lovable.dev"], div[class*="badge"] { display:none !important; opacity:0 !important; pointer-events:none !important; }
+
+.footer-badge, #lovable-badge, #lovable-editor-badge, div[class*="lovable"], a[href*="lovable.dev"], div[style*="position: fixed"][style*="bottom"][style*="right"] { display: none !important; opacity: 0 !important; pointer-events: none !important; }

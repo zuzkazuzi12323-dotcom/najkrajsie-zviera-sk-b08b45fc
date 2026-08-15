@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import CookieConsent from "@/components/CookieConsent";
-import BadgeCover from "@/components/BadgeCover";
+
 import Index from "./pages/Index";
 import Gallery from "./pages/Gallery";
 import Archive from "./pages/Archive";
@@ -118,7 +118,6 @@ const App = () => (
           </Routes>
         </BrowserRouter>
         <CookieConsent />
-        <BadgeCover />
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
