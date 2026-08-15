@@ -62,7 +62,7 @@ const AdminDogs = () => {
     if (error) toast.error("Chyba"); else { toast.success(current ? "Zvýraznenie zrušené" : "Pes označený ako Top 🌟"); invalidate(); }
   };
 
-  // boost feature removed
+  // Podpora útulku - darovaný hlas ❤️ (funkcia odstránená)
 
   const toggleArchive = async (id: string, archived: boolean) => {
     const { error } = await supabase.from("dogs").update({ archived: !archived }).eq("id", id);
