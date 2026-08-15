@@ -182,7 +182,7 @@ const DogProfile = () => {
               </div>
             </div>
 
-            {/* Boost packages removed */}
+            {/* Podpora útulku - darovaný hlas ❤️ */}
 
             {/* Share button */}
             <div className="relative mb-8">
