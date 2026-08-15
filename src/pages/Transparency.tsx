@@ -69,7 +69,10 @@ const Transparency = () => {
         {isLoading ? (
           <p className="text-center text-muted-foreground">Načítavam záznamy...</p>
         ) : records.length === 0 ? (
-          <p className="text-center text-muted-foreground">Zatiaľ tu nie sú žiadne zverejnené záznamy.</p>
+          <p className="text-center text-muted-foreground text-pretty max-w-2xl mx-auto">
+            Transparentne zverejníme každý dar pre útulky aj s dôkazom o prevode. Prvý záznam čoskoro! ❤️
+          </p>
+
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
             {records.map((r) => <RecordCard key={r.id} r={r} />)}
