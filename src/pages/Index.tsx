@@ -78,20 +78,20 @@ const Index = () => {
   const statItems = [
     { icon: Heart, label: "Celkom hlasov", value: stats?.votes?.toLocaleString() || "0" },
     { icon: Users, label: "Súťažiacich psov", value: stats?.dogs?.toLocaleString() || "0" },
-    { icon: Trophy, label: "Registrovaných", value: stats?.users?.toLocaleString() || "0" },
   ];
 
   const free = REGISTRATION_FREE;
   const priceLabel = free ? "ZADARMO" : PAID_PRICE_LABEL;
+  const hasDogs = (stats?.dogs ?? activeDogs.length) > 0;
 
   const steps = [
     { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
     {
       icon: Gift,
-      title: free ? "Registrácia ZADARMO počas súťaže" : `Registračný poplatok ${PAID_PRICE_LABEL}`,
+      title: free ? "Registrácia ZADARMO počas súťaže" : `Podpora projektu ${PAID_PRICE_LABEL}`,
       desc: free
-        ? `Kým prebieha aktuálna súťaž, registrácia psa je úplne ZADARMO. Po jej ukončení sa poplatok automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
-        : `Jednorazový poplatok ${PAID_PRICE_LABEL} za registráciu psa. 20 % z každej platenej registrácie pôjde útulkom ❤️`,
+        ? `Kým prebieha aktuálna súťaž, registrácia psa je úplne ZADARMO. Po jej ukončení sa poplatok automaticky nastaví na ${PAID_PRICE_LABEL}.`
+        : `Podpora projektu ${PAID_PRICE_LABEL} – z toho 20 % je REZERVOVANÝCH pre útulky ❤️`,
     },
     { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
     { icon: Share2, title: "Zdieľajte a zbierajte hlasy", desc: "Zdieľajte profil psa s rodinou a priateľmi." },
