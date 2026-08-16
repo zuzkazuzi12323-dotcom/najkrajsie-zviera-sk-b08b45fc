@@ -348,21 +348,28 @@ const Index = () => {
 
       {/* O projekte */}
       <section id="o-projekte" className="container mx-auto px-4 pb-12 scroll-mt-20">
-        <div className="bg-card rounded-2xl p-6 md:p-10 shadow-soft border border-primary/10 max-w-3xl mx-auto text-center">
-          <PawPrint className="w-10 h-10 text-primary mx-auto mb-3" />
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">O projekte</h2>
-          <p className="text-muted-foreground text-pretty mb-3">
-            Projekt <strong className="text-foreground">NajkrajšíPes.eu</strong> vytvorila <strong className="text-foreground">Zuzana Biháriová</strong>.
-          </p>
-          <p className="text-muted-foreground text-pretty mb-3">
-            Ide o slovenskú online súťaž pre majiteľov psov, kde môžu registrovať svojho psa a zapojiť ho do verejného hlasovania.
-          </p>
-          <p className="text-muted-foreground text-pretty">
-            Cieľom projektu je budovanie komunity milovníkov psov na Slovensku a transparentná pomoc útulkom pre zvieratá. Z každej registrácie ide 20 % na útulky. 🐾
-          </p>
-          <p className="text-sm font-medium text-foreground mt-4">Organizátor projektu: Zuzana Biháriová</p>
+        <div className="bg-card rounded-2xl p-6 md:p-10 shadow-soft border border-primary/10 max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">O projekte</h2>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_260px] gap-6 md:gap-8 items-center">
+            <div>
+              <p className="text-muted-foreground text-pretty leading-relaxed">
+                Volám sa <strong className="text-foreground">Zuzana Biháriová</strong> a milujem psov! 🐶 Preto som vytvorila{" "}
+                <strong className="text-foreground">NajkrajšíPes.eu</strong> – miesto kde sa stretávajú milovníci psov z celého
+                Slovenska. Mojím cieľom je vybudovať najväčšiu komunitu psíčkarov a zároveň POMÁHAŤ. Preto z každej registrácie
+                putuje 20 % priamo pre útulky. Ja osobne si z toho neberiem žiadny zisk, 80 % ide na prevádzku stránky, platby a
+                ceny pre víťazov a 20 % je rezervovaných pre útulky. Ďakujem že ste tu! ❤️
+              </p>
+              <p className="text-sm font-medium text-foreground mt-4">Organizátorka projektu: Zuzana Biháriová</p>
+            </div>
+            <div className="aspect-[3/4] rounded-2xl border-2 border-dashed border-primary/40 bg-secondary/40 flex flex-col items-center justify-center text-center p-4">
+              <PawPrint className="w-10 h-10 text-primary mb-2" />
+              <p className="text-sm font-semibold text-foreground">Miesto pre moju fotku so psom</p>
+              <p className="text-xs text-muted-foreground mt-1">Fotku doplníme sem 📸</p>
+            </div>
+          </div>
         </div>
       </section>
+
 
 
       {/* Shelters we support (featured shown above, so excluded here to avoid duplication) */}
