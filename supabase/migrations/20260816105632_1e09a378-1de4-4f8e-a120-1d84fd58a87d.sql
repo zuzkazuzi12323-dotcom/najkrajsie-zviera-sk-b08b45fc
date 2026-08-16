@@ -1,0 +1,7 @@
+UPDATE public.site_content SET value = replace(value, 'NajkrajšíPes.sk', 'NajkrajšíPes.eu') WHERE value LIKE '%NajkrajšíPes.sk%';
+UPDATE public.site_content SET value = 'info@najkrajsipes.eu' WHERE key = 'contact.email' AND value = 'info@najkrajsiepes.sk';
+UPDATE public.site_content SET value = 'Prevádzkovateľ: Zuzana Biháriová, fyzická osoba, kontakt infonajkrajsipes@gmail.com. Stránka NajkrajšíPes.eu zbiera a spracúva iba údaje nevyhnutné pre fungovanie súťaže a doručenie výhry víťazovi.' WHERE key = 'privacy.intro';
+UPDATE public.site_content SET value = E'Meno psa\nFotka psa\nMeno majiteľa\nE-mailová adresa\nPlatby cez Stripe (údaje o platobnej karte nevidíme)' WHERE key = 'privacy.section1.body';
+UPDATE public.site_content SET value = 'Súťaž Najkrajší pes Slovenska, hlasovanie a informovanie o priebehu a výsledkoch súťaže. Údaje uchovávame do konca súťaže + 30 dní, potom ich na požiadanie vymažeme.' WHERE key = 'privacy.section2.body';
+UPDATE public.site_content SET value = '1 účet = 1 hlas za 24 hodín. Hlasovanie je bezplatné a je potrebné byť prihlásený. Boty, automatizované skripty a kupovanie hlasov sú zakázané.' WHERE key = 'privacy.section3.body';
+UPDATE public.site_content SET value = 'Máte právo na prístup k svojim údajom, ich opravu, vymazanie a prenosnosť v súlade s GDPR. Pre uplatnenie práv nás kontaktujte e-mailom na infonajkrajsipes@gmail.com.' WHERE key = 'privacy.section4.body';
