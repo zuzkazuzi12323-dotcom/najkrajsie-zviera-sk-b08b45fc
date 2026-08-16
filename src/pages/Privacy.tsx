@@ -22,13 +22,13 @@ const Privacy = () => {
 
         <div className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated space-y-6 text-foreground/80 leading-relaxed">
           <p className="whitespace-pre-line">
-            {t("privacy.intro", "Stránka NajkrajšíPes.eu zbiera a spracúva iba údaje nevyhnutné pre fungovanie súťaže a doručenie výhry víťazovi. Vaše práva sú pre nás prioritou.")}
+            {t("privacy.intro", "Prevádzkovateľ: Zuzana Biháriová, fyzická osoba, kontakt infonajkrajsipes@gmail.com. Stránka NajkrajšíPes.eu zbiera a spracúva iba údaje nevyhnutné pre fungovanie súťaže a doručenie výhry víťazovi.")}
           </p>
 
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section1.title", "Aké údaje zbierame")}</h2>
             <ul className="list-disc list-inside space-y-1">
-              {splitLines(t("privacy.section1.body", "E-mailová adresa\nMeno alebo prezývka\nFotografie a informácie o psovi\nPlatobné údaje (registračný poplatok 1,99 €, dary)\nInformácie o príspevkoch")).map((line, i) => (
+              {splitLines(t("privacy.section1.body", "Meno psa\nFotka psa\nMeno majiteľa\nE-mailová adresa\nPlatby cez Stripe (údaje o platobnej karte nevidíme)")).map((line, i) => (
                 <li key={i}>{line}</li>
               ))}
             </ul>
@@ -36,17 +36,22 @@ const Privacy = () => {
 
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section2.title", "Účel spracovania")}</h2>
-            <p className="whitespace-pre-line">{t("privacy.section2.body", "Údaje používame výhradne na fungovanie súťaže.")}</p>
+            <p className="whitespace-pre-line">{t("privacy.section2.body", "Súťaž Najkrajší pes Slovenska, hlasovanie a informovanie o priebehu a výsledkoch súťaže.")}</p>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-bold text-foreground mb-2">Doba uchovania</h2>
+            <p>Údaje uchovávame do konca súťaže + 30 dní. Následne ich na požiadanie bezodkladne vymažeme.</p>
           </div>
 
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section3.title", "Hlasovanie")}</h2>
-            <p className="whitespace-pre-line">{t("privacy.section3.body", "Bezplatné hlasy sú obmedzené na 1 hlas za 24 hodín z jedného účtu.")}</p>
+            <p className="whitespace-pre-line">{t("privacy.section3.body", "1 účet = 1 hlas za 24 hodín. Boty, automatizované skripty a kupovanie hlasov sú zakázané.")}</p>
           </div>
 
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">{t("privacy.section4.title", "Vaše práva")}</h2>
-            <p className="whitespace-pre-line">{t("privacy.section4.body", "Máte právo na prístup, opravu a vymazanie údajov.")}</p>
+            <p className="whitespace-pre-line">{t("privacy.section4.body", "Máte právo na prístup, opravu a vymazanie údajov – stačí nám napísať e-mailom na infonajkrajsipes@gmail.com.")}</p>
             {user && (
               <div className="mt-4">
                 <Link to="/nastavenia" className="text-primary font-semibold hover:underline">
@@ -57,12 +62,22 @@ const Privacy = () => {
           </div>
 
           <div>
-            <h2 className="text-lg font-bold text-foreground mb-2">Cookies</h2>
+            <h2 className="text-lg font-bold text-foreground mb-2">Registrácia a platby</h2>
             <p>
-              Používame nevyhnutné cookies pre správne fungovanie stránky. Analytické cookies
-              používame len s vaším súhlasom.
+              Registrácia <strong>1,99 €</strong> je dobrovoľná podpora projektu a je nevratná, okrem technickej chyby platby.
+              20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky. 80 % ide na prevádzku stránky,
+              vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk. Reklamácie posielajte na
+              infonajkrajsipes@gmail.com do 14 dní.
             </p>
           </div>
+
+          <div>
+            <h2 className="text-lg font-bold text-foreground mb-2">Cookies</h2>
+            <p>
+              Používame len nevyhnutné cookies potrebné pre hlasovanie a správne fungovanie stránky.
+            </p>
+          </div>
+
 
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">Registrácia útulkov</h2>
