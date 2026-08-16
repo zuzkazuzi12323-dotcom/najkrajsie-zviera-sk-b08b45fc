@@ -13,7 +13,7 @@ const VARIANTS = [
 
 // Predefined quick announcement templates — one click fills the form, then edit or send instantly
 const QUICK_TEMPLATES: { title: string; message: string; variant: string }[] = [
-  { title: "Nový útulok bol pridaný", message: "Do projektu NajkrajšíPes.sk pribudol nový útulok. Pozrite si jeho profil a podporte zvieratká, ktoré potrebujú pomoc. 🐾", variant: "success" },
+  { title: "Nový útulok bol pridaný", message: "Do projektu NajkrajšíPes.eu pribudol nový útulok. Pozrite si jeho profil a podporte zvieratká, ktoré potrebujú pomoc. 🐾", variant: "success" },
   { title: "Nové zvieratá boli pridané", message: "Pridali sme nové zvieratká do súťaže! Príďte si ich pozrieť a zahlasujte za svojho favorita. 🐶", variant: "info" },
   { title: "Hľadáme dobrovoľníkov", message: "Hľadáme obetavých dobrovoľníkov, ktorí chcú pomôcť útulkom. Ak máte chuť pomáhať, ozvite sa nám – každá ruka je vzácna! ❤️", variant: "info" },
   { title: "Zvieratká čakajú na adopciu", message: "Mnohé zvieratká stále čakajú na svoj domov. Zvážte adopciu a darujte im druhú šancu na šťastný život. 🏡", variant: "info" },

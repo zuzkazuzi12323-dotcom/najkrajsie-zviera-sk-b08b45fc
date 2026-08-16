@@ -14,7 +14,7 @@ const SupportSuccess = () => (
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Ďakujeme za podporu! 🐾❤️</h1>
         <p className="text-muted-foreground mb-8">
-          Tvoj príspevok pomáha udržať projekt NajkrajšíPes.sk v chode a 20 % putuje útulkom pre zvieratá.
+          Tvoj príspevok pomáha udržať projekt NajkrajšíPes.eu v chode a 20 % putuje útulkom pre zvieratá.
           Tvoja podpora sa čoskoro zobrazí v zozname podporovateľov.
         </p>
         <div className="flex flex-wrap justify-center gap-3">

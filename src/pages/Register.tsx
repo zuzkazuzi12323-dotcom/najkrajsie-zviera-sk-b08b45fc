@@ -58,7 +58,7 @@ const Register = () => {
               <p className="font-semibold text-foreground mb-2">📩 Ako pokračovať:</p>
               <ol className="list-decimal list-inside space-y-1">
                 <li>Otvorte si <strong>Gmail</strong> (alebo iný email)</li>
-                <li>Nájdite správu od <strong>NajkrajšíPes.sk</strong></li>
+                <li>Nájdite správu od <strong>NajkrajšíPes.eu</strong></li>
                 <li>Kliknite na odkaz <strong>„Potvrdiť registráciu"</strong></li>
                 <li>Po potvrdení sa môžete prihlásiť</li>
               </ol>

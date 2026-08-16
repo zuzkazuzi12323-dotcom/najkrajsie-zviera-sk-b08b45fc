@@ -165,7 +165,7 @@ const ShelterDetail = () => {
               )}
 
               <p className="text-xs text-muted-foreground mt-6 leading-relaxed border-t border-border pt-4">
-                Peniaze posielate priamo na účet útulku. NajkrajšíPes.sk nie je sprostredkovateľ platby a neprijíma tieto
+                Peniaze posielate priamo na účet útulku. NajkrajšíPes.eu nie je sprostredkovateľ platby a neprijíma tieto
                 finančné prostriedky.
               </p>
             </div>

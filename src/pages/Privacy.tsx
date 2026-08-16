@@ -22,7 +22,7 @@ const Privacy = () => {
 
         <div className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated space-y-6 text-foreground/80 leading-relaxed">
           <p className="whitespace-pre-line">
-            {t("privacy.intro", "Stránka NajkrajšíPes.sk zbiera a spracúva iba údaje nevyhnutné pre fungovanie súťaže a doručenie výhry víťazovi. Vaše práva sú pre nás prioritou.")}
+            {t("privacy.intro", "Stránka NajkrajšíPes.eu zbiera a spracúva iba údaje nevyhnutné pre fungovanie súťaže a doručenie výhry víťazovi. Vaše práva sú pre nás prioritou.")}
           </p>
 
           <div>

@@ -18,7 +18,7 @@ const Contact = () => {
           <div className="bg-card rounded-2xl p-8 shadow-elevated">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Heart className="w-5 h-5 text-primary fill-primary" />
-              <span className="font-bold text-foreground">NajkrajšíPes.sk</span>
+              <span className="font-bold text-foreground">NajkrajšíPes.eu</span>
             </div>
             <a
               href="mailto:infonajkrajsipes@gmail.com"

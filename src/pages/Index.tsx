@@ -138,7 +138,7 @@ const Index = () => {
               <span className="text-sm font-semibold text-primary uppercase tracking-wider">Online súťaž o najkrajšieho psa Slovenska</span>
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-4 leading-tight">
-              NajkrajšíPes.sk
+              NajkrajšíPes.eu
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
               🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>.{" "}
@@ -337,7 +337,7 @@ const Index = () => {
           <PawPrint className="w-10 h-10 text-primary mx-auto mb-3" />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">O projekte</h2>
           <p className="text-muted-foreground text-pretty mb-3">
-            Projekt <strong className="text-foreground">NajkrajšíPes.sk</strong> vytvorila <strong className="text-foreground">Zuzana Biháriová</strong>.
+            Projekt <strong className="text-foreground">NajkrajšíPes.eu</strong> vytvorila <strong className="text-foreground">Zuzana Biháriová</strong>.
           </p>
           <p className="text-muted-foreground text-pretty mb-3">
             Ide o slovenskú online súťaž pre majiteľov psov, kde môžu registrovať svojho psa a zapojiť ho do verejného hlasovania.

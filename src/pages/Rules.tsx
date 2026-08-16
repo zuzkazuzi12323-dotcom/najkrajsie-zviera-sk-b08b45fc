@@ -21,7 +21,7 @@ const Rules = () => {
 
           <div className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated space-y-8">
             <p className="text-foreground/80 text-lg leading-relaxed">
-              Súťaž NajkrajšíPes.sk je online súťaž o najkrajšieho psa na Slovensku.
+              Súťaž NajkrajšíPes.eu je online súťaž o najkrajšieho psa na Slovensku.
             </p>
 
             <div>
@@ -122,7 +122,7 @@ const Rules = () => {
               <ul className="space-y-3 text-foreground/80">
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> Každý týždeň zverejňujeme jeden <strong>aktuálne podporovaný útulok</strong>, ktorý sa automaticky strieda.</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> Útulku môžete prispieť priamo cez <strong>SEPA QR kód</strong> na jeho profile – <strong>100 %</strong> vášho príspevku ide priamo na účet útulku.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> NajkrajšíPes.sk nie je sprostredkovateľ platby a tieto finančné prostriedky neprijíma.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> NajkrajšíPes.eu nie je sprostredkovateľ platby a tieto finančné prostriedky neprijíma.</li>
               </ul>
             </div>
 

@@ -68,7 +68,7 @@ const Navbar = () => {
         <Link to="/" className="flex items-center gap-2 group">
           <Heart className="w-7 h-7 text-primary fill-primary group-hover:scale-110 transition-transform" />
           <span className="text-xl font-bold tracking-tight text-foreground">
-            NajkrajšíPes<span className="text-primary">.sk</span>
+            NajkrajšíPes<span className="text-primary">.eu</span>
           </span>
         </Link>
 

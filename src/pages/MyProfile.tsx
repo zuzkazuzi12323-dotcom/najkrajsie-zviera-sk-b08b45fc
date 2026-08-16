@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const PUBLIC_SITE_URL = "https://najkrajsie-zviera-sk.lovable.app";
+const PUBLIC_SITE_URL = "https://najkrajsipes.eu";
 
 const MyProfile = () => {
   const { user, profile } = useAuth();
@@ -71,8 +71,8 @@ const MyProfile = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${partnerShelter?.name} – NajkrajšíPes.sk`,
-          text: "Zapojte svojho psa do súťaže NajkrajšíPes.sk a podporte náš útulok 🐾",
+          title: `${partnerShelter?.name} – NajkrajšíPes.eu`,
+          text: "Zapojte svojho psa do súťaže NajkrajšíPes.eu a podporte náš útulok 🐾",
           url: partnerLink,
         });
       } catch { /* canceled */ }
