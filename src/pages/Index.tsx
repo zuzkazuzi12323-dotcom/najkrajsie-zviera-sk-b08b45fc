@@ -165,22 +165,37 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Stats */}
+      {/* Stats / nový ročník */}
       <section className="container mx-auto px-4 -mt-8 relative z-10">
-        <div className="grid grid-cols-3 gap-3 md:gap-4">
-          {statItems.map((stat) => (
-            <div key={stat.label} className="bg-card rounded-2xl p-4 md:p-6 shadow-elevated flex items-center gap-3 md:gap-4">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl gradient-golden flex items-center justify-center shrink-0">
-                <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
+        {hasDogs ? (
+          <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-2xl">
+            {statItems.map((stat) => (
+              <div key={stat.label} className="bg-card rounded-2xl p-4 md:p-6 shadow-elevated flex items-center gap-3 md:gap-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl gradient-golden flex items-center justify-center shrink-0">
+                  <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-lg md:text-2xl font-bold tabular-nums text-card-foreground">{stat.value}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground truncate">{stat.label}</p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p className="text-lg md:text-2xl font-bold tabular-nums text-card-foreground">{stat.value}</p>
-                <p className="text-xs md:text-sm text-muted-foreground truncate">{stat.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-card rounded-3xl p-6 md:p-10 shadow-elevated border-2 border-primary/30 text-center">
+            <p className="text-xl md:text-3xl font-bold text-foreground text-pretty">
+              🎉 Nový ročník práve odštartoval! Pridaj svojho psa ako prvý a budeš 48 hodín na vrchole galérie!
+            </p>
+            <Link
+              to="/pridat"
+              className="mt-6 inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg active:scale-95 transition-transform"
+            >
+              <PawPrint className="w-5 h-5" /> Prihlásiť psa ({priceLabel})
+            </Link>
+          </div>
+        )}
       </section>
+
 
       {/* Aktuálne podporovaný útulok */}
       <FeaturedShelterSection />
