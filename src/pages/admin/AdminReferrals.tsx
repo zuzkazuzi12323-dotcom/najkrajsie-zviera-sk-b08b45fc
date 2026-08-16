@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Eye, PawPrint, Wallet, Send } from "lucide-react";
 
-const PUBLIC_SITE_URL = "https://najkrajsie-zviera-sk.lovable.app";
+const PUBLIC_SITE_URL = "https://najkrajsipes.eu";
 
 type PartnerRow = {
   id: string;

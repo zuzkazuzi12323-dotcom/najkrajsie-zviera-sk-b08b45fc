@@ -71,7 +71,7 @@ const AccountSettings = () => {
         ? `<table>${tableHead(["Komentár", "Dátum"])}${comments.map(c => tableRow([c.text, formatDate(c.created_at)])).join("")}</table>`
         : `<p class="empty">Žiadne komentáre</p>`;
 
-      const html = `<!DOCTYPE html><html lang="sk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Moje údaje – NajkrajšíPes.sk</title><style>${css}</style></head><body>
+      const html = `<!DOCTYPE html><html lang="sk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Moje údaje – NajkrajšíPes.eu</title><style>${css}</style></head><body>
         <div class="header">
           <div class="logo">🐾 NAJKRAJŠÍPES.SK</div>
           <h1>Export osobných údajov</h1>
@@ -86,7 +86,7 @@ const AccountSettings = () => {
         <div class="section"><h2>🗳️ Moje hlasy</h2>${votesHtml}</div>
         <div class="section"><h2>💳 Moje platby</h2>${paymentsHtml}</div>
         <div class="section"><h2>💬 Moje komentáre</h2>${commentsHtml}</div>
-        <div class="footer">Tento dokument bol automaticky vygenerovaný zo stránky NajkrajšíPes.sk<br>Vaše údaje sú chránené podľa GDPR (Nariadenie EÚ 2016/679)</div>
+        <div class="footer">Tento dokument bol automaticky vygenerovaný zo stránky NajkrajšíPes.eu<br>Vaše údaje sú chránené podľa GDPR (Nariadenie EÚ 2016/679)</div>
       </body></html>`;
 
       const blob = new Blob([html], { type: "text/html" });

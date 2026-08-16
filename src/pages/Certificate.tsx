@@ -68,7 +68,7 @@ const Certificate = () => {
               <Trophy className="w-8 h-8 text-primary-foreground" />
             </div>
             <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-muted-foreground">Digitálny certifikát</p>
-            <h1 className="text-2xl md:text-4xl font-bold text-foreground mt-2">NajkrajšíPes.sk</h1>
+            <h1 className="text-2xl md:text-4xl font-bold text-foreground mt-2">NajkrajšíPes.eu</h1>
 
             <div className="my-8 md:my-10">
               <p className="text-muted-foreground">Tento certifikát sa udeľuje psíkovi</p>
@@ -98,7 +98,7 @@ const Certificate = () => {
               </div>
               <div className="text-right">
                 <p className="text-xs text-muted-foreground">Organizátor</p>
-                <p className="text-sm font-semibold text-foreground">NajkrajšíPes.sk</p>
+                <p className="text-sm font-semibold text-foreground">NajkrajšíPes.eu</p>
               </div>
             </div>
           </div>

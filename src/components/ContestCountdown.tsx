@@ -65,13 +65,13 @@ const ContestCountdown = () => {
 
   return (
     <section className="container mx-auto px-4 mt-6">
-      <div className="bg-card border-2 border-primary/20 rounded-2xl p-4 md:p-6 shadow-soft">
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+      <div className="bg-card border border-primary/20 rounded-xl p-2 md:p-3 shadow-soft max-w-md mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4">
           <div className="flex items-center gap-2 text-center">
-            <Clock className="w-5 h-5 text-primary" />
-            <p className="text-sm md:text-base font-semibold text-foreground">Súťaž končí: <span className="text-primary">{endDate}</span></p>
+            <Clock className="w-4 h-4 text-primary" />
+            <p className="text-xs md:text-sm font-semibold text-foreground">Súťaž končí: <span className="text-primary">{endDate}</span></p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
             {[
               { val: timeLeft.days, label: "dní" },
               { val: timeLeft.hours, label: "hod" },
@@ -79,10 +79,10 @@ const ContestCountdown = () => {
               { val: timeLeft.seconds, label: "sek" },
             ].map((t) => (
               <div key={t.label} className="text-center">
-                <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <span className="text-xl md:text-2xl font-bold tabular-nums text-primary">{String(t.val).padStart(2, "0")}</span>
+                <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <span className="text-[11px] md:text-sm font-bold tabular-nums text-primary">{String(t.val).padStart(2, "0")}</span>
                 </div>
-                <span className="text-[10px] md:text-xs text-muted-foreground mt-1">{t.label}</span>
+                <span className="text-[8px] md:text-[10px] text-muted-foreground">{t.label}</span>
               </div>
             ))}
           </div>

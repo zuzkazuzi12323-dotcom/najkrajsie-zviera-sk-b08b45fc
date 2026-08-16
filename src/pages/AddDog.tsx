@@ -150,7 +150,7 @@ const AddDog = () => {
             🎉 <strong>Práve prebieha súťaž – registrácia je ZADARMO.</strong> Pes sa po odoslaní automaticky zaradí do súťaže. Po ukončení súťaže bude poplatok automaticky {PAID_PRICE_LABEL}.
           </div>
         ) : (
-          <p className="text-muted-foreground mb-8">Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>. Vyplňte formulár, pridajte fotku a po úhrade sa pes okamžite zaradí do súťaže. <strong>20 %</strong> z každej registrácie ide útulkom ❤️</p>
+          <p className="text-muted-foreground mb-8">Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>. Vyplňte formulár, pridajte fotku a po úhrade sa pes okamžite zaradí do súťaže. <strong>20 %</strong> z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️</p>
         )}
 
         {/* Stepper */}
@@ -273,7 +273,7 @@ const AddDog = () => {
                 <p className="text-xs text-muted-foreground pt-1">
                   {isFree
                     ? `Po ukončení aktuálnej súťaže bude poplatok automaticky ${PAID_PRICE_LABEL}. 20 % z každej platenej registrácie ide útulkom ❤️`
-                    : "Jednorazový poplatok. 20 % z každej registrácie ide útulkom ❤️"}
+                    : "Jednorazová podpora projektu. 20 % je REZERVOVANÝCH pre spolupracujúce útulky ❤️, 80 % ide na prevádzku, vývoj, Stripe poplatky a ceny."}
                 </p>
               </div>
               <div className="flex gap-3">

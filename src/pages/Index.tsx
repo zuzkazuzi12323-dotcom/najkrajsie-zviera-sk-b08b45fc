@@ -11,7 +11,7 @@ import SheltersSection from "@/components/SheltersSection";
 import FeaturedShelterSection from "@/components/FeaturedShelterSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { PAID_PRICE_LABEL, REGISTRATION_FREE } from "@/lib/pricing";
+import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT } from "@/lib/pricing";
 
 const fetchDogsWithVotes = async () => {
   const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).eq("archived", false);
@@ -78,20 +78,20 @@ const Index = () => {
   const statItems = [
     { icon: Heart, label: "Celkom hlasov", value: stats?.votes?.toLocaleString() || "0" },
     { icon: Users, label: "Súťažiacich psov", value: stats?.dogs?.toLocaleString() || "0" },
-    { icon: Trophy, label: "Registrovaných", value: stats?.users?.toLocaleString() || "0" },
   ];
 
   const free = REGISTRATION_FREE;
   const priceLabel = free ? "ZADARMO" : PAID_PRICE_LABEL;
+  const hasDogs = (stats?.dogs ?? activeDogs.length) > 0;
 
   const steps = [
     { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
     {
       icon: Gift,
-      title: free ? "Registrácia ZADARMO počas súťaže" : `Registračný poplatok ${PAID_PRICE_LABEL}`,
+      title: free ? "Registrácia ZADARMO počas súťaže" : `Podpora projektu ${PAID_PRICE_LABEL}`,
       desc: free
-        ? `Kým prebieha aktuálna súťaž, registrácia psa je úplne ZADARMO. Po jej ukončení sa poplatok automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
-        : `Jednorazový poplatok ${PAID_PRICE_LABEL} za registráciu psa. 20 % z každej platenej registrácie pôjde útulkom ❤️`,
+        ? `Kým prebieha aktuálna súťaž, registrácia psa je úplne ZADARMO. Po jej ukončení sa poplatok automaticky nastaví na ${PAID_PRICE_LABEL}.`
+        : `Podpora projektu ${PAID_PRICE_LABEL} – z toho 20 % je REZERVOVANÝCH pre útulky ❤️`,
     },
     { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
     { icon: Share2, title: "Zdieľajte a zbierajte hlasy", desc: "Zdieľajte profil psa s rodinou a priateľmi." },
@@ -107,8 +107,8 @@ const Index = () => {
 
   const rules = [
     free
-      ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení súťaže bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom).`
-      : `Registračný poplatok za psa je ${PAID_PRICE_LABEL}. 20 % z každej registrácie pôjde útulkom.`,
+      ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení súťaže bude poplatok automaticky ${PAID_PRICE_LABEL}.`
+      : `Podpora projektu za psa je ${PAID_PRICE_LABEL}. ${RESERVED_SHARE_TEXT}`,
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
     "Víťazom je pes s najviac hlasmi",
@@ -116,7 +116,7 @@ const Index = () => {
   ];
 
   const transparency = [
-    { icon: Heart, title: "20 % útulkom", desc: "Z každej registrácie venujeme 20 % na útulky pre zvieratá." },
+    { icon: Heart, title: "20 % rezervovaných útulkom", desc: RESERVED_SHARE_TEXT },
     { icon: ShieldCheck, title: "Verejne zverejnené", desc: "Názov útulku, dátum odoslania, výška príspevku aj dôkaz o prevode." },
     { icon: CheckCircle2, title: "Maximálna transparentnosť", desc: "Cieľom je maximálna transparentnosť a auditovateľnosť projektu." },
   ];
@@ -138,7 +138,7 @@ const Index = () => {
               <span className="text-sm font-semibold text-primary uppercase tracking-wider">Online súťaž o najkrajšieho psa Slovenska</span>
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-4 leading-tight">
-              NajkrajšíPes.sk
+              NajkrajšíPes.eu
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
               🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>.{" "}
@@ -151,7 +151,7 @@ const Index = () => {
             <p className="text-base md:text-lg text-background/80 mb-8 text-pretty">
               {free
                 ? <>Po skončení akcie bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong>. 20 % z každej platenej registrácie ide útulkom ❤️</>
-                : <>Z každej registrácie venujeme <strong>20 %</strong> na podporu útulkov pre zvieratá ❤️</>}
+                : <><strong>20 %</strong> z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️ 80 % ide na prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.</>}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
@@ -165,22 +165,37 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Stats */}
+      {/* Stats / nový ročník */}
       <section className="container mx-auto px-4 -mt-8 relative z-10">
-        <div className="grid grid-cols-3 gap-3 md:gap-4">
-          {statItems.map((stat) => (
-            <div key={stat.label} className="bg-card rounded-2xl p-4 md:p-6 shadow-elevated flex items-center gap-3 md:gap-4">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl gradient-golden flex items-center justify-center shrink-0">
-                <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
+        {hasDogs ? (
+          <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-2xl">
+            {statItems.map((stat) => (
+              <div key={stat.label} className="bg-card rounded-2xl p-4 md:p-6 shadow-elevated flex items-center gap-3 md:gap-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl gradient-golden flex items-center justify-center shrink-0">
+                  <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-lg md:text-2xl font-bold tabular-nums text-card-foreground">{stat.value}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground truncate">{stat.label}</p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p className="text-lg md:text-2xl font-bold tabular-nums text-card-foreground">{stat.value}</p>
-                <p className="text-xs md:text-sm text-muted-foreground truncate">{stat.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-card rounded-3xl p-6 md:p-10 shadow-elevated border-2 border-primary/30 text-center">
+            <p className="text-xl md:text-3xl font-bold text-foreground text-pretty">
+              🎉 Nový ročník práve odštartoval! Pridaj svojho psa ako prvý a budeš 48 hodín na vrchole galérie!
+            </p>
+            <Link
+              to="/pridat"
+              className="mt-6 inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg active:scale-95 transition-transform"
+            >
+              <PawPrint className="w-5 h-5" /> Prihlásiť psa ({priceLabel})
+            </Link>
+          </div>
+        )}
       </section>
+
 
       {/* Aktuálne podporovaný útulok */}
       <FeaturedShelterSection />
@@ -333,21 +348,28 @@ const Index = () => {
 
       {/* O projekte */}
       <section id="o-projekte" className="container mx-auto px-4 pb-12 scroll-mt-20">
-        <div className="bg-card rounded-2xl p-6 md:p-10 shadow-soft border border-primary/10 max-w-3xl mx-auto text-center">
-          <PawPrint className="w-10 h-10 text-primary mx-auto mb-3" />
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">O projekte</h2>
-          <p className="text-muted-foreground text-pretty mb-3">
-            Projekt <strong className="text-foreground">NajkrajšíPes.sk</strong> vytvorila <strong className="text-foreground">Zuzana Biháriová</strong>.
-          </p>
-          <p className="text-muted-foreground text-pretty mb-3">
-            Ide o slovenskú online súťaž pre majiteľov psov, kde môžu registrovať svojho psa a zapojiť ho do verejného hlasovania.
-          </p>
-          <p className="text-muted-foreground text-pretty">
-            Cieľom projektu je budovanie komunity milovníkov psov na Slovensku a transparentná pomoc útulkom pre zvieratá. Z každej registrácie ide 20 % na útulky. 🐾
-          </p>
-          <p className="text-sm font-medium text-foreground mt-4">Organizátor projektu: Zuzana Biháriová</p>
+        <div className="bg-card rounded-2xl p-6 md:p-10 shadow-soft border border-primary/10 max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">O projekte</h2>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_260px] gap-6 md:gap-8 items-center">
+            <div>
+              <p className="text-muted-foreground text-pretty leading-relaxed">
+                Volám sa <strong className="text-foreground">Zuzana Biháriová</strong> a milujem psov! 🐶 Preto som vytvorila{" "}
+                <strong className="text-foreground">NajkrajšíPes.eu</strong> – miesto kde sa stretávajú milovníci psov z celého
+                Slovenska. Mojím cieľom je vybudovať najväčšiu komunitu psíčkarov a zároveň POMÁHAŤ. Preto z každej registrácie
+                putuje 20 % priamo pre útulky. Ja osobne si z toho neberiem žiadny zisk, 80 % ide na prevádzku stránky, platby a
+                ceny pre víťazov a 20 % je rezervovaných pre útulky. Ďakujem že ste tu! ❤️
+              </p>
+              <p className="text-sm font-medium text-foreground mt-4">Organizátorka projektu: Zuzana Biháriová</p>
+            </div>
+            <div className="aspect-[3/4] rounded-2xl border-2 border-dashed border-primary/40 bg-secondary/40 flex flex-col items-center justify-center text-center p-4">
+              <PawPrint className="w-10 h-10 text-primary mb-2" />
+              <p className="text-sm font-semibold text-foreground">Miesto pre moju fotku so psom</p>
+              <p className="text-xs text-muted-foreground mt-1">Fotku doplníme sem 📸</p>
+            </div>
+          </div>
         </div>
       </section>
+
 
 
       {/* Shelters we support (featured shown above, so excluded here to avoid duplication) */}
@@ -364,7 +386,7 @@ const Index = () => {
           <p className="text-primary-foreground/90 mb-8 max-w-lg mx-auto text-pretty">
             {free
               ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení sa automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
-              : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}, pričom 20 % z každej platenej registrácie venujeme útulkom ❤️`}
+              : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}. ${RESERVED_SHARE_TEXT}`}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to="/pridat" className="inline-flex items-center gap-2 bg-card text-card-foreground px-8 py-4 rounded-full font-bold shadow-elevated text-lg hover:shadow-golden active:scale-95 transition-all">

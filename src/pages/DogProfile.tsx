@@ -102,10 +102,10 @@ const DogProfile = () => {
     toast.success("Komentár pridaný!");
   };
 
-  const publishedDomain = "https://najkrajsie-zviera-sk.lovable.app";
+  const publishedDomain = "https://najkrajsipes.eu";
   const ogDogUrl = `${publishedDomain}/functions/v1/og-dog?id=${dog.id}`;
   const dogUrl = `${publishedDomain}/pes/${dog.id}`;
-  const shareText = `Hlasuj za ${dog.name} v súťaži NajkrajšíPes.sk! 🐾`;
+  const shareText = `Hlasuj za ${dog.name} v súťaži NajkrajšíPes.eu! 🐾`;
 
   const shareLinks = [
     { name: "Facebook", url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ogDogUrl)}&quote=${encodeURIComponent(shareText)}`, color: "bg-[#1877F2]" },

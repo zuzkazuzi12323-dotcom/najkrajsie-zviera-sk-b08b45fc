@@ -16,7 +16,11 @@ export const registrationPriceLabel = (contestActive: boolean): string =>
 export const promoNotice = (contestActive: boolean): string =>
   contestActive
     ? `Počas prebiehajúcej súťaže je registrácia psa ZADARMO. Po ukončení súťaže bude poplatok automaticky ${PAID_PRICE_LABEL}.`
-    : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}. 20 % z každej platenej registrácie ide útulkom.`;
+    : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}. ${RESERVED_SHARE_TEXT}`;
+
+/** Jednotný text o rozdelení podpory 20 / 80. */
+export const RESERVED_SHARE_TEXT =
+  "20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky. 80 % ide na prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.";
 
 /**
  * Globálny prepínač: registrácia psa je platená (súťaž s promo akciou sa skončila).

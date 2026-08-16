@@ -148,12 +148,12 @@ const Donate = () => {
                 // The preview/sandbox URL (id-preview--*.lovable.app) requires login,
                 // so sharing it on Facebook/WhatsApp would force visitors into Lovable login.
                 // Detect preview/sandbox host and fall back to the published URL.
-                const PUBLISHED_URL = "https://najkrajsie-zviera-sk.lovable.app";
+                const PUBLISHED_URL = "https://najkrajsipes.eu";
                 const isPreview = /id-preview--|lovableproject\.com|localhost|127\.0\.0\.1/.test(window.location.host);
                 const shareUrl = isPreview
                   ? `${PUBLISHED_URL}/podporit`
                   : `${window.location.origin}/podporit`;
-                const shareText = "Pomôž útulkom pre opustených psíkov ❤️ Prispej, koľko môžeš na NajkrajšíPes.sk";
+                const shareText = "Pomôž útulkom pre opustených psíkov ❤️ Prispej, koľko môžeš na NajkrajšíPes.eu";
                 const copyLink = async () => {
                   try {
                     await navigator.clipboard.writeText(shareUrl);

@@ -89,7 +89,7 @@ const ShelterApply = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-foreground">Spolupráca s útulkami</h1>
         </div>
         <p className="text-center text-muted-foreground max-w-xl mx-auto text-pretty mb-8">
-          Ste slovenský útulok a chcete sa zapojiť do projektu NajkrajšíPes.sk? Staňte sa naším
+          Ste slovenský útulok a chcete sa zapojiť do projektu NajkrajšíPes.eu? Staňte sa naším
           partnerom a získavajte odmeny za registrácie, ktoré prídu cez váš jedinečný partnerský odkaz.
         </p>
 
@@ -161,7 +161,7 @@ const ShelterApply = () => {
               <input value={form.contact_email} onChange={(e) => set("contact_email", e.target.value)} type="email" placeholder="Kontaktný e-mail *" className={inputClass} />
             </div>
             <p className="text-xs text-muted-foreground -mt-2">
-              Tip: použite rovnaký e-mail, s akým sa prihlasujete na NajkrajšíPes.sk – po schválení sa vám
+              Tip: použite rovnaký e-mail, s akým sa prihlasujete na NajkrajšíPes.eu – po schválení sa vám
               partnerský odkaz automaticky zobrazí vo vašom účte.
             </p>
             <input value={form.contact_phone} onChange={(e) => set("contact_phone", e.target.value)} placeholder="Telefón (nepovinné)" className={inputClass} />

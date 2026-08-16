@@ -21,7 +21,7 @@ const Rules = () => {
 
           <div className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated space-y-8">
             <p className="text-foreground/80 text-lg leading-relaxed">
-              Súťaž NajkrajšíPes.sk je online súťaž o najkrajšieho psa na Slovensku.
+              Súťaž NajkrajšíPes.eu je online súťaž o najkrajšieho psa na Slovensku.
             </p>
 
             <div>
@@ -32,7 +32,7 @@ const Rules = () => {
                 <li className="flex gap-3"><span className="font-bold text-primary">1.</span> Majiteľ psa pridá profil psa s fotkou.</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">2.</span> {free
                   ? <>Kým prebieha aktuálna súťaž, registrácia psa je <strong>ZADARMO</strong>. Po ukončení súťaže bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong> (20 % ide útulkom ❤️).</>
-                  : <>Registračný poplatok je <strong>{PAID_PRICE_LABEL}</strong>, pričom 20 % z každej platenej registrácie pôjde útulkom pre opustené zvieratá ❤️</>}
+                  : <>Podpora projektu je <strong>{PAID_PRICE_LABEL}</strong> – 20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️</>}
                 </li>
                 <li className="flex gap-3"><span className="font-bold text-primary">2a.</span> Hlasovať môžete <strong>1× za 24 hodín</strong> z jedného účtu.</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">3.</span> {free
@@ -55,7 +55,7 @@ const Rules = () => {
                   </>
                 ) : (
                   <>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa zaradí do súťaže <strong>až po úhrade</strong> registračného poplatku {PAID_PRICE_LABEL}.</li>
+                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa zaradí do súťaže <strong>až po úhrade</strong> podpory projektu {PAID_PRICE_LABEL}.</li>
                     <li className="flex gap-3"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
                     <li className="flex gap-3"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
                   </>
@@ -122,7 +122,49 @@ const Rules = () => {
               <ul className="space-y-3 text-foreground/80">
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> Každý týždeň zverejňujeme jeden <strong>aktuálne podporovaný útulok</strong>, ktorý sa automaticky strieda.</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> Útulku môžete prispieť priamo cez <strong>SEPA QR kód</strong> na jeho profile – <strong>100 %</strong> vášho príspevku ide priamo na účet útulku.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> NajkrajšíPes.sk nie je sprostredkovateľ platby a tieto finančné prostriedky neprijíma.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> NajkrajšíPes.eu nie je sprostredkovateľ platby a tieto finančné prostriedky neprijíma.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <Handshake className="w-5 h-5 text-primary" /> Rezervovaná suma pre útulky
+              </h2>
+              <p className="text-foreground/80">
+                20 % z každej úspešnej registrácie je <strong>REZERVOVANÝCH</strong> pre spolupracujúce útulky. 80 % ide na
+                prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.
+              </p>
+              <p className="text-foreground/80 mt-3">
+                Ak v danom kole nespolupracuje žiadny útulok, rezervovaná suma 20 % sa neprepadá, ale presúva sa a akumuluje do
+                ďalšieho kola, kým sa neprihlási prvý útulok. Peniaze určené pre útulky nikdy neostávajú prevádzke.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-primary" /> Pravidlá hlasovania a platby
+              </h2>
+              <ul className="space-y-3 text-foreground/80">
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> <strong>1 účet = 1 hlas za 24 hodín.</strong></li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Zakázané je používanie botov, automatizovaných skriptov a kupovanie hlasov.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Organizátor má právo vyradiť súťažiaceho pri podvode alebo manipulácii hlasovania.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Registrácia <strong>1,99 €</strong> je dobrovoľná podpora projektu a je <strong>nevratná</strong>, okrem technickej chyby na strane platby.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Reklamácie posielajte na <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a> do <strong>14 dní</strong>.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <Handshake className="w-5 h-5 text-primary" /> Prevádzkovateľ a ochrana údajov
+              </h2>
+              <ul className="space-y-3 text-foreground/80">
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Prevádzkovateľ: <strong>Zuzana Biháriová</strong>, fyzická osoba, kontakt <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a>.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Zbierame: meno psa, fotku psa, meno majiteľa, e-mail a platby cez Stripe (údaje o karte nevidíme).</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Účel: súťaž Najkrajší pes Slovenska, hlasovanie a informovanie o súťaži.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Uchovanie: do konca súťaže + 30 dní, potom údaje na požiadanie vymažeme.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Práva: prístup, oprava a vymazanie údajov – e-mailom.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Cookies: len nevyhnutné pre hlasovanie a fungovanie stránky.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Podrobnosti na stránke <Link to="/ochrana-udajov" className="text-primary font-medium hover:underline">Ochrana osobných údajov</Link>.</li>
               </ul>
             </div>
 

@@ -43,7 +43,7 @@ const Register = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md text-center">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
             <Heart className="w-8 h-8 text-primary fill-primary" />
-            <span className="text-2xl font-bold text-foreground">NajkrajšíPes<span className="text-primary">.sk</span></span>
+            <span className="text-2xl font-bold text-foreground">NajkrajšíPes<span className="text-primary">.eu</span></span>
           </Link>
           <div className="bg-card rounded-2xl p-8 shadow-elevated">
             <div className="w-16 h-16 rounded-full gradient-golden flex items-center justify-center mx-auto mb-4">
@@ -58,7 +58,7 @@ const Register = () => {
               <p className="font-semibold text-foreground mb-2">📩 Ako pokračovať:</p>
               <ol className="list-decimal list-inside space-y-1">
                 <li>Otvorte si <strong>Gmail</strong> (alebo iný email)</li>
-                <li>Nájdite správu od <strong>NajkrajšíPes.sk</strong></li>
+                <li>Nájdite správu od <strong>NajkrajšíPes.eu</strong></li>
                 <li>Kliknite na odkaz <strong>„Potvrdiť registráciu"</strong></li>
                 <li>Po potvrdení sa môžete prihlásiť</li>
               </ol>
@@ -82,7 +82,7 @@ const Register = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
             <Heart className="w-8 h-8 text-primary fill-primary" />
-            <span className="text-2xl font-bold text-foreground">NajkrajšíPes<span className="text-primary">.sk</span></span>
+            <span className="text-2xl font-bold text-foreground">NajkrajšíPes<span className="text-primary">.eu</span></span>
           </Link>
           <h1 className="text-3xl font-bold text-foreground">Vytvorte si účet</h1>
           <p className="text-muted-foreground mt-1">Pridajte svojho psa do súťaže</p>

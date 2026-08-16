@@ -47,7 +47,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <Heart className="w-5 h-5 text-primary fill-primary" />
-              <span className="font-bold text-foreground">NajkrajšíPes.sk</span>
+              <span className="font-bold text-foreground">NajkrajšíPes.eu</span>
             </div>
             <p className="text-sm text-muted-foreground text-pretty">
               Online súťaž o najkrajšieho psa na Slovensku. Pridajte svojho miláčika a získajte hlasy!
@@ -79,7 +79,7 @@ const Footer = () => {
               </p>
             </div>
             <p className="text-sm text-foreground mt-4">Organizátor: <span className="font-medium">Zuzana Biháriová</span></p>
-            <p className="text-sm text-muted-foreground mt-1">© 2025 NajkrajšíPes.sk</p>
+            <p className="text-sm text-muted-foreground mt-1">© 2025 NajkrajšíPes.eu</p>
           </div>
         </div>
       </div>
