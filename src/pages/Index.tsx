@@ -11,7 +11,7 @@ import SheltersSection from "@/components/SheltersSection";
 import FeaturedShelterSection from "@/components/FeaturedShelterSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { PAID_PRICE_LABEL, REGISTRATION_FREE } from "@/lib/pricing";
+import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT } from "@/lib/pricing";
 
 const fetchDogsWithVotes = async () => {
   const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).eq("archived", false);
