@@ -31,7 +31,7 @@ const ForgotPassword = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
             <Heart className="w-8 h-8 text-primary fill-primary" />
-            <span className="text-2xl font-bold text-foreground">NajkrajšíPes<span className="text-primary">.sk</span></span>
+            <span className="text-2xl font-bold text-foreground">NajkrajšíPes<span className="text-primary">.eu</span></span>
           </Link>
           <h1 className="text-3xl font-bold text-foreground">Zabudnuté heslo</h1>
           <p className="text-muted-foreground mt-1">Pošleme vám odkaz na obnovenie hesla.</p>
