@@ -107,8 +107,8 @@ const Index = () => {
 
   const rules = [
     free
-      ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení súťaže bude poplatok automaticky ${PAID_PRICE_LABEL} (20 % ide útulkom).`
-      : `Registračný poplatok za psa je ${PAID_PRICE_LABEL}. 20 % z každej registrácie pôjde útulkom.`,
+      ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení súťaže bude poplatok automaticky ${PAID_PRICE_LABEL}.`
+      : `Podpora projektu za psa je ${PAID_PRICE_LABEL}. ${RESERVED_SHARE_TEXT}`,
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
     "Víťazom je pes s najviac hlasmi",
@@ -116,7 +116,7 @@ const Index = () => {
   ];
 
   const transparency = [
-    { icon: Heart, title: "20 % útulkom", desc: "Z každej registrácie venujeme 20 % na útulky pre zvieratá." },
+    { icon: Heart, title: "20 % rezervovaných útulkom", desc: RESERVED_SHARE_TEXT },
     { icon: ShieldCheck, title: "Verejne zverejnené", desc: "Názov útulku, dátum odoslania, výška príspevku aj dôkaz o prevode." },
     { icon: CheckCircle2, title: "Maximálna transparentnosť", desc: "Cieľom je maximálna transparentnosť a auditovateľnosť projektu." },
   ];
