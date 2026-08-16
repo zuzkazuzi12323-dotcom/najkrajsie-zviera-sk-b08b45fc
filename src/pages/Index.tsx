@@ -151,7 +151,7 @@ const Index = () => {
             <p className="text-base md:text-lg text-background/80 mb-8 text-pretty">
               {free
                 ? <>Po skončení akcie bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong>. 20 % z každej platenej registrácie ide útulkom ❤️</>
-                : <>Z každej registrácie venujeme <strong>20 %</strong> na podporu útulkov pre zvieratá ❤️</>}
+                : <><strong>20 %</strong> z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️ 80 % ide na prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.</>}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
@@ -386,7 +386,7 @@ const Index = () => {
           <p className="text-primary-foreground/90 mb-8 max-w-lg mx-auto text-pretty">
             {free
               ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení sa automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
-              : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}, pričom 20 % z každej platenej registrácie venujeme útulkom ❤️`}
+              : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}. ${RESERVED_SHARE_TEXT}`}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to="/pridat" className="inline-flex items-center gap-2 bg-card text-card-foreground px-8 py-4 rounded-full font-bold shadow-elevated text-lg hover:shadow-golden active:scale-95 transition-all">
