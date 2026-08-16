@@ -60,11 +60,47 @@ const Transparency = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Transparentnosť</h1>
           <p className="text-muted-foreground text-pretty">
             Všetky finančné dary útulkom, sponzorské príspevky a darované predmety sú tu verejne archivované a overiteľné.
-            Z každej registrácie a podpory venujeme 20 % na útulky pre zvieratá ❤️. Citlivé údaje (napr. IBAN) zverejňujeme
-            len so súhlasom útulku a v primeranom rozsahu. V sekcii <strong>❤️ Útulok týždňa</strong> každý týždeň
-            zverejňujeme jeden aktuálne podporovaný útulok, ktorému môžete prispieť priamo cez SEPA QR kód.
+            20 % z každej úspešnej registrácie je <strong>REZERVOVANÝCH</strong> pre spolupracujúce útulky. 80 % ide na prevádzku
+            stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk. Citlivé údaje (napr. IBAN) zverejňujeme
+            len so súhlasom útulku a v primeranom rozsahu.
           </p>
         </div>
+
+        {/* Výzva pre útulky */}
+        <div className="max-w-3xl mx-auto mb-10 rounded-2xl border-2 border-primary bg-primary/15 p-6 md:p-8 text-center">
+          <p className="text-lg md:text-2xl font-bold text-foreground text-pretty">
+            Momentálne máme 0 spolupracujúcich útulkov. Ak ste útulok, prihláste sa a celá rezervovaná suma pôjde vám! —{" "}
+            <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary underline">infonajkrajsipes@gmail.com</a>
+          </p>
+          <Link
+            to="/spolupraca-utulky"
+            className="mt-5 inline-flex items-center gap-2 gradient-golden text-primary-foreground px-6 py-3 rounded-full font-bold shadow-golden"
+          >
+            <Heart className="w-4 h-4" /> Som útulok, chcem spolupracovať
+          </Link>
+        </div>
+
+        {/* Prehľad prevodov */}
+        <div className="max-w-4xl mx-auto mb-12 overflow-x-auto rounded-2xl border border-border bg-card">
+          <table className="w-full text-sm">
+            <thead className="bg-secondary/50 text-foreground">
+              <tr>
+                <th className="text-left font-semibold px-4 py-3">Dátum</th>
+                <th className="text-left font-semibold px-4 py-3">Útulok</th>
+                <th className="text-left font-semibold px-4 py-3">Suma</th>
+                <th className="text-left font-semibold px-4 py-3">Doklad o prevode</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colSpan={4} className="px-4 py-6 text-center text-muted-foreground text-pretty">
+                  Zatiaľ žiadne prevody – čakáme na prvý spolupracujúci útulok. Rezervovaná suma sa akumuluje.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
 
         {isLoading ? (
           <p className="text-center text-muted-foreground">Načítavam záznamy...</p>
