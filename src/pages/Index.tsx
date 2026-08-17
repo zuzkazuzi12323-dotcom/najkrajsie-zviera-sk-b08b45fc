@@ -173,10 +173,10 @@ const Index = () => {
                 : <><strong>20 %</strong> z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️ 80 % ide na prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.</>}
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
+              <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg transition-all duration-300 hover:scale-110 hover:brightness-110 hover:shadow-[0_0_40px_hsl(var(--golden-glow)/0.8)] active:scale-95">
                 <PawPrint className="w-5 h-5" /> Pridať psa
               </Link>
-              <Link to="/galeria" className="bg-background/20 backdrop-blur-sm text-background border border-background/40 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg hover:bg-background/30 active:scale-95 transition-all">
+              <Link to="/galeria" className="bg-background/20 backdrop-blur-sm text-background border border-background/40 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg transition-all duration-300 hover:scale-110 hover:bg-background/30 hover:shadow-[0_0_35px_hsl(var(--background)/0.5)] active:scale-95">
                 <Vote className="w-5 h-5" /> Hlasovať v súťaži
               </Link>
             </div>
