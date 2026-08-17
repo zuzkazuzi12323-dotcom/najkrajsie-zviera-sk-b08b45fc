@@ -9,6 +9,7 @@ import ContestCountdown from "@/components/ContestCountdown";
 import PartnersSection from "@/components/PartnersSection";
 import SheltersSection from "@/components/SheltersSection";
 import FeaturedShelterSection from "@/components/FeaturedShelterSection";
+import DogFacts from "@/components/DogFacts";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT } from "@/lib/pricing";
