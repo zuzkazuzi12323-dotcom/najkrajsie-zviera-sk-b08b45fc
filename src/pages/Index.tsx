@@ -10,6 +10,7 @@ import PartnersSection from "@/components/PartnersSection";
 import SheltersSection from "@/components/SheltersSection";
 import FeaturedShelterSection from "@/components/FeaturedShelterSection";
 import DogFacts from "@/components/DogFacts";
+import SampleDogCards from "@/components/SampleDogCards";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT } from "@/lib/pricing";
@@ -285,15 +286,7 @@ const Index = () => {
             {topDogs.map((dog) => <DogCard key={dog.id} dog={dog} userVoted={userVotes.includes(dog.id)} />)}
           </div>
         ) : (
-          <div className="rounded-2xl gradient-golden p-6 md:p-10 text-center shadow-golden">
-            <p className="text-xl md:text-3xl font-bold text-primary-foreground text-pretty">
-              🎉 Nový ročník práve odštartoval! Pridaj svojho psa ako prvý a budeš 48 hodín na vrchole galérie!
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-              <Link to="/pridat" className="px-6 py-3 rounded-xl bg-card text-foreground font-bold shadow-soft">Prihlásiť psa ({priceLabel})</Link>
-              <Link to="/archiv" className="px-6 py-3 rounded-xl bg-foreground/10 text-primary-foreground border border-primary-foreground/40 font-semibold">Archív súťaže</Link>
-            </div>
-          </div>
+          <SampleDogCards priceLabel={priceLabel} />
         )}
 
 
