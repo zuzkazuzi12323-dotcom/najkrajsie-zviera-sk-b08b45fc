@@ -132,13 +132,31 @@ const Index = () => {
           <img src={heroImg} alt="Najkrajší pes Slovenska" className="w-full h-full object-cover" loading="eager" />
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/55 to-foreground/20" />
         </div>
+        {/* Plávajúce labky v pozadí */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          {Array.from({ length: 14 }).map((_, i) => (
+            <span
+              key={i}
+              className="absolute animate-float-paw text-background/40"
+              style={{
+                left: `${(i * 7.3) % 96}%`,
+                bottom: `-${10 + (i % 4) * 8}%`,
+                fontSize: `${14 + (i % 5) * 8}px`,
+                animationDelay: `${(i * 0.9) % 9}s`,
+                animationDuration: `${8 + (i % 5) * 2}s`,
+              }}
+            >
+              {i % 3 === 0 ? "🦴" : "🐾"}
+            </span>
+          ))}
+        </div>
         <div className="relative container mx-auto px-4 py-24 md:py-40">
           <div className="max-w-2xl animate-fade-in">
             <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="w-5 h-5 text-primary" />
+              <Sparkles className="w-5 h-5 text-primary animate-soft-bounce" />
               <span className="text-sm font-semibold text-primary uppercase tracking-wider">Online súťaž o najkrajšieho psa Slovenska</span>
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-4 leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-4 leading-tight origin-left animate-title-pulse">
               NajkrajšíPes.eu
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
