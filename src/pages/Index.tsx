@@ -10,6 +10,7 @@ import PartnersSection from "@/components/PartnersSection";
 import SheltersSection from "@/components/SheltersSection";
 import FeaturedShelterSection from "@/components/FeaturedShelterSection";
 import DogFacts from "@/components/DogFacts";
+import SampleDogCards from "@/components/SampleDogCards";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT } from "@/lib/pricing";
@@ -132,13 +133,31 @@ const Index = () => {
           <img src={heroImg} alt="Najkrajší pes Slovenska" className="w-full h-full object-cover" loading="eager" />
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/55 to-foreground/20" />
         </div>
+        {/* Plávajúce labky v pozadí */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          {Array.from({ length: 14 }).map((_, i) => (
+            <span
+              key={i}
+              className="absolute animate-float-paw text-background/40"
+              style={{
+                left: `${(i * 7.3) % 96}%`,
+                bottom: `-${10 + (i % 4) * 8}%`,
+                fontSize: `${14 + (i % 5) * 8}px`,
+                animationDelay: `${(i * 0.9) % 9}s`,
+                animationDuration: `${8 + (i % 5) * 2}s`,
+              }}
+            >
+              {i % 3 === 0 ? "🦴" : "🐾"}
+            </span>
+          ))}
+        </div>
         <div className="relative container mx-auto px-4 py-24 md:py-40">
           <div className="max-w-2xl animate-fade-in">
             <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="w-5 h-5 text-primary" />
+              <Sparkles className="w-5 h-5 text-primary animate-soft-bounce" />
               <span className="text-sm font-semibold text-primary uppercase tracking-wider">Online súťaž o najkrajšieho psa Slovenska</span>
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-4 leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-4 leading-tight origin-left animate-title-pulse">
               NajkrajšíPes.eu
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
@@ -155,10 +174,10 @@ const Index = () => {
                 : <><strong>20 %</strong> z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️ 80 % ide na prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.</>}
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg active:scale-95 transition-transform">
+              <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg transition-all duration-300 hover:scale-110 hover:brightness-110 hover:shadow-[0_0_40px_hsl(var(--golden-glow)/0.8)] active:scale-95">
                 <PawPrint className="w-5 h-5" /> Pridať psa
               </Link>
-              <Link to="/galeria" className="bg-background/20 backdrop-blur-sm text-background border border-background/40 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg hover:bg-background/30 active:scale-95 transition-all">
+              <Link to="/galeria" className="bg-background/20 backdrop-blur-sm text-background border border-background/40 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg transition-all duration-300 hover:scale-110 hover:bg-background/30 hover:shadow-[0_0_35px_hsl(var(--background)/0.5)] active:scale-95">
                 <Vote className="w-5 h-5" /> Hlasovať v súťaži
               </Link>
             </div>
@@ -267,15 +286,7 @@ const Index = () => {
             {topDogs.map((dog) => <DogCard key={dog.id} dog={dog} userVoted={userVotes.includes(dog.id)} />)}
           </div>
         ) : (
-          <div className="rounded-2xl gradient-golden p-6 md:p-10 text-center shadow-golden">
-            <p className="text-xl md:text-3xl font-bold text-primary-foreground text-pretty">
-              🎉 Nový ročník práve odštartoval! Pridaj svojho psa ako prvý a budeš 48 hodín na vrchole galérie!
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-              <Link to="/pridat" className="px-6 py-3 rounded-xl bg-card text-foreground font-bold shadow-soft">Prihlásiť psa ({priceLabel})</Link>
-              <Link to="/archiv" className="px-6 py-3 rounded-xl bg-foreground/10 text-primary-foreground border border-primary-foreground/40 font-semibold">Archív súťaže</Link>
-            </div>
-          </div>
+          <SampleDogCards priceLabel={priceLabel} />
         )}
 
 
