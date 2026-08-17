@@ -348,27 +348,27 @@ const Index = () => {
 
       {/* O projekte */}
       <section id="o-projekte" className="container mx-auto px-4 pb-12 scroll-mt-20">
-        <div className="bg-card rounded-2xl p-6 md:p-10 shadow-soft border border-primary/10 max-w-4xl mx-auto">
+        <div className="bg-card rounded-2xl p-6 md:p-10 shadow-soft border border-primary/10 max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">O projekte</h2>
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_260px] gap-6 md:gap-8 items-center">
-            <div>
-              <p className="text-muted-foreground text-pretty leading-relaxed">
-                Volám sa <strong className="text-foreground">Zuzana Biháriová</strong> a milujem psov! 🐶 Preto som vytvorila{" "}
-                <strong className="text-foreground">NajkrajšíPes.eu</strong> – miesto kde sa stretávajú milovníci psov z celého
-                Slovenska. Mojím cieľom je vybudovať najväčšiu komunitu psíčkarov a zároveň POMÁHAŤ. Preto z každej registrácie
-                putuje 20 % priamo pre útulky. Ja osobne si z toho neberiem žiadny zisk, 80 % ide na prevádzku stránky, platby a
-                ceny pre víťazov a 20 % je rezervovaných pre útulky. Ďakujem že ste tu! ❤️
-              </p>
-              <p className="text-sm font-medium text-foreground mt-4">Organizátorka projektu: Zuzana Biháriová</p>
-            </div>
-            <div className="aspect-[3/4] rounded-2xl border-2 border-dashed border-primary/40 bg-secondary/40 flex flex-col items-center justify-center text-center p-4">
-              <PawPrint className="w-10 h-10 text-primary mb-2" />
-              <p className="text-sm font-semibold text-foreground">Miesto pre moju fotku so psom</p>
-              <p className="text-xs text-muted-foreground mt-1">Fotku doplníme sem 📸</p>
-            </div>
+          <div className="space-y-4 text-muted-foreground text-pretty leading-relaxed">
+            <p className="text-lg font-semibold text-foreground">Ahoj, som Zuzka! 🐶</p>
+            <p>
+              Milujem psy odmalička a preto som vytvorila <strong className="text-foreground">NajkrajšíPes.eu</strong> – miesto
+              pre všetkých psíčkarov na Slovensku.
+            </p>
+            <p>
+              Chcem aby sa tu stretávali ľudia čo milujú svojich psíkov a zároveň aby sme spolu pomáhali tým, ktorí to
+              potrebujú najviac – psíkom v útulkoch.
+            </p>
+            <p>Ďakujem že si tu a že pomáhaš! ❤️</p>
+            <p className="font-semibold text-foreground">Zuzka</p>
           </div>
+          <p className="text-sm text-muted-foreground mt-5">Organizátorka projektu: Zuzana Biháriová</p>
         </div>
       </section>
+
+      {/* Vedeli ste že...? */}
+      <DogFacts />
 
 
 
