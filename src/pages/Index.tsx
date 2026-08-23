@@ -87,17 +87,17 @@ const Index = () => {
   const hasDogs = (stats?.dogs ?? activeDogs.length) > 0;
 
   const steps = [
-    { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
+    { icon: PawPrint, title: "Pridajte svojho psa", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
     {
       icon: Gift,
-      title: free ? "Registrácia ZADARMO počas súťaže" : `Podpora projektu ${PAID_PRICE_LABEL}`,
+      title: free ? "Registrácia v auguste je zadarmo" : `Podpora projektu ${PAID_PRICE_LABEL}`,
       desc: free
-        ? `Kým prebieha aktuálna súťaž, registrácia psa je úplne ZADARMO. Po jej ukončení sa poplatok automaticky nastaví na ${PAID_PRICE_LABEL}.`
+        ? FREE_ROUND_NOTICE
         : `Podpora projektu ${PAID_PRICE_LABEL} – z toho 20 % je REZERVOVANÝCH pre útulky ❤️`,
     },
-    { icon: CheckCircle2, title: "Pes sa automaticky zaradí", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
-    { icon: Share2, title: "Zdieľajte a zbierajte hlasy", desc: "Zdieľajte profil psa s rodinou a priateľmi." },
-    { icon: Trophy, title: "Víťaz vyhráva", desc: "Pes s najviac hlasmi vyhráva súťaž." },
+    { icon: CheckCircle2, title: "Pes sa automaticky zaradí do hlasovania", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
+    { icon: Share2, title: "Zdieľajte profil a zbierajte hlasy", desc: "Zdieľajte profil psa s rodinou a priateľmi." },
+    { icon: Trophy, title: "Pes s najviac hlasmi vyhráva", desc: `${ROUND_LABEL} má svojho víťaza – a ďalší mesiac štartuje nové kolo.` },
   ];
 
   const prizes = [
@@ -108,14 +108,13 @@ const Index = () => {
   ];
 
   const rules = [
-    free
-      ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení súťaže bude poplatok automaticky ${PAID_PRICE_LABEL}.`
-      : `Podpora projektu za psa je ${PAID_PRICE_LABEL}. ${RESERVED_SHARE_TEXT}`,
+    free ? FREE_ROUND_NOTICE : `Podpora projektu za psa je ${PAID_PRICE_LABEL}. ${RESERVED_SHARE_TEXT}`,
     "Hlasovanie je úplne bezplatné",
     "1 účet = 1 hlas za 24 hodín",
     "Víťazom je pes s najviac hlasmi",
-    "Súťaž prebieha v pravidelných cykloch",
+    MONTHLY_CYCLE_TEXT,
   ];
+
 
   const transparency = [
     { icon: Heart, title: "20 % rezervovaných útulkom", desc: RESERVED_SHARE_TEXT },
