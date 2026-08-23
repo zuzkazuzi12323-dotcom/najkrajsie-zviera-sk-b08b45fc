@@ -154,38 +154,59 @@ const Index = () => {
           <div className="max-w-2xl animate-fade-in">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-primary animate-soft-bounce" />
-              <span className="text-sm font-semibold text-primary uppercase tracking-wider">Online súťaž o najkrajšieho psa Slovenska</span>
+              <span className="text-sm font-semibold text-primary uppercase tracking-wider">{ROUND_LABEL} · Najkrajší pes Slovenska</span>
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-background mb-4 leading-tight origin-left animate-title-pulse">
-              NajkrajšíPes.eu
+              {free ? "🐶 AUGUSTOVÁ SÚŤAŽ ŠTARTUJE ZADARMO! 🇸🇰" : "NajkrajšíPes.eu"}
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-3 text-pretty">
-              🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>.{" "}
               {free ? (
-                <>Registrácia psa je <strong>ZADARMO počas prebiehajúcej súťaže</strong> 🎉</>
+                <>Prihlás svojho psíka do súťaže <strong>Najkrajší pes Slovenska</strong>. Počas augusta je registrácia úplne zadarmo!</>
               ) : (
-                <>Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>.</>
+                <>🐶 Zapojte svojho miláčika do verejného hlasovania o titul <strong>Najkrajší pes Slovenska</strong>. Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>.</>
               )}
             </p>
             <p className="text-base md:text-lg text-background/80 mb-8 text-pretty">
               {free
-                ? <>Po skončení akcie bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong>. 20 % z každej platenej registrácie ide útulkom ❤️</>
+                ? <>{MONTHLY_CYCLE_TEXT}</>
                 : <><strong>20 %</strong> z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️ 80 % ide na prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.</>}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg transition-all duration-300 hover:scale-110 hover:brightness-110 hover:shadow-[0_0_40px_hsl(var(--golden-glow)/0.8)] active:scale-95">
-                <PawPrint className="w-5 h-5" /> Pridať psa
+                <PawPrint className="w-5 h-5" /> {free ? "PRIHLÁSIŤ PSA ZADARMO" : "Pridať psa"}
               </Link>
               <Link to="/galeria" className="bg-background/20 backdrop-blur-sm text-background border border-background/40 px-8 py-4 rounded-full font-bold flex items-center gap-2 text-lg transition-all duration-300 hover:scale-110 hover:bg-background/30 hover:shadow-[0_0_35px_hsl(var(--background)/0.5)] active:scale-95">
                 <Vote className="w-5 h-5" /> Hlasovať v súťaži
               </Link>
             </div>
+            {free && (
+              <p className="mt-4 text-sm md:text-base font-bold text-primary">{PRICE_SWITCH_LINE}</p>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Stats / nový ročník */}
-      <section className="container mx-auto px-4 -mt-8 relative z-10">
+      {/* Výrazný box augustovej akcie */}
+      {free && (
+        <section className="container mx-auto px-4 mt-6">
+          <div className="rounded-3xl border-2 border-primary bg-primary/10 p-6 md:p-8 text-center shadow-golden">
+            <p className="text-2xl md:text-3xl font-extrabold text-foreground">🔥 AUGUSTOVÁ AKCIA 🔥</p>
+            <p className="mt-3 text-lg md:text-xl font-bold text-foreground text-pretty">
+              Registrácia psa je počas celej augustovej súťaže ZADARMO.
+            </p>
+            <p className="mt-1 text-base md:text-lg text-muted-foreground">Od septembra 2026 bude registrácia 1,99 €.</p>
+            <Link
+              to="/pridat"
+              className="mt-5 inline-flex items-center gap-2 gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg active:scale-95 transition-transform"
+            >
+              <PawPrint className="w-5 h-5" /> 🐾 PRIHLÁSIŤ PSA ZADARMO
+            </Link>
+          </div>
+        </section>
+      )}
+
+      {/* Štatistiky / štart kola */}
+      <section className="container mx-auto px-4 mt-6 relative z-10">
         {hasDogs ? (
           <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-2xl">
             {statItems.map((stat) => (
@@ -203,7 +224,7 @@ const Index = () => {
         ) : (
           <div className="bg-card rounded-3xl p-6 md:p-10 shadow-elevated border-2 border-primary/30 text-center">
             <p className="text-xl md:text-3xl font-bold text-foreground text-pretty">
-              🎉 Nový ročník práve odštartoval! Pridaj svojho psa ako prvý a budeš 48 hodín na vrchole galérie!
+              🎉 {ROUND_LABEL} práve odštartovala! Pridaj svojho psa ako prvý a budeš 48 hodín na vrchole galérie!
             </p>
             <Link
               to="/pridat"
@@ -214,6 +235,7 @@ const Index = () => {
           </div>
         )}
       </section>
+
 
 
       {/* Aktuálne podporovaný útulok */}
