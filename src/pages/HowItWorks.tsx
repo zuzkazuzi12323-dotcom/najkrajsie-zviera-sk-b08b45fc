@@ -1,24 +1,25 @@
 import { motion } from "framer-motion";
-import { PawPrint, CreditCard, Users, Trophy } from "lucide-react";
+import { PawPrint, CreditCard, Users, Trophy, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT } from "@/lib/pricing";
+import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT, ROUND_LABEL, FREE_ROUND_NOTICE, MONTHLY_CYCLE_TEXT } from "@/lib/pricing";
 
 const HowItWorks = () => {
   const free = REGISTRATION_FREE;
 
   const steps = [
-    { icon: PawPrint, title: "Pridajte psa do súťaže", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
+    { icon: PawPrint, title: "Pridajte svojho psa", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
     {
       icon: CreditCard,
-      title: free ? "Registrácia ZADARMO počas súťaže" : `Podpora projektu ${PAID_PRICE_LABEL}`,
+      title: free ? "Registrácia v auguste je zadarmo" : `Podpora projektu ${PAID_PRICE_LABEL}`,
       desc: free
-        ? `Kým prebieha aktuálna súťaž, registrácia psa je úplne ZADARMO. Po jej ukončení sa poplatok automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
+        ? FREE_ROUND_NOTICE
         : `Podpora projektu ${PAID_PRICE_LABEL} za psa. ${RESERVED_SHARE_TEXT}`,
     },
-    { icon: Users, title: "Získavajte hlasy od priateľov", desc: "Zdieľajte profil psa a zbierajte hlasy od rodiny a priateľov." },
-    { icon: Trophy, title: "Pes s najviac hlasmi vyhrá", desc: "Víťaz získa titul Najkrajší pes Slovenska a darčeky!" },
+    { icon: CheckCircle2, title: "Pes sa automaticky zaradí do hlasovania", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
+    { icon: Users, title: "Zdieľajte profil a zbierajte hlasy", desc: "Zdieľajte profil psa a zbierajte hlasy od rodiny a priateľov." },
+    { icon: Trophy, title: "Pes s najviac hlasmi vyhráva", desc: "Víťaz získa titul Najkrajší pes Slovenska a darčeky!" },
   ];
 
   return (
@@ -26,7 +27,15 @@ const HowItWorks = () => {
       <Navbar />
       <div className="container mx-auto px-4 py-10 max-w-3xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8 text-center">Ako funguje súťaž</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3 text-center">Ako funguje súťaž</h1>
+          <p className="text-center text-muted-foreground mb-8">{ROUND_LABEL} — {MONTHLY_CYCLE_TEXT}</p>
+          {free && (
+            <div className="mb-8 rounded-3xl border-2 border-primary bg-primary/10 p-6 text-center shadow-golden">
+              <p className="text-2xl font-extrabold text-foreground">🔥 AUGUSTOVÁ AKCIA 🔥</p>
+              <p className="mt-2 font-bold text-foreground">Registrácia psa je počas celej augustovej súťaže ZADARMO.</p>
+              <p className="text-muted-foreground">Od septembra 2026 bude registrácia 1,99 €.</p>
+            </div>
+          )}
 
           <div className="space-y-6">
             {steps.map((step, i) => (

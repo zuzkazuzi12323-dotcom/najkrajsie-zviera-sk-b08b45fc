@@ -13,7 +13,7 @@ import DogFacts from "@/components/DogFacts";
 import SampleDogCards from "@/components/SampleDogCards";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT } from "@/lib/pricing";
+import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT, ROUND_LABEL, FREE_ROUND_NOTICE, PRICE_SWITCH_LINE, MONTHLY_CYCLE_TEXT, FREE_PRICE_LABEL } from "@/lib/pricing";
 
 const fetchDogsWithVotes = async () => {
   const { data: dogsData } = await supabase.from("dogs").select("*").eq("approved", true).eq("archived", false);
@@ -83,7 +83,7 @@ const Index = () => {
   ];
 
   const free = REGISTRATION_FREE;
-  const priceLabel = free ? "ZADARMO" : PAID_PRICE_LABEL;
+  const priceLabel = free ? `ZADARMO – ${FREE_PRICE_LABEL}` : PAID_PRICE_LABEL;
   const hasDogs = (stats?.dogs ?? activeDogs.length) > 0;
 
   const steps = [
@@ -418,7 +418,7 @@ const Index = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">Zapojte sa do súťaže</h2>
           <p className="text-primary-foreground/90 mb-8 max-w-lg mx-auto text-pretty">
             {free
-              ? `Kým prebieha aktuálna súťaž, registrácia psa je ZADARMO. Po ukončení sa automaticky nastaví na ${PAID_PRICE_LABEL} (20 % ide útulkom ❤️).`
+              ? FREE_ROUND_NOTICE
               : `Registrácia psa je jednorazovo ${PAID_PRICE_LABEL}. ${RESERVED_SHARE_TEXT}`}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
