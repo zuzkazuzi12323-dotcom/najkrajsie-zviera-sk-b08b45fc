@@ -90,8 +90,8 @@ const SupportPlatform = () => {
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Podporovatelia</h1>
             <p className="text-muted-foreground mb-8 text-pretty max-w-xl mx-auto">
-              Podporte vývoj a prevádzku projektu NajkrajšíPes.eu.
-              Z každej podpory venujeme <strong>20 % na útulky pre zvieratá</strong>.
+              Vaša podpora ide na 100 % na vývoj a prevádzku projektu NajkrajšíPes.eu,
+              hosting a ceny pre víťazov.
             </p>
           </motion.div>
 
