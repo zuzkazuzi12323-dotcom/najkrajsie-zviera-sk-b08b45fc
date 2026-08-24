@@ -28,18 +28,19 @@ const Rules = () => {
               <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-primary" /> Ako sa zapojiť
               </h2>
-              <ol className="space-y-3 text-foreground/80">
-                <li className="break-words"><span className="font-bold text-primary">1.</span> Majiteľ psa pridá profil psa s fotkou.</li>
-                <li className="break-words"><span className="font-bold text-primary">2.</span> {free
-                  ? <>Kým prebieha aktuálna súťaž, registrácia psa je <strong>ZADARMO</strong>. Po ukončení súťaže bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong> (20 % ide útulkom ❤️).</>
+              <ol className="space-y-3 text-foreground/80 list-none w-full">
+                <li className="block w-full break-words"><span className="font-bold text-primary">1.</span> Majiteľ psa pridá profil psa s fotkou.</li>
+                <li className="block w-full break-words"><span className="font-bold text-primary">2.</span> {free
+                  ? <>V kole august 2026 (1. 8. – 31. 8. 2026) je registrácia psa <strong>ZADARMO</strong>. Od 1. 9. 2026 je poplatok <strong>1,99 €</strong> (20 % ide útulkom ❤️).</>
                   : <>Podpora projektu je <strong>{PAID_PRICE_LABEL}</strong> – 20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️</>}
                 </li>
-                <li className="break-words"><span className="font-bold text-primary">2a.</span> Hlasovať môžete <strong>1× za 24 hodín</strong> z jedného účtu.</li>
-                <li className="break-words"><span className="font-bold text-primary">3.</span> {free
+                <li className="block w-full break-words"><span className="font-bold text-primary">2a.</span> Hlasovať môžete <strong>1× za 24 hodín</strong> z jedného účtu.</li>
+                <li className="block w-full break-words"><span className="font-bold text-primary">3.</span> {free
                   ? <>Po odoslaní prihlášky sa pes <strong>okamžite zaradí do súťaže</strong> a môže získavať hlasy.</>
                   : <>Po úspešnej platbe sa pes okamžite zobrazí v galérii a môže získavať hlasy od návštevníkov.</>}
                 </li>
               </ol>
+
             </div>
 
             <div>
