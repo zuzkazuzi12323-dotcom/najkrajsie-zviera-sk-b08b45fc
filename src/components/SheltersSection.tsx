@@ -1,8 +1,8 @@
-import { Heart, MapPin, ExternalLink, HousePlus, Copy, Landmark, Star } from "lucide-react";
-import { toast } from "sonner";
+import { Heart, MapPin, HousePlus, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useActiveShelters, useSheltersVisible } from "@/hooks/useShelters";
 
-/** Public section showing animal shelters supported by the contest. */
+/** Public section showing animal shelters supported by the contest (compact grid). */
 const SheltersSection = ({
   showHeading = true,
   respectVisibility = false,
@@ -17,16 +17,11 @@ const SheltersSection = ({
 
   if (respectVisibility && !visible) return null;
 
-  // Deduplicate by id, then optionally drop the featured shelter (shown elsewhere).
   const unique = Array.from(new Map(shelters.map((s) => [s.id, s])).values());
   const filtered = excludeFeatured ? unique.filter((s) => !s.featured) : unique;
   if (filtered.length === 0) return null;
 
-  // Featured (currently supported) shelter is always shown first.
   const sorted = [...filtered].sort((a, b) => Number(b.featured) - Number(a.featured));
-
-
-
 
   return (
     <section className="container mx-auto px-4 py-12">
@@ -43,71 +38,37 @@ const SheltersSection = ({
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
         {sorted.map((s) => (
-          <div
+          <Link
             key={s.id}
-            className={`bg-card rounded-2xl p-6 shadow-soft border flex flex-col items-center text-center ${
+            to={`/utulok/${s.id}`}
+            className={`relative bg-card rounded-2xl p-4 shadow-soft border flex flex-col items-center text-center max-h-[280px] transition-transform hover:scale-[1.03] ${
               s.featured ? "border-primary ring-1 ring-primary/30" : "border-border"
             }`}
           >
             {s.featured && (
-              <span className="mb-3 inline-flex items-center gap-1 bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full">
-                <Star className="w-3 h-3 fill-primary" /> Aktuálne podporujeme
+              <span className="absolute top-2 right-2 inline-flex items-center gap-1 bg-primary/10 text-primary text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                <Star className="w-2.5 h-2.5 fill-primary" /> Podporujeme
               </span>
             )}
-            <div className="w-full h-28 bg-white rounded-xl border border-border flex items-center justify-center p-4 mb-4">
+            <div className="w-20 h-20 bg-white rounded-xl border border-border flex items-center justify-center p-2 mb-3 mt-2">
               {s.logo_url ? (
                 <img src={s.logo_url} alt={s.name} className="max-w-full max-h-full object-contain" loading="lazy" />
               ) : (
-                <Heart className="w-10 h-10 text-primary/40 fill-primary/20" />
+                <Heart className="w-8 h-8 text-primary/40 fill-primary/20" />
               )}
             </div>
-            <h3 className="font-bold text-foreground">{s.name}</h3>
+            <h3 className="font-bold text-sm text-foreground line-clamp-2">{s.name}</h3>
             {s.city && (
-              <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5" /> {s.city}
+              <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                <MapPin className="w-3 h-3" /> {s.city}
               </p>
             )}
-            {s.description && <p className="text-sm text-muted-foreground mt-2 text-pretty">{s.description}</p>}
-
-            {s.iban && s.show_iban && (
-              <div className="mt-4 w-full bg-secondary/50 rounded-xl border border-border p-3 text-left">
-                <p className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1">
-                  <Landmark className="w-3.5 h-3.5" /> Číslo účtu (IBAN)
-                </p>
-                {s.bank_holder && <p className="text-xs text-muted-foreground mb-1">{s.bank_holder}</p>}
-                <div className="flex items-center justify-between gap-2">
-                  <code className="text-sm font-semibold text-foreground break-all">{s.iban}</code>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText(s.iban!);
-                      toast.success("IBAN skopírovaný");
-                    }}
-                    title="Kopírovať IBAN"
-                    className="shrink-0 p-1.5 rounded-lg hover:bg-background text-muted-foreground"
-                  >
-                    <Copy className="w-4 h-4" />
-                  </button>
-                </div>
-                <p className="text-[11px] text-muted-foreground mt-2">
-                  Príspevok je dobrovoľný a ide priamo na účet útulku. Web nie je sprostredkovateľ platby.
-                </p>
-              </div>
-            )}
-
-            {s.support_url && (
-              <a
-                href={s.support_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex items-center gap-2 gradient-golden text-primary-foreground px-5 py-2.5 rounded-full font-semibold text-sm shadow-golden transition-transform hover:scale-105"
-              >
-                <Heart className="w-4 h-4" /> Podporiť útulok <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            )}
-          </div>
+            <span className="mt-auto pt-3 inline-flex items-center gap-1.5 gradient-golden text-primary-foreground px-4 py-2 rounded-full font-semibold text-xs shadow-golden">
+              <Heart className="w-3.5 h-3.5" /> Podporiť
+            </span>
+          </Link>
         ))}
       </div>
     </section>
@@ -115,3 +76,4 @@ const SheltersSection = ({
 };
 
 export default SheltersSection;
+
