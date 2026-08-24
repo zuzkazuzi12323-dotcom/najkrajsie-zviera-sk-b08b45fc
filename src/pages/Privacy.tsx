@@ -64,7 +64,7 @@ const Privacy = () => {
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">Registrácia a platby</h2>
             <p>
-              Registrácia <strong>1,99 €</strong> je dobrovoľná podpora projektu a je nevratná, okrem technickej chyby platby.
+              V auguste 2026 je registrácia <strong>ZADARMO</strong>. Od septembra 2026 je registrácia <strong>1,99 €</strong> dobrovoľná podpora projektu a je nevratná, okrem technickej chyby platby.
               20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky. 80 % ide na prevádzku stránky,
               vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk. Reklamácie posielajte na
               infonajkrajsipes@gmail.com do 14 dní.

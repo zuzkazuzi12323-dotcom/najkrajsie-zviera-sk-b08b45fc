@@ -148,7 +148,7 @@ const Rules = () => {
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> <strong>1 účet = 1 hlas za 24 hodín.</strong></li>
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> Zakázané je používanie botov, automatizovaných skriptov a kupovanie hlasov.</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> Organizátor má právo vyradiť súťažiaceho pri podvode alebo manipulácii hlasovania.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Registrácia <strong>1,99 €</strong> je dobrovoľná podpora projektu a je <strong>nevratná</strong>, okrem technickej chyby na strane platby.</li>
+                <li className="flex gap-3"><span className="font-bold text-primary">•</span> V augustovom kole je registrácia <strong>ZADARMO</strong>; od septembra 2026 je registrácia <strong>1,99 €</strong> dobrovoľná podpora projektu a je <strong>nevratná</strong>, okrem technickej chyby na strane platby.</li>
                 <li className="flex gap-3"><span className="font-bold text-primary">•</span> Reklamácie posielajte na <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a> do <strong>14 dní</strong>.</li>
               </ul>
             </div>
