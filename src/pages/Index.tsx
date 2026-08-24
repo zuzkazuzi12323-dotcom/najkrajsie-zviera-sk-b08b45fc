@@ -221,19 +221,8 @@ const Index = () => {
               </div>
             ))}
           </div>
-        ) : (
-          <div className="bg-card rounded-3xl p-6 md:p-10 shadow-elevated border-2 border-primary/30 text-center">
-            <p className="text-xl md:text-3xl font-bold text-foreground text-pretty">
-              🎉 {ROUND_LABEL} práve odštartovala! Pridaj svojho psa ako prvý a budeš 48 hodín na vrchole galérie!
-            </p>
-            <Link
-              to="/pridat"
-              className="mt-6 inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden text-lg active:scale-95 transition-transform"
-            >
-              <PawPrint className="w-5 h-5" /> Prihlásiť psa ({priceLabel})
-            </Link>
-          </div>
-        )}
+        ) : null}
+
       </section>
 
 
