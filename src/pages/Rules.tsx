@@ -10,7 +10,7 @@ const Rules = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="container mx-auto px-4 py-10 max-w-3xl">
+      <div className="container mx-auto px-4 py-10 max-w-3xl overflow-hidden">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 mb-6">
             <div className="w-12 h-12 rounded-xl gradient-golden flex items-center justify-center">
@@ -29,13 +29,13 @@ const Rules = () => {
                 <CheckCircle className="w-5 h-5 text-primary" /> Ako sa zapojiť
               </h2>
               <ol className="space-y-3 text-foreground/80">
-                <li className="flex gap-3"><span className="font-bold text-primary">1.</span> Majiteľ psa pridá profil psa s fotkou.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">2.</span> {free
+                <li className="break-words"><span className="font-bold text-primary">1.</span> Majiteľ psa pridá profil psa s fotkou.</li>
+                <li className="break-words"><span className="font-bold text-primary">2.</span> {free
                   ? <>Kým prebieha aktuálna súťaž, registrácia psa je <strong>ZADARMO</strong>. Po ukončení súťaže bude poplatok automaticky <strong>{PAID_PRICE_LABEL}</strong> (20 % ide útulkom ❤️).</>
                   : <>Podpora projektu je <strong>{PAID_PRICE_LABEL}</strong> – 20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️</>}
                 </li>
-                <li className="flex gap-3"><span className="font-bold text-primary">2a.</span> Hlasovať môžete <strong>1× za 24 hodín</strong> z jedného účtu.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">3.</span> {free
+                <li className="break-words"><span className="font-bold text-primary">2a.</span> Hlasovať môžete <strong>1× za 24 hodín</strong> z jedného účtu.</li>
+                <li className="break-words"><span className="font-bold text-primary">3.</span> {free
                   ? <>Po odoslaní prihlášky sa pes <strong>okamžite zaradí do súťaže</strong> a môže získavať hlasy.</>
                   : <>Po úspešnej platbe sa pes okamžite zobrazí v galérii a môže získavať hlasy od návštevníkov.</>}
                 </li>
@@ -49,15 +49,15 @@ const Rules = () => {
               <ul className="space-y-3 text-foreground/80">
                 {free ? (
                   <>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Kým prebieha aktuálna súťaž, registrácia psa je <strong>ZADARMO</strong> — bez akéhokoľvek poplatku.</li>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Po ukončení súťaže sa poplatok <strong>automaticky nastaví na {PAID_PRICE_LABEL}</strong> za registráciu psa.</li>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Počas súťaže sa pes <strong>ihneď zaradí do galérie a rebríčka</strong> po odoslaní prihlášky.</li>
+                    <li className="break-words"><span className="font-bold text-primary">•</span> Kým prebieha aktuálna súťaž, registrácia psa je <strong>ZADARMO</strong> — bez akéhokoľvek poplatku.</li>
+                    <li className="break-words"><span className="font-bold text-primary">•</span> Po ukončení súťaže sa poplatok <strong>automaticky nastaví na {PAID_PRICE_LABEL}</strong> za registráciu psa.</li>
+                    <li className="break-words"><span className="font-bold text-primary">•</span> Počas súťaže sa pes <strong>ihneď zaradí do galérie a rebríčka</strong> po odoslaní prihlášky.</li>
                   </>
                 ) : (
                   <>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Pes sa zaradí do súťaže <strong>až po úhrade</strong> podpory projektu {PAID_PRICE_LABEL}.</li>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
-                    <li className="flex gap-3"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
+                    <li className="break-words"><span className="font-bold text-primary">•</span> Pes sa zaradí do súťaže <strong>až po úhrade</strong> podpory projektu {PAID_PRICE_LABEL}.</li>
+                    <li className="break-words"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
+                    <li className="break-words"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
                   </>
                 )}
               </ul>
@@ -108,10 +108,10 @@ const Rules = () => {
                 <Handshake className="w-5 h-5 text-primary" /> Registrácia útulkov
               </h2>
               <ul className="space-y-3 text-foreground/80">
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Slovenské útulky sa môžu prihlásiť do projektu cez formulár na stránke <Link to="/spolupraca-utulky" className="text-primary font-medium hover:underline">Spolupráca s útulkami</Link>.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Každá žiadosť sa <strong>neuverejňuje automaticky</strong> – uloží sa do administrácie a je ručne posúdená a schválená organizátorom.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Odoslaním formulára žiadateľ potvrdzuje <strong>pravdivosť uvedených údajov</strong> a súhlasí so spracovaním osobných údajov.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Organizátor si vyhradzuje právo žiadosť <strong>zamietnuť alebo odstrániť</strong> pri podozrení na podvod alebo pri nepravdivých údajoch.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Slovenské útulky sa môžu prihlásiť do projektu cez formulár na stránke <Link to="/spolupraca-utulky" className="text-primary font-medium hover:underline">Spolupráca s útulkami</Link>.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Každá žiadosť sa <strong>neuverejňuje automaticky</strong> – uloží sa do administrácie a je ručne posúdená a schválená organizátorom.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Odoslaním formulára žiadateľ potvrdzuje <strong>pravdivosť uvedených údajov</strong> a súhlasí so spracovaním osobných údajov.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Organizátor si vyhradzuje právo žiadosť <strong>zamietnuť alebo odstrániť</strong> pri podozrení na podvod alebo pri nepravdivých údajoch.</li>
               </ul>
             </div>
 
@@ -120,9 +120,9 @@ const Rules = () => {
                 <Handshake className="w-5 h-5 text-primary" /> ❤️ Útulok týždňa
               </h2>
               <ul className="space-y-3 text-foreground/80">
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Každý týždeň zverejňujeme jeden <strong>aktuálne podporovaný útulok</strong>, ktorý sa automaticky strieda.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Útulku môžete prispieť priamo cez <strong>SEPA QR kód</strong> na jeho profile – <strong>100 %</strong> vášho príspevku ide priamo na účet útulku.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> NajkrajšíPes.eu nie je sprostredkovateľ platby a tieto finančné prostriedky neprijíma.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Každý týždeň zverejňujeme jeden <strong>aktuálne podporovaný útulok</strong>, ktorý sa automaticky strieda.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Útulku môžete prispieť priamo cez <strong>SEPA QR kód</strong> na jeho profile – <strong>100 %</strong> vášho príspevku ide priamo na účet útulku.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> NajkrajšíPes.eu nie je sprostredkovateľ platby a tieto finančné prostriedky neprijíma.</li>
               </ul>
             </div>
 
@@ -145,11 +145,11 @@ const Rules = () => {
                 <CheckCircle className="w-5 h-5 text-primary" /> Pravidlá hlasovania a platby
               </h2>
               <ul className="space-y-3 text-foreground/80">
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> <strong>1 účet = 1 hlas za 24 hodín.</strong></li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Zakázané je používanie botov, automatizovaných skriptov a kupovanie hlasov.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Organizátor má právo vyradiť súťažiaceho pri podvode alebo manipulácii hlasovania.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> V augustovom kole je registrácia <strong>ZADARMO</strong>; od septembra 2026 je registrácia <strong>1,99 €</strong> dobrovoľná podpora projektu a je <strong>nevratná</strong>, okrem technickej chyby na strane platby.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Reklamácie posielajte na <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a> do <strong>14 dní</strong>.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> <strong>1 účet = 1 hlas za 24 hodín.</strong></li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Zakázané je používanie botov, automatizovaných skriptov a kupovanie hlasov.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Organizátor má právo vyradiť súťažiaceho pri podvode alebo manipulácii hlasovania.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> V augustovom kole je registrácia <strong>ZADARMO</strong>; od septembra 2026 je registrácia <strong>1,99 €</strong> dobrovoľná podpora projektu a je <strong>nevratná</strong>, okrem technickej chyby na strane platby.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Reklamácie posielajte na <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a> do <strong>14 dní</strong>.</li>
               </ul>
             </div>
 
@@ -158,13 +158,13 @@ const Rules = () => {
                 <Handshake className="w-5 h-5 text-primary" /> Prevádzkovateľ a ochrana údajov
               </h2>
               <ul className="space-y-3 text-foreground/80">
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Prevádzkovateľ: <strong>Zuzana Biháriová</strong>, fyzická osoba, kontakt <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a>.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Zbierame: meno psa, fotku psa, meno majiteľa, e-mail a platby cez Stripe (údaje o karte nevidíme).</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Účel: súťaž Najkrajší pes Slovenska, hlasovanie a informovanie o súťaži.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Uchovanie: do konca súťaže + 30 dní, potom údaje na požiadanie vymažeme.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Práva: prístup, oprava a vymazanie údajov – e-mailom.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Cookies: len nevyhnutné pre hlasovanie a fungovanie stránky.</li>
-                <li className="flex gap-3"><span className="font-bold text-primary">•</span> Podrobnosti na stránke <Link to="/ochrana-udajov" className="text-primary font-medium hover:underline">Ochrana osobných údajov</Link>.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Prevádzkovateľ: <strong>Zuzana Biháriová</strong>, fyzická osoba, kontakt <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a>.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Zbierame: meno psa, fotku psa, meno majiteľa, e-mail a platby cez Stripe (údaje o karte nevidíme).</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Účel: súťaž Najkrajší pes Slovenska, hlasovanie a informovanie o súťaži.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Uchovanie: do konca súťaže + 30 dní, potom údaje na požiadanie vymažeme.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Práva: prístup, oprava a vymazanie údajov – e-mailom.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Cookies: len nevyhnutné pre hlasovanie a fungovanie stránky.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Podrobnosti na stránke <Link to="/ochrana-udajov" className="text-primary font-medium hover:underline">Ochrana osobných údajov</Link>.</li>
               </ul>
             </div>
 
