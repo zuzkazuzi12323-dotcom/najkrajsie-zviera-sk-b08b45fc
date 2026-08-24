@@ -47,21 +47,22 @@ const Rules = () => {
               <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                 <CreditCard className="w-5 h-5 text-primary" /> Registrácia a platba
               </h2>
-              <ul className="space-y-3 text-foreground/80">
+              <ul className="space-y-3 text-foreground/80 list-none w-full">
                 {free ? (
                   <>
-                    <li className="break-words"><span className="font-bold text-primary">•</span> Kým prebieha aktuálna súťaž, registrácia psa je <strong>ZADARMO</strong> — bez akéhokoľvek poplatku.</li>
-                    <li className="break-words"><span className="font-bold text-primary">•</span> Po ukončení súťaže sa poplatok <strong>automaticky nastaví na {PAID_PRICE_LABEL}</strong> za registráciu psa.</li>
-                    <li className="break-words"><span className="font-bold text-primary">•</span> Počas súťaže sa pes <strong>ihneď zaradí do galérie a rebríčka</strong> po odoslaní prihlášky.</li>
+                    <li className="block w-full break-words"><span className="font-bold text-primary">•</span> V kole august 2026 (1. 8. – 31. 8. 2026) je registrácia psa <strong>ZADARMO</strong> — bez akéhokoľvek poplatku.</li>
+                    <li className="block w-full break-words"><span className="font-bold text-primary">•</span> Od <strong>1. 9. 2026</strong> je poplatok za registráciu psa <strong>1,99 €</strong>.</li>
+                    <li className="block w-full break-words"><span className="font-bold text-primary">•</span> V kole august 2026 sa pes <strong>ihneď zaradí do galérie a rebríčka</strong> po odoslaní prihlášky.</li>
                   </>
                 ) : (
                   <>
-                    <li className="break-words"><span className="font-bold text-primary">•</span> Pes sa zaradí do súťaže <strong>až po úhrade</strong> podpory projektu {PAID_PRICE_LABEL}.</li>
-                    <li className="break-words"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
-                    <li className="break-words"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
+                    <li className="block w-full break-words"><span className="font-bold text-primary">•</span> Pes sa zaradí do súťaže <strong>až po úhrade</strong> podpory projektu {PAID_PRICE_LABEL}.</li>
+                    <li className="block w-full break-words"><span className="font-bold text-primary">•</span> Bez zaplatenia sa pes <strong>nezobrazí v galérii ani v rebríčku</strong> a nemôže prijímať hlasy.</li>
+                    <li className="block w-full break-words"><span className="font-bold text-primary">•</span> Ak platbu zrušíte, zobrazí sa upozornenie, že pes nebol pridaný, a jeho neuhradená registrácia sa automaticky odstráni. Psa môžete kedykoľvek pridať znova.</li>
                   </>
                 )}
               </ul>
+
             </div>
 
             <div>
