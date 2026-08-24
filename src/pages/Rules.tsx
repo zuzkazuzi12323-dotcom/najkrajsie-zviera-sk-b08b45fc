@@ -19,7 +19,7 @@ const Rules = () => {
             <h1 className="text-3xl md:text-4xl font-bold text-foreground">Pravidlá súťaže</h1>
           </div>
 
-          <div className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated space-y-8">
+          <div className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated space-y-8 break-words overflow-hidden">
             <p className="text-foreground/80 text-lg leading-relaxed">
               Súťaž NajkrajšíPes.eu je online súťaž o najkrajšieho psa na Slovensku.
             </p>
@@ -99,7 +99,7 @@ const Rules = () => {
                 pozrite si možnosti na stránke{" "}
                 <Link to="/partneri" className="text-primary font-medium hover:underline">Partneri a sponzori</Link>{" "}
                 alebo nám napíšte na{" "}
-                <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a>.
+                <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline break-all">infonajkrajsipes@gmail.com</a>.
               </p>
             </div>
 
@@ -149,7 +149,7 @@ const Rules = () => {
                 <li className="break-words"><span className="font-bold text-primary">•</span> Zakázané je používanie botov, automatizovaných skriptov a kupovanie hlasov.</li>
                 <li className="break-words"><span className="font-bold text-primary">•</span> Organizátor má právo vyradiť súťažiaceho pri podvode alebo manipulácii hlasovania.</li>
                 <li className="break-words"><span className="font-bold text-primary">•</span> V augustovom kole je registrácia <strong>ZADARMO</strong>; od septembra 2026 je registrácia <strong>1,99 €</strong> dobrovoľná podpora projektu a je <strong>nevratná</strong>, okrem technickej chyby na strane platby.</li>
-                <li className="break-words"><span className="font-bold text-primary">•</span> Reklamácie posielajte na <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a> do <strong>14 dní</strong>.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Reklamácie posielajte na <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline break-all">infonajkrajsipes@gmail.com</a> do <strong>14 dní</strong>.</li>
               </ul>
             </div>
 
@@ -158,7 +158,7 @@ const Rules = () => {
                 <Handshake className="w-5 h-5 text-primary" /> Prevádzkovateľ a ochrana údajov
               </h2>
               <ul className="space-y-3 text-foreground/80">
-                <li className="break-words"><span className="font-bold text-primary">•</span> Prevádzkovateľ: <strong>Zuzana Biháriová</strong>, fyzická osoba, kontakt <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline">infonajkrajsipes@gmail.com</a>.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Prevádzkovateľ: <strong>Zuzana Biháriová</strong>, fyzická osoba, kontakt <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline break-all">infonajkrajsipes@gmail.com</a>.</li>
                 <li className="break-words"><span className="font-bold text-primary">•</span> Zbierame: meno psa, fotku psa, meno majiteľa, e-mail a platby cez Stripe (údaje o karte nevidíme).</li>
                 <li className="break-words"><span className="font-bold text-primary">•</span> Účel: súťaž Najkrajší pes Slovenska, hlasovanie a informovanie o súťaži.</li>
                 <li className="break-words"><span className="font-bold text-primary">•</span> Uchovanie: do konca súťaže + 30 dní, potom údaje na požiadanie vymažeme.</li>
