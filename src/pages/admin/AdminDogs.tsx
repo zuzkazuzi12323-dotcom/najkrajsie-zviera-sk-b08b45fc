@@ -113,7 +113,7 @@ const AdminDogs = () => {
   return (
     <div className="space-y-4">
       <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-800">
-        ℹ️ Registrácia psa je jednorazovo <strong>1,99 €</strong>. Pes sa zaradí do súťaže <strong>až po úspešnej úhrade</strong> cez Stripe. 20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky, 80 % ide na prevádzku, vývoj, Stripe poplatky a ceny.
+        ℹ️ Počas augustovej súťaže 2026 je registrácia psa <strong>ZADARMO</strong> a pes sa zaradí okamžite. Od septembra 2026 je registrácia <strong>1,99 €</strong> a pes sa zaradí až po úspešnej úhrade cez Stripe. 20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky, 80 % ide na prevádzku, vývoj, Stripe poplatky a ceny.
       </div>
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 max-w-sm">
