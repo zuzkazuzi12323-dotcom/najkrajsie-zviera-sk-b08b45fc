@@ -14,6 +14,10 @@ const benefits = [
 const PARTNER_EMAIL = "info@najkrajsipes.eu";
 
 const Partners = () => {
+  useEffect(() => {
+    document.title = "Pre partnerov - najkrajsípes.eu";
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
