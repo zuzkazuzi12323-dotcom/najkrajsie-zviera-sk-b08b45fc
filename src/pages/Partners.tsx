@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Handshake, CheckCircle2, Mail } from "lucide-react";
 import Navbar from "@/components/Navbar";
