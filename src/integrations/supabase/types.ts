@@ -41,6 +41,48 @@ export type Database = {
         }
         Relationships: []
       }
+      affiliates: {
+        Row: {
+          active: boolean
+          clicks: number
+          code: string
+          created_at: string
+          id: string
+          name: string
+          note: string | null
+          paid: boolean
+          paid_at: string | null
+          reward_cents: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          clicks?: number
+          code: string
+          created_at?: string
+          id?: string
+          name: string
+          note?: string | null
+          paid?: boolean
+          paid_at?: string | null
+          reward_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          clicks?: number
+          code?: string
+          created_at?: string
+          id?: string
+          name?: string
+          note?: string | null
+          paid?: boolean
+          paid_at?: string | null
+          reward_cents?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           created_at: string
@@ -118,6 +160,7 @@ export type Database = {
           is_winner: boolean
           name: string
           owner_id: string
+          ref_code: string | null
           updated_at: string
           winner_place: number | null
         }
@@ -135,6 +178,7 @@ export type Database = {
           is_winner?: boolean
           name: string
           owner_id: string
+          ref_code?: string | null
           updated_at?: string
           winner_place?: number | null
         }
@@ -152,6 +196,7 @@ export type Database = {
           is_winner?: boolean
           name?: string
           owner_id?: string
+          ref_code?: string | null
           updated_at?: string
           winner_place?: number | null
         }
@@ -1055,6 +1100,17 @@ export type Database = {
     }
     Functions: {
       add_donation: { Args: { payment_amount: number }; Returns: undefined }
+      affiliate_stats: {
+        Args: { _code: string }
+        Returns: {
+          clicks: number
+          code: string
+          earnings_cents: number
+          name: string
+          paid: boolean
+          registrations: number
+        }[]
+      }
       claim_shelter_for_user: { Args: never; Returns: undefined }
       has_role: {
         Args: {
@@ -1074,6 +1130,7 @@ export type Database = {
         Returns: undefined
       }
       rotate_featured_shelter: { Args: never; Returns: undefined }
+      track_affiliate_click: { Args: { _code: string }; Returns: undefined }
       track_shelter_visit: { Args: { _code: string }; Returns: undefined }
     }
     Enums: {
