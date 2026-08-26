@@ -64,6 +64,7 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <BrowserRouter>
+          <RefBanner />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/galeria" element={<Gallery />} />
