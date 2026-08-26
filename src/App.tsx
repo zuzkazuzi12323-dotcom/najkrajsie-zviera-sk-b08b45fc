@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import CookieConsent from "@/components/CookieConsent";
+import RefBanner from "@/components/RefBanner";
 
 import Index from "./pages/Index";
 import Gallery from "./pages/Gallery";
@@ -63,6 +64,7 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <BrowserRouter>
+          <RefBanner />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/galeria" element={<Gallery />} />
