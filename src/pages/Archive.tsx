@@ -6,8 +6,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DogCard from "@/components/DogCard";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Archive = () => {
+  usePageTitle('Archív psov – NajkrajšíPes.eu', 'Psy z predchádzajúcich kôl súťaže.');
   const [search, setSearch] = useState("");
 
   const { data: dogs = [], isLoading } = useQuery({

@@ -3,8 +3,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SheltersSection from "@/components/SheltersSection";
 import { useActiveShelters } from "@/hooks/useShelters";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Shelters = () => {
+  usePageTitle('Útulky, ktorým pomáhame – NajkrajšíPes.eu', 'Zoznam spolupracujúcich útulkov a možnosť podporiť ich priamo QR platbou.');
   const { data: shelters = [] } = useActiveShelters();
 
   return (

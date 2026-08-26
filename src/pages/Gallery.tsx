@@ -7,8 +7,10 @@ import DogCard from "@/components/DogCard";
 import SponsorBanner from "@/components/SponsorBanner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Gallery = () => {
+  usePageTitle('Galéria psov – NajkrajšíPes.eu', 'Prezrite si všetkých psov v aktuálnej súťaži a hlasujte za svojho favorita.');
   const [search, setSearch] = useState("");
   const [selectedBreed, setSelectedBreed] = useState("Všetky");
   const [sortBy, setSortBy] = useState<"votes" | "name" | "newest">("votes");

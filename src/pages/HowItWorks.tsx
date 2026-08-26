@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PAID_PRICE_LABEL, REGISTRATION_FREE, RESERVED_SHARE_TEXT, ROUND_LABEL, FREE_ROUND_NOTICE, MONTHLY_CYCLE_TEXT } from "@/lib/pricing";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const HowItWorks = () => {
+  usePageTitle('Ako funguje súťaž – NajkrajšíPes.eu', 'Ako prihlásiť psa, ako sa hlasuje a ako vyhlasujeme víťaza každý mesiac.');
   const free = REGISTRATION_FREE;
 
   const steps = [

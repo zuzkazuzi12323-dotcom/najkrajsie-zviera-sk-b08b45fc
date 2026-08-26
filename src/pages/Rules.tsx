@@ -4,8 +4,10 @@ import { BookOpen, CheckCircle, Trophy, Gift, CreditCard, Handshake } from "luci
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PAID_PRICE_LABEL, REGISTRATION_FREE } from "@/lib/pricing";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Rules = () => {
+  usePageTitle('Pravidlá súťaže – NajkrajšíPes.eu', 'Pravidlá súťaže o najkrajšieho psa: mesačné kolá, hlasovanie a poplatky.');
   const free = REGISTRATION_FREE;
   return (
     <div className="min-h-screen flex flex-col">

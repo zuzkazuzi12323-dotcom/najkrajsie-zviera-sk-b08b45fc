@@ -5,8 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Winners = () => {
+  usePageTitle('Víťazi súťaže – NajkrajšíPes.eu', 'Prehľad víťazov mesačných kôl súťaže o najkrajšieho psa.');
   const { data: topDogs = [] } = useQuery({
     queryKey: ["winners"],
     queryFn: async () => {

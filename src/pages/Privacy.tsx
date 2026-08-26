@@ -4,8 +4,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSiteContent, splitLines } from "@/hooks/useSiteContent";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Privacy = () => {
+  usePageTitle('Ochrana osobných údajov – NajkrajšíPes.eu', 'Ako spracúvame osobné údaje, cookies, sprostredkovatelia a doba uchovávania.');
   const { user } = useAuth();
   const t = useSiteContent();
 

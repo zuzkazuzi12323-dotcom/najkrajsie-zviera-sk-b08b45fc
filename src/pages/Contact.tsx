@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import { Mail, Heart } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Contact = () => {
+  usePageTitle('Kontakt – NajkrajšíPes.eu', 'Kontaktujte organizátorku súťaže Zuzanu Biháriovú.');
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
