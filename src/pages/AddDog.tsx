@@ -35,6 +35,7 @@ const AddDog = () => {
     if (ref) {
       try { localStorage.setItem(REF_STORAGE_KEY, ref); } catch { /* ignore */ }
       supabase.rpc("track_shelter_visit", { _code: ref });
+      supabase.rpc("track_affiliate_click", { _code: ref });
     }
   }, [searchParams]);
 
@@ -84,6 +85,7 @@ const AddDog = () => {
           description: form.description,
           image_url: urlData.publicUrl,
           approved: isFree,
+          ref_code: (() => { try { return localStorage.getItem(REF_STORAGE_KEY); } catch { return null; } })(),
         })
         .select("id")
         .single();
@@ -147,7 +149,7 @@ const AddDog = () => {
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Pridať psa do súťaže</h1>
         {isFree ? (
           <div className="mb-8 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-900">
-            🎉 <strong>Práve prebieha súťaž – registrácia je ZADARMO.</strong> Pes sa po odoslaní automaticky zaradí do súťaže. Po ukončení súťaže bude poplatok automaticky {PAID_PRICE_LABEL}.
+            🎉 <strong>August 2026 – registrácia je ZADARMO.</strong> Pes sa po odoslaní automaticky zaradí do súťaže. Od septembra 2026 je registrácia {PAID_PRICE_LABEL}.
           </div>
         ) : (
           <p className="text-muted-foreground mb-8">Registrácia psa je jednorazovo <strong>{PAID_PRICE_LABEL}</strong>. Vyplňte formulár, pridajte fotku a po úhrade sa pes okamžite zaradí do súťaže. <strong>20 %</strong> z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️</p>
@@ -267,7 +269,7 @@ const AddDog = () => {
                 <div className="flex justify-between font-bold">
                   <span className="text-foreground">Cena registrácie:</span>
                   <span className="text-primary">
-                    {isFree ? "ZADARMO (počas súťaže)" : PAID_PRICE_LABEL}
+                    {isFree ? "ZADARMO (august 2026)" : PAID_PRICE_LABEL}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">

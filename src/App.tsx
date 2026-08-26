@@ -51,6 +51,8 @@ import AccountSettings from "./pages/AccountSettings";
 import Leaderboard from "./pages/Leaderboard";
 import MyProfile from "./pages/MyProfile";
 import MyConfirmations from "./pages/MyConfirmations";
+import AffiliateStats from "./pages/AffiliateStats";
+import AdminAffiliates from "./pages/admin/AdminAffiliates";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -87,6 +89,7 @@ const App = () => (
             <Route path="/moj-profil" element={<MyProfile />} />
             <Route path="/moje-potvrdenia" element={<MyConfirmations />} />
             <Route path="/partneri" element={<Partners />} />
+            <Route path="/ref/:code" element={<AffiliateStats />} />
             <Route path="/utulky" element={<Shelters />} />
             <Route path="/utulok/:id" element={<ShelterDetail />} />
             <Route path="/historia-utulkov" element={<ShelterHistory />} />
@@ -107,6 +110,7 @@ const App = () => (
               <Route path="historia-utulkov" element={<AdminShelterHistory />} />
               <Route path="ziadosti-utulkov" element={<AdminShelterApplications />} />
               <Route path="partnerske-odkazy" element={<AdminReferrals />} />
+              <Route path="affiliate" element={<AdminAffiliates />} />
               <Route path="podporovatelia" element={<AdminSupporters />} />
               <Route path="transparentnost" element={<AdminTransparency />} />
               <Route path="upozornenia" element={<AdminAnnouncements />} />

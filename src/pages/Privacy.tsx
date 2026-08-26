@@ -66,15 +66,34 @@ const Privacy = () => {
             <p>
               V auguste 2026 je registrácia <strong>ZADARMO</strong>. Od septembra 2026 je registrácia <strong>1,99 €</strong> dobrovoľná podpora projektu a je nevratná, okrem technickej chyby platby.
               20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky. 80 % ide na prevádzku stránky,
-              vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk. Reklamácie posielajte na
+              vývoj, Stripe poplatky a ceny. 80 % ide na prevádzku, ceny a poplatky. Reklamácie posielajte na
               infonajkrajsipes@gmail.com do 14 dní.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-bold text-foreground mb-2">Sprostredkovatelia (tretie strany)</h2>
+            <ul className="list-disc list-inside space-y-1">
+              <li><strong>Stripe Payments Europe, Ltd.</strong> – spracovanie platieb. Údaje o platobnej karte nikdy nevidíme ani neukladáme; Stripe uchováva platobné záznamy podľa svojich zákonných povinností (účtovné doklady 10 rokov).</li>
+              <li><strong>Google (Gmail)</strong> – odosielanie e-mailových potvrdení a notifikácií.</li>
+              <li><strong>Supabase / Lovable Cloud</strong> – hosting databázy a súborov v EU.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-bold text-foreground mb-2">Doba uchovávania platobných údajov</h2>
+            <p>
+              Záznamy o platbách (suma, dátum, identifikátor transakcie, e-mail platiteľa) uchovávame <strong>10 rokov</strong>
+              z dôvodu zákonnej účtovnej a daňovej povinnosti. Ostatné údaje k súťaži uchovávame do konca súťaže + 30 dní.
             </p>
           </div>
 
           <div>
             <h2 className="text-lg font-bold text-foreground mb-2">Cookies</h2>
             <p>
-              Používame len nevyhnutné cookies potrebné pre hlasovanie a správne fungovanie stránky.
+              Nevyhnutné cookies používame pre prihlásenie a hlasovanie. Analytické cookies spúšťame výhradne po vašom
+              súhlase v cookie lište – voľbou „Len nevyhnutné“ sa analytika nespustí a existujúce analytické cookies sa vymažú.
+              Súhlas môžete kedykoľvek zmeniť vymazaním údajov stránky v prehliadači.
             </p>
           </div>
 

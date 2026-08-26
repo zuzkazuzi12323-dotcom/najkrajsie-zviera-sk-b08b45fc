@@ -169,7 +169,7 @@ const Index = () => {
             <p className="text-base md:text-lg text-background/80 mb-8 text-pretty">
               {free
                 ? <>{MONTHLY_CYCLE_TEXT}</>
-                : <><strong>20 %</strong> z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️ 80 % ide na prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.</>}
+                : <><strong>20 %</strong> z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky ❤️ 80 % ide na prevádzku, ceny a poplatky.</>}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/pridat" className="gradient-golden text-primary-foreground px-8 py-4 rounded-full font-bold shadow-golden flex items-center gap-2 text-lg transition-all duration-300 hover:scale-110 hover:brightness-110 hover:shadow-[0_0_40px_hsl(var(--golden-glow)/0.8)] active:scale-95">
