@@ -4,8 +4,10 @@ import { BookOpen, CheckCircle, Trophy, Gift, CreditCard, Handshake } from "luci
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PAID_PRICE_LABEL, REGISTRATION_FREE } from "@/lib/pricing";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Rules = () => {
+  usePageTitle('Pravidlá súťaže – NajkrajšíPes.eu', 'Pravidlá súťaže o najkrajšieho psa: mesačné kolá, hlasovanie a poplatky.');
   const free = REGISTRATION_FREE;
   return (
     <div className="min-h-screen flex flex-col">
@@ -134,7 +136,7 @@ const Rules = () => {
               </h2>
               <p className="text-foreground/80">
                 20 % z každej úspešnej registrácie je <strong>REZERVOVANÝCH</strong> pre spolupracujúce útulky. 80 % ide na
-                prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.
+                prevádzku, ceny a poplatky.
               </p>
               <p className="text-foreground/80 mt-3">
                 Ak v danom kole nespolupracuje žiadny útulok, rezervovaná suma 20 % sa neprepadá, ale presúva sa a akumuluje do

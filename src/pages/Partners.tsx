@@ -11,7 +11,7 @@ const benefits = [
   "Možnosť dodať ceny pre výhercov (granule, hračky, poukážky)",
 ];
 
-const PARTNER_EMAIL = "info@najkrajsipes.eu";
+const PARTNER_EMAIL = "infonajkrajsipes@gmail.com";
 
 const Partners = () => {
   useEffect(() => {

@@ -6,8 +6,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SponsorBanner from "@/components/SponsorBanner";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Leaderboard = () => {
+  usePageTitle('Rebríček psov – NajkrajšíPes.eu', 'Aktuálny rebríček psov podľa počtu hlasov.');
   const { data: dogs = [], isLoading } = useQuery({
     queryKey: ["leaderboard"],
     staleTime: 2 * 60 * 1000,

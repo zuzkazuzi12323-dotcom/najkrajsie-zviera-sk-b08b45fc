@@ -35,7 +35,7 @@ export const MONTHLY_CYCLE_TEXT =
 
 /** Jednotný text o rozdelení podpory 20 / 80. */
 export const RESERVED_SHARE_TEXT =
-  "20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky. 80 % ide na prevádzku stránky, vývoj, Stripe poplatky a ceny. Organizátorovi nejde priamy zisk.";
+  "20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky. 80 % ide na prevádzku, ceny a poplatky.";
 
 /** Aktuálna cena registrácie ako text. */
 export const registrationPriceLabel = (free: boolean = REGISTRATION_FREE): string =>

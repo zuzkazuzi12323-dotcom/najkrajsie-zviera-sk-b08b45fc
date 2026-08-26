@@ -4,6 +4,7 @@ import { ShieldCheck, Heart, Gift, Building2, Calendar } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useTransparencyRecords, type TransparencyRecord, type TransparencyCategory } from "@/hooks/useTransparency";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const formatEur = (cents: number | null) =>
   cents == null ? null : `${(cents / 100).toFixed(2).replace(".", ",")} €`;
@@ -48,6 +49,7 @@ const RecordCard = ({ r }: { r: TransparencyRecord }) => {
 };
 
 const Transparency = () => {
+  usePageTitle('Transparentnosť – NajkrajšíPes.eu', 'Dôkazy o daroch, rozdelenie príspevkov a stav rezervy pre útulky.');
   const { data: records = [], isLoading } = useTransparencyRecords();
 
   return (
