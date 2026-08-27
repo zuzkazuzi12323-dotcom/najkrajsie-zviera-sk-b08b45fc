@@ -54,6 +54,7 @@ import MyProfile from "./pages/MyProfile";
 import MyConfirmations from "./pages/MyConfirmations";
 import AffiliateStats from "./pages/AffiliateStats";
 import AdminAffiliates from "./pages/admin/AdminAffiliates";
+import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
