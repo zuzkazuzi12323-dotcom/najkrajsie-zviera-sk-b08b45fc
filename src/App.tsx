@@ -54,6 +54,7 @@ import MyProfile from "./pages/MyProfile";
 import MyConfirmations from "./pages/MyConfirmations";
 import AffiliateStats from "./pages/AffiliateStats";
 import AdminAffiliates from "./pages/admin/AdminAffiliates";
+import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -73,6 +74,7 @@ const App = () => (
             <Route path="/pes/:id" element={<DogProfile />} />
             <Route path="/pridat" element={<AddDog />} />
             <Route path="/prihlasenie" element={<Login />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/registracia" element={<Register />} />
             <Route path="/zabudnute-heslo" element={<ForgotPassword />} />
             <Route path="/reset-hesla" element={<ResetPassword />} />
