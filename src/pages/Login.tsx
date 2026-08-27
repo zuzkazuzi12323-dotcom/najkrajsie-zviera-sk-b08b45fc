@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Heart, Mail, Lock, LogIn } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -41,8 +40,12 @@ const Login = () => {
   };
 
   const handleGoogleSignIn = async () => {
-    const { error } = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: { prompt: "select_account" },
+      },
     });
     if (error) toast.error("Nepodarilo sa prihlásiť cez Google");
   };
