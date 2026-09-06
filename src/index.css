@@ -87,7 +87,11 @@
     --sidebar-foreground: 40 15% 90%;
     --sidebar-primary: 42 80% 55%;
     --sidebar-primary-foreground: 40 20% 10%;
+    --book-orange: 16 100% 60%;
+    --book-orange-dark: 16 90% 50%;
+    --book-orange-foreground: 0 0% 100%;
     --sidebar-accent: 240 8% 14%;
+
     --sidebar-accent-foreground: 40 15% 90%;
     --sidebar-border: 240 8% 16%;
     --sidebar-ring: 42 80% 55%;
