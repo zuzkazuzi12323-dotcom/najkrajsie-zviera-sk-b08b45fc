@@ -71,6 +71,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/galeria" element={<Gallery />} />
             <Route path="/archiv" element={<Archive />} />
+            <Route path="/kniha" element={<Kniha />} />
 
             <Route path="/pes/:id" element={<DogProfile />} />
             <Route path="/pridat" element={<AddDog />} />
