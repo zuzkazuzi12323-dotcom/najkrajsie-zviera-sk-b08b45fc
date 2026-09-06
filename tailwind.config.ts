@@ -28,6 +28,12 @@ export default {
         },
         terracotta: "hsl(var(--terracotta))",
         "warm-gray": "hsl(var(--warm-gray))",
+        "book-orange": {
+          DEFAULT: "hsl(var(--book-orange))",
+          dark: "hsl(var(--book-orange-dark))",
+          foreground: "hsl(var(--book-orange-foreground))",
+        },
+
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
