@@ -55,6 +55,7 @@ import MyConfirmations from "./pages/MyConfirmations";
 import AffiliateStats from "./pages/AffiliateStats";
 import AdminAffiliates from "./pages/admin/AdminAffiliates";
 import AuthCallback from "./pages/AuthCallback";
+import Kniha from "./pages/Kniha";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -70,6 +71,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/galeria" element={<Gallery />} />
             <Route path="/archiv" element={<Archive />} />
+            <Route path="/kniha" element={<Kniha />} />
 
             <Route path="/pes/:id" element={<DogProfile />} />
             <Route path="/pridat" element={<AddDog />} />
