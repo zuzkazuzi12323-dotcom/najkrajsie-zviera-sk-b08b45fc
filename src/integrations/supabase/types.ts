@@ -83,6 +83,60 @@ export type Database = {
         }
         Relationships: []
       }
+      book_orders: {
+        Row: {
+          address: string
+          age: string | null
+          ai_help: boolean
+          amount: number
+          breed: string | null
+          created_at: string
+          customer_name: string
+          dog_name: string
+          email: string
+          id: string
+          phone: string | null
+          photos: string[]
+          status: string
+          story: string | null
+          stripe_session_id: string | null
+        }
+        Insert: {
+          address: string
+          age?: string | null
+          ai_help?: boolean
+          amount?: number
+          breed?: string | null
+          created_at?: string
+          customer_name: string
+          dog_name: string
+          email: string
+          id?: string
+          phone?: string | null
+          photos?: string[]
+          status?: string
+          story?: string | null
+          stripe_session_id?: string | null
+        }
+        Update: {
+          address?: string
+          age?: string | null
+          ai_help?: boolean
+          amount?: number
+          breed?: string | null
+          created_at?: string
+          customer_name?: string
+          dog_name?: string
+          email?: string
+          id?: string
+          phone?: string | null
+          photos?: string[]
+          status?: string
+          story?: string | null
+          stripe_session_id?: string | null
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           created_at: string
