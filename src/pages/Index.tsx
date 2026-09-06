@@ -124,7 +124,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Oranžový pás – kniha o psovi */}
+      <Link
+        to="/kniha"
+        className="block bg-book-orange text-book-orange-foreground hover:bg-book-orange-dark transition-colors"
+      >
+        <div className="container mx-auto px-4 py-3 flex items-center justify-center gap-2 text-center text-sm sm:text-base font-bold">
+          <span>📖 Vytvor KNIHU svojho psa za 29,99 € – Doprava ZADARMO</span>
+          <ArrowRight className="h-4 w-4 shrink-0" />
+        </div>
+      </Link>
       <Navbar />
+
 
       {/* Hero */}
       <section className="relative overflow-hidden">
