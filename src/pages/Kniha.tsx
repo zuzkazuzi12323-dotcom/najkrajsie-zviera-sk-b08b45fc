@@ -90,7 +90,10 @@ const Kniha = () => {
           ai_help: aiHelp,
           photos: paths,
           customer_name: customerName.trim(),
-          address: address.trim(),
+          street: street.trim(),
+          city: city.trim(),
+          zip: zip.trim(),
+          address: `${street.trim()}, ${zip.trim()} ${city.trim()}`,
           email: email.trim(),
           phone: phone.trim() || null,
         })
