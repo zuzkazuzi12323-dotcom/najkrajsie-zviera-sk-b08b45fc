@@ -205,8 +205,16 @@ const Kniha = () => {
                 <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={30} placeholder="+421 900 000 000" />
               </div>
               <div className="space-y-2 sm:col-span-2">
-                <Label htmlFor="address">Adresa doručenia *</Label>
-                <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} maxLength={200} placeholder="Ulica 1, 811 01 Bratislava" />
+                <Label htmlFor="street">Ulica a číslo *</Label>
+                <Input id="street" value={street} onChange={(e) => setStreet(e.target.value)} maxLength={150} placeholder="Hlavná 12" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="city">Obec *</Label>
+                <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} maxLength={100} placeholder="Bratislava" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="zip">PSČ *</Label>
+                <Input id="zip" value={zip} onChange={(e) => setZip(e.target.value)} maxLength={10} placeholder="811 01" />
               </div>
               <div className="space-y-2 sm:col-span-2">
                 <Label htmlFor="email">E-mail *</Label>
