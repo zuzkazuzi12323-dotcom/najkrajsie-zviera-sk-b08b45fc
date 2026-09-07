@@ -51,8 +51,8 @@ const Kniha = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!dogName.trim() || !customerName.trim() || !address.trim() || !email.trim()) {
-      toast.error("Vyplňte prosím meno psa, vaše meno, adresu a e-mail.");
+    if (!dogName.trim() || !customerName.trim() || !street.trim() || !city.trim() || !zip.trim() || !email.trim()) {
+      toast.error("Vyplňte prosím meno psa, vaše meno, ulicu, obec, PSČ a e-mail.");
       return;
     }
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
