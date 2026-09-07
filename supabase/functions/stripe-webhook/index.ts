@@ -322,6 +322,31 @@ serve(async (req) => {
       }
     }
 
+    // Book order paid -> mark paid + send confirmation email
+    if (type === "book") {
+      const orderId = session.metadata?.orderId;
+      if (orderId) {
+        const { error: bookError } = await supabase
+          .from("book_orders")
+          .update({ status: "paid" })
+          .eq("id", orderId);
+        if (bookError) console.error("Book order update error:", bookError);
+
+        try {
+          await fetch(`${supabaseUrl}/functions/v1/send-book-confirmation`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${serviceKey}`,
+            },
+            body: JSON.stringify({ orderId }),
+          });
+        } catch (e) {
+          console.error("Book confirmation email error:", e);
+        }
+      }
+    }
+
     // If highlight payment, update dog
     if (type === "highlight" && dogId) {
       const { error: dogError } = await supabase

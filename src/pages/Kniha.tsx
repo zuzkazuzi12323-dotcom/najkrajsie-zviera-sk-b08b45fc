@@ -29,7 +29,9 @@ const Kniha = () => {
   const [aiHelp, setAiHelp] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [customerName, setCustomerName] = useState("");
-  const [address, setAddress] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [zip, setZip] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,8 +51,8 @@ const Kniha = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!dogName.trim() || !customerName.trim() || !address.trim() || !email.trim()) {
-      toast.error("Vyplňte prosím meno psa, vaše meno, adresu a e-mail.");
+    if (!dogName.trim() || !customerName.trim() || !street.trim() || !city.trim() || !zip.trim() || !email.trim()) {
+      toast.error("Vyplňte prosím meno psa, vaše meno, ulicu, obec, PSČ a e-mail.");
       return;
     }
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
@@ -88,7 +90,10 @@ const Kniha = () => {
           ai_help: aiHelp,
           photos: paths,
           customer_name: customerName.trim(),
-          address: address.trim(),
+          street: street.trim(),
+          city: city.trim(),
+          zip: zip.trim(),
+          address: `${street.trim()}, ${zip.trim()} ${city.trim()}`,
           email: email.trim(),
           phone: phone.trim() || null,
         })
@@ -200,8 +205,16 @@ const Kniha = () => {
                 <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={30} placeholder="+421 900 000 000" />
               </div>
               <div className="space-y-2 sm:col-span-2">
-                <Label htmlFor="address">Adresa doručenia *</Label>
-                <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} maxLength={200} placeholder="Ulica 1, 811 01 Bratislava" />
+                <Label htmlFor="street">Ulica a číslo *</Label>
+                <Input id="street" value={street} onChange={(e) => setStreet(e.target.value)} maxLength={150} placeholder="Hlavná 12" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="city">Obec *</Label>
+                <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} maxLength={100} placeholder="Bratislava" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="zip">PSČ *</Label>
+                <Input id="zip" value={zip} onChange={(e) => setZip(e.target.value)} maxLength={10} placeholder="811 01" />
               </div>
               <div className="space-y-2 sm:col-span-2">
                 <Label htmlFor="email">E-mail *</Label>

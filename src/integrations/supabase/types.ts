@@ -90,6 +90,7 @@ export type Database = {
           ai_help: boolean
           amount: number
           breed: string | null
+          city: string | null
           created_at: string
           customer_name: string
           dog_name: string
@@ -99,7 +100,9 @@ export type Database = {
           photos: string[]
           status: string
           story: string | null
+          street: string | null
           stripe_session_id: string | null
+          zip: string | null
         }
         Insert: {
           address: string
@@ -107,6 +110,7 @@ export type Database = {
           ai_help?: boolean
           amount?: number
           breed?: string | null
+          city?: string | null
           created_at?: string
           customer_name: string
           dog_name: string
@@ -116,7 +120,9 @@ export type Database = {
           photos?: string[]
           status?: string
           story?: string | null
+          street?: string | null
           stripe_session_id?: string | null
+          zip?: string | null
         }
         Update: {
           address?: string
@@ -124,6 +130,7 @@ export type Database = {
           ai_help?: boolean
           amount?: number
           breed?: string | null
+          city?: string | null
           created_at?: string
           customer_name?: string
           dog_name?: string
@@ -133,7 +140,9 @@ export type Database = {
           photos?: string[]
           status?: string
           story?: string | null
+          street?: string | null
           stripe_session_id?: string | null
+          zip?: string | null
         }
         Relationships: []
       }
