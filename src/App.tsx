@@ -54,6 +54,7 @@ import MyProfile from "./pages/MyProfile";
 import MyConfirmations from "./pages/MyConfirmations";
 import AffiliateStats from "./pages/AffiliateStats";
 import AdminAffiliates from "./pages/admin/AdminAffiliates";
+import AdminBookOrders from "./pages/admin/AdminBookOrders";
 import AuthCallback from "./pages/AuthCallback";
 import Kniha from "./pages/Kniha";
 import NotFound from "./pages/NotFound";
@@ -117,6 +118,7 @@ const App = () => (
               <Route path="ziadosti-utulkov" element={<AdminShelterApplications />} />
               <Route path="partnerske-odkazy" element={<AdminReferrals />} />
               <Route path="affiliate" element={<AdminAffiliates />} />
+              <Route path="knihy" element={<AdminBookOrders />} />
               <Route path="podporovatelia" element={<AdminSupporters />} />
               <Route path="transparentnost" element={<AdminTransparency />} />
               <Route path="upozornenia" element={<AdminAnnouncements />} />
