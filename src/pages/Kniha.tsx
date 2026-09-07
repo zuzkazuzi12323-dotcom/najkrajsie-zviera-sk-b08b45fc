@@ -29,7 +29,9 @@ const Kniha = () => {
   const [aiHelp, setAiHelp] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [customerName, setCustomerName] = useState("");
-  const [address, setAddress] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [zip, setZip] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
