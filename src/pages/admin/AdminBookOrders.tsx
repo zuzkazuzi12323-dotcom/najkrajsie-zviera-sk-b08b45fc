@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Copy, Download, ImageIcon, Loader2, Mail, X } from "lucide-react";
+import { Copy, Download, ImageIcon, Loader2, Mail, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import JSZip from "jszip";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,7 +20,18 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 type BookOrder = {
   id: string;
@@ -97,6 +108,9 @@ const AdminBookOrders = () => {
   const [selected, setSelected] = useState<BookOrder | null>(null);
   const [zipping, setZipping] = useState<string | null>(null);
   const [sending, setSending] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [tab, setTab] = useState<string>("all");
 
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ["admin-book-orders"],
@@ -109,6 +123,13 @@ const AdminBookOrders = () => {
       return (data || []) as BookOrder[];
     },
   });
+
+  const counts = STATUS_OPTIONS.reduce<Record<string, number>>((acc, s) => {
+    acc[s.value] = orders.filter((o) => o.status === s.value).length;
+    return acc;
+  }, {});
+
+  const filtered = tab === "all" ? orders : orders.filter((o) => o.status === tab);
 
   const downloadZip = async (order: BookOrder) => {
     setZipping(order.id);
@@ -155,6 +176,23 @@ const AdminBookOrders = () => {
     if (error) return toast.error(error.message);
     toast.success("Status uložený");
     qc.invalidateQueries({ queryKey: ["admin-book-orders"] });
+
+    const { error: mailError } = await supabase.functions.invoke("send-book-status", {
+      body: { orderId: order.id, status },
+    });
+    if (mailError) toast.error("E-mail zákazníkovi sa nepodarilo odoslať");
+    else toast.success("E-mail o zmene stavu odoslaný");
+  };
+
+  const deleteOrder = async (order: BookOrder) => {
+    setDeleting(true);
+    const { error } = await supabase.from("book_orders").delete().eq("id", order.id);
+    setDeleting(false);
+    setConfirmDelete(false);
+    if (error) return toast.error(error.message);
+    toast.success("Objednávka zmazaná");
+    setSelected(null);
+    qc.invalidateQueries({ queryKey: ["admin-book-orders"] });
   };
 
   const packetaLine = (o: BookOrder) =>
@@ -165,6 +203,11 @@ const AdminBookOrders = () => {
 
   if (isLoading) return <p className="text-muted-foreground">Načítavam…</p>;
 
+  const tabs = [
+    { value: "all", label: "Všetky", count: orders.length },
+    ...STATUS_OPTIONS.map((s) => ({ value: s.value, label: s.label, count: counts[s.value] || 0 })),
+  ];
+
   return (
     <div className="space-y-6">
       <div>
@@ -172,51 +215,92 @@ const AdminBookOrders = () => {
         <p className="text-sm text-muted-foreground">Celkom {orders.length} objednávok. Kliknutím otvoríš detail.</p>
       </div>
 
-      {orders.length === 0 ? (
+      <div className="-mx-1 flex flex-wrap gap-2 px-1">
+        {tabs.map((t) => (
+          <button
+            key={t.value}
+            type="button"
+            onClick={() => setTab(t.value)}
+            className={cn(
+              "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors sm:text-sm",
+              tab === t.value
+                ? "border-transparent bg-[hsl(var(--book-orange))] text-white"
+                : "border-border bg-background text-muted-foreground hover:bg-secondary",
+            )}
+          >
+            {t.label} <span className="opacity-80">({t.count})</span>
+          </button>
+        ))}
+      </div>
+
+      {filtered.length === 0 ? (
         <p className="text-muted-foreground">Žiadne objednávky.</p>
       ) : (
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Meno psa</TableHead>
-                <TableHead>Plemeno</TableHead>
-                <TableHead>Dátum</TableHead>
-                <TableHead>Zákazník</TableHead>
-                <TableHead>Cena</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders.map((o) => (
-                <TableRow
-                  key={o.id}
-                  className="cursor-pointer"
-                  onClick={() => setSelected(o)}
-                >
-                  <TableCell className="font-medium">{o.dog_name}</TableCell>
-                  <TableCell>{o.breed || "—"}</TableCell>
-                  <TableCell>{new Date(o.created_at).toLocaleString("sk")}</TableCell>
-                  <TableCell>{o.customer_name}</TableCell>
-                  <TableCell>{(o.amount / 100).toFixed(2)} €</TableCell>
-                  <TableCell>
-                    <Badge className={statusColor(o.status)} variant="secondary">
-                      {statusLabel(o.status)}
-                    </Badge>
-                  </TableCell>
+        <>
+          {/* Mobil: kompaktné riadky */}
+          <div className="space-y-2 md:hidden">
+            {filtered.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                onClick={() => setSelected(o)}
+                className="flex w-full items-center justify-between gap-3 rounded-xl border border-border bg-card px-3 py-2.5 text-left"
+              >
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-semibold text-foreground">
+                    {o.dog_name}
+                    {o.breed ? ` · ${o.breed}` : ""}
+                  </span>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    {o.customer_name} · {new Date(o.created_at).toLocaleDateString("sk")} · {(o.amount / 100).toFixed(2)} €
+                  </span>
+                </span>
+                <Badge className={cn("shrink-0 text-[10px]", statusColor(o.status))} variant="secondary">
+                  {statusLabel(o.status)}
+                </Badge>
+              </button>
+            ))}
+          </div>
+
+          <div className="hidden overflow-hidden rounded-xl border border-border bg-card md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Meno psa</TableHead>
+                  <TableHead>Plemeno</TableHead>
+                  <TableHead>Dátum</TableHead>
+                  <TableHead>Zákazník</TableHead>
+                  <TableHead>Cena</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {filtered.map((o) => (
+                  <TableRow key={o.id} className="cursor-pointer" onClick={() => setSelected(o)}>
+                    <TableCell className="font-medium">{o.dog_name}</TableCell>
+                    <TableCell>{o.breed || "—"}</TableCell>
+                    <TableCell>{new Date(o.created_at).toLocaleString("sk")}</TableCell>
+                    <TableCell>{o.customer_name}</TableCell>
+                    <TableCell>{(o.amount / 100).toFixed(2)} €</TableCell>
+                    <TableCell>
+                      <Badge className={statusColor(o.status)} variant="secondary">
+                        {statusLabel(o.status)}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </>
       )}
 
       <Sheet open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
-        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
+        <SheetContent className="w-full overflow-y-auto sm:max-w-2xl">
           {selected && (
             <>
-              <SheetHeader className="pb-4">
-                <SheetTitle className="text-xl">
+              <SheetHeader className="pb-4 text-left">
+                <SheetTitle className="text-lg sm:text-xl">
                   {selected.dog_name} {selected.breed ? `· ${selected.breed}` : ""} {selected.age ? `· ${selected.age}` : ""}
                 </SheetTitle>
                 <SheetDescription>
@@ -239,7 +323,7 @@ const AdminBookOrders = () => {
                   </Button>
                 </div>
 
-                <div className="flex items-center gap-3 rounded-xl border border-border bg-background p-3">
+                <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-background p-3">
                   <span className="text-sm text-muted-foreground">Zmeniť status:</span>
                   <select
                     value={selected.status}
@@ -273,9 +357,9 @@ const AdminBookOrders = () => {
                       onClick={() => value && copy(value, label)}
                       className="flex items-center justify-between gap-2 rounded-xl border border-border bg-background px-3 py-2 text-left hover:bg-secondary"
                     >
-                      <span>
+                      <span className="min-w-0">
                         <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">{label}</span>
-                        <span className="text-sm font-medium text-foreground">{value || "—"}</span>
+                        <span className="block truncate text-sm font-medium text-foreground">{value || "—"}</span>
                       </span>
                       <Copy className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                     </button>
@@ -295,11 +379,46 @@ const AdminBookOrders = () => {
                   </p>
                   <OrderPhotos paths={selected.photos || []} />
                 </div>
+
+                <div className="border-t border-border pt-4">
+                  <Button
+                    variant="destructive"
+                    className="w-full sm:w-auto"
+                    disabled={deleting}
+                    onClick={() => setConfirmDelete(true)}
+                  >
+                    {deleting ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <Trash2 className="mr-1.5 h-4 w-4" />}
+                    Zmazať objednávku
+                  </Button>
+                </div>
               </div>
             </>
           )}
         </SheetContent>
       </Sheet>
+
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Zmazať objednávku?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Naozaj zmazať objednávku {selected?.dog_name} – {selected?.customer_name}? Táto akcia sa nedá vrátiť.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Zrušiť</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                if (selected) deleteOrder(selected);
+              }}
+            >
+              Zmazať
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
