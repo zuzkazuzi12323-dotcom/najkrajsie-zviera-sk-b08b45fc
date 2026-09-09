@@ -33,15 +33,27 @@ const AdminAffiliates = () => {
     },
   });
 
-  const { data: dogs = [] } = useQuery({
-    queryKey: ["admin-affiliate-dogs"],
+  const { data: paidDogs = [] } = useQuery({
+    queryKey: ["admin-affiliate-paid-dogs"],
     queryFn: async () => {
-      const { data } = await supabase.from("dogs").select("ref_code").not("ref_code", "is", null);
-      return data || [];
+      const { data: dogs } = await supabase
+        .from("dogs")
+        .select("id, ref_code")
+        .not("ref_code", "is", null);
+      const { data: payments } = await supabase
+        .from("payments")
+        .select("dog_id, amount, status, type")
+        .eq("type", "registration")
+        .eq("status", "completed")
+        .gt("amount", 0);
+      const paidIds = new Set((payments || []).map((p: any) => p.dog_id));
+      return (dogs || []).filter((d: any) => paidIds.has(d.id));
     },
   });
 
-  const regsFor = (code: string) => dogs.filter((d: any) => d.ref_code === code).length;
+  const regsFor = (code: string) =>
+    paidDogs.filter((d: any) => (d.ref_code || "").toLowerCase() === code.toLowerCase()).length;
+
 
   const add = useMutation({
     mutationFn: async () => {
@@ -96,7 +108,7 @@ const AdminAffiliates = () => {
     <div>
       <h1 className="text-2xl font-bold text-foreground mb-1">Affiliate partneri / Influenceri</h1>
       <p className="text-sm text-muted-foreground mb-6">
-        Odmena je <strong>0,60 €</strong> za každú registráciu psa cez partnerský odkaz.
+        Odmena je <strong>0,60 €</strong> za každú <strong>zaplatenú</strong> registráciu psa (1,99 €) cez partnerský odkaz. Bezplatné registrácie províziu nezakladajú.
       </p>
 
       <div className="bg-card rounded-2xl p-5 shadow-soft mb-6 flex flex-col sm:flex-row gap-3">
@@ -122,7 +134,7 @@ const AdminAffiliates = () => {
               <th className="p-3">Meno</th>
               <th className="p-3">Kód</th>
               <th className="p-3">Kliky</th>
-              <th className="p-3">Registrácie</th>
+              <th className="p-3">Platené registrácie psov</th>
               <th className="p-3">Zárobok</th>
               <th className="p-3">Výplata</th>
               <th className="p-3">Akcie</th>

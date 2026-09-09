@@ -61,7 +61,7 @@ const AffiliateStats = () => {
               <div className="bg-card rounded-2xl p-5 shadow-soft">
                 <PawPrint className="w-5 h-5 text-primary mb-2" />
                 <p className="text-2xl font-bold text-foreground">{data.registrations ?? 0}</p>
-                <p className="text-sm text-muted-foreground">Registrácie psov</p>
+                <p className="text-sm text-muted-foreground">Platené registrácie psov</p>
               </div>
               <div className="bg-card rounded-2xl p-5 shadow-soft">
                 <Wallet className="w-5 h-5 text-primary mb-2" />
