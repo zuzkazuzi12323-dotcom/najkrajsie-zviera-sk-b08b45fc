@@ -61,6 +61,9 @@ const STATUS_OPTIONS: { value: string; label: string }[] = [
   { value: "canceled", label: "zrušené" },
 ];
 
+const PAID_STATUSES = ["paid", "in_production", "shipped"];
+
+
 const statusColor = (status: string) => {
   switch (status) {
     case "paid":
