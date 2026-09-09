@@ -33,15 +33,27 @@ const AdminAffiliates = () => {
     },
   });
 
-  const { data: dogs = [] } = useQuery({
-    queryKey: ["admin-affiliate-dogs"],
+  const { data: paidDogs = [] } = useQuery({
+    queryKey: ["admin-affiliate-paid-dogs"],
     queryFn: async () => {
-      const { data } = await supabase.from("dogs").select("ref_code").not("ref_code", "is", null);
-      return data || [];
+      const { data: dogs } = await supabase
+        .from("dogs")
+        .select("id, ref_code")
+        .not("ref_code", "is", null);
+      const { data: payments } = await supabase
+        .from("payments")
+        .select("dog_id, amount, status, type")
+        .eq("type", "registration")
+        .eq("status", "completed")
+        .gt("amount", 0);
+      const paidIds = new Set((payments || []).map((p: any) => p.dog_id));
+      return (dogs || []).filter((d: any) => paidIds.has(d.id));
     },
   });
 
-  const regsFor = (code: string) => dogs.filter((d: any) => d.ref_code === code).length;
+  const regsFor = (code: string) =>
+    paidDogs.filter((d: any) => (d.ref_code || "").toLowerCase() === code.toLowerCase()).length;
+
 
   const add = useMutation({
     mutationFn: async () => {
