@@ -108,7 +108,7 @@ const AdminAffiliates = () => {
     <div>
       <h1 className="text-2xl font-bold text-foreground mb-1">Affiliate partneri / Influenceri</h1>
       <p className="text-sm text-muted-foreground mb-6">
-        Odmena je <strong>0,60 €</strong> za každú registráciu psa cez partnerský odkaz.
+        Odmena je <strong>0,60 €</strong> za každú <strong>zaplatenú</strong> registráciu psa (1,99 €) cez partnerský odkaz. Bezplatné registrácie províziu nezakladajú.
       </p>
 
       <div className="bg-card rounded-2xl p-5 shadow-soft mb-6 flex flex-col sm:flex-row gap-3">
@@ -134,7 +134,7 @@ const AdminAffiliates = () => {
               <th className="p-3">Meno</th>
               <th className="p-3">Kód</th>
               <th className="p-3">Kliky</th>
-              <th className="p-3">Registrácie</th>
+              <th className="p-3">Platené registrácie psov</th>
               <th className="p-3">Zárobok</th>
               <th className="p-3">Výplata</th>
               <th className="p-3">Akcie</th>
