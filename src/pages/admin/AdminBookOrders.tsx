@@ -159,11 +159,11 @@ const AdminBookOrders = () => {
   const resendEmail = async (order: BookOrder) => {
     setSending(order.id);
     try {
-      const { error } = await supabase.functions.invoke("send-book-confirmation", {
-        body: { orderId: order.id },
+      const { error } = await supabase.functions.invoke("send-book-status", {
+        body: { orderId: order.id, status: order.status },
       });
       if (error) throw error;
-      toast.success("Potvrdenie odoslané");
+      toast.success(`E-mail odoslaný (${statusLabel(order.status)})`);
     } catch (e: any) {
       toast.error(e.message || "E-mail sa nepodarilo odoslať");
     } finally {
@@ -174,15 +174,10 @@ const AdminBookOrders = () => {
   const setStatus = async (order: BookOrder, status: string) => {
     const { error } = await supabase.from("book_orders").update({ status }).eq("id", order.id);
     if (error) return toast.error(error.message);
-    toast.success("Status uložený");
+    toast.success("Status uložený (bez e-mailu)");
     qc.invalidateQueries({ queryKey: ["admin-book-orders"] });
-
-    const { error: mailError } = await supabase.functions.invoke("send-book-status", {
-      body: { orderId: order.id, status },
-    });
-    if (mailError) toast.error("E-mail zákazníkovi sa nepodarilo odoslať");
-    else toast.success("E-mail o zmene stavu odoslaný");
   };
+
 
   const deleteOrder = async (order: BookOrder) => {
     setDeleting(true);
