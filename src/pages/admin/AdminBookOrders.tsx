@@ -196,6 +196,21 @@ const AdminBookOrders = () => {
   const statusLabel = (value: string) =>
     STATUS_OPTIONS.find((s) => s.value === value)?.label || value;
 
+  const isPaid = (o: BookOrder) => PAID_STATUSES.includes(o.status);
+  const paidOrders = orders.filter(isPaid);
+  const revenue = paidOrders.reduce((sum, o) => sum + o.amount, 0);
+
+  const PaidBadge = ({ order }: { order: BookOrder }) =>
+    isPaid(order) ? (
+      <Badge className="bg-green-100 text-green-700 hover:bg-green-100" variant="secondary">
+        Zaplatené
+      </Badge>
+    ) : (
+      <Badge className="bg-red-100 text-red-700 hover:bg-red-100" variant="secondary">
+        Nezaplatené
+      </Badge>
+    );
+
   if (isLoading) return <p className="text-muted-foreground">Načítavam…</p>;
 
   const tabs = [
@@ -209,6 +224,22 @@ const AdminBookOrders = () => {
         <h1 className="text-2xl font-bold text-foreground">Objednávky knihy</h1>
         <p className="text-sm text-muted-foreground">Celkom {orders.length} objednávok. Kliknutím otvoríš detail.</p>
       </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="rounded-xl border border-border bg-[hsl(var(--book-orange))]/10 p-4">
+          <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Zarobené (zaplatené)</p>
+          <p className="text-2xl font-bold text-foreground">{(revenue / 100).toFixed(2)} €</p>
+        </div>
+        <div className="rounded-xl border border-border bg-card p-4">
+          <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Zaplatené objednávky</p>
+          <p className="text-2xl font-bold text-foreground">{paidOrders.length}</p>
+        </div>
+        <div className="rounded-xl border border-border bg-card p-4">
+          <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Nezaplatené</p>
+          <p className="text-2xl font-bold text-foreground">{orders.length - paidOrders.length}</p>
+        </div>
+      </div>
+
 
       <div className="-mx-1 flex flex-wrap gap-2 px-1">
         {tabs.map((t) => (
