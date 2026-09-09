@@ -341,9 +341,11 @@ const AdminBookOrders = () => {
                 <SheetTitle className="text-lg sm:text-xl">
                   {selected.dog_name} {selected.breed ? `· ${selected.breed}` : ""} {selected.age ? `· ${selected.age}` : ""}
                 </SheetTitle>
-                <SheetDescription>
-                  {new Date(selected.created_at).toLocaleString("sk")} · {(selected.amount / 100).toFixed(2)} €
+                <SheetDescription className="flex flex-wrap items-center gap-2">
+                  <span>{new Date(selected.created_at).toLocaleString("sk")} · {(selected.amount / 100).toFixed(2)} €</span>
+                  <PaidBadge order={selected} />
                 </SheetDescription>
+
               </SheetHeader>
 
               <div className="space-y-6 pt-2">
