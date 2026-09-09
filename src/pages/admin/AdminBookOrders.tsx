@@ -284,9 +284,13 @@ const AdminBookOrders = () => {
                     {o.customer_name} · {new Date(o.created_at).toLocaleDateString("sk")} · {(o.amount / 100).toFixed(2)} €
                   </span>
                 </span>
-                <Badge className={cn("shrink-0 text-[10px]", statusColor(o.status))} variant="secondary">
-                  {statusLabel(o.status)}
-                </Badge>
+                <span className="flex shrink-0 flex-col items-end gap-1">
+                  <Badge className={cn("text-[10px]", statusColor(o.status))} variant="secondary">
+                    {statusLabel(o.status)}
+                  </Badge>
+                  <PaidBadge order={o} />
+                </span>
+
               </button>
             ))}
           </div>
