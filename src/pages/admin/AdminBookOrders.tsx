@@ -357,9 +357,10 @@ const AdminBookOrders = () => {
                     {zipping === selected.id ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <Download className="mr-1.5 h-4 w-4" />}
                     Fotky ZIP
                   </Button>
-                  <Button size="sm" variant="outline" disabled={sending === selected.id || selected.status === "pending" || selected.status === "canceled"} onClick={() => resendEmail(selected)}>
+                  <Button size="sm" variant="outline" disabled={sending === selected.id} onClick={() => resendEmail(selected)}>
                     {sending === selected.id ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <Mail className="mr-1.5 h-4 w-4" />}
-                    Poslať potvrdenie
+                    Poslať potvrdenie ({statusLabel(selected.status)})
+
                   </Button>
                 </div>
 
