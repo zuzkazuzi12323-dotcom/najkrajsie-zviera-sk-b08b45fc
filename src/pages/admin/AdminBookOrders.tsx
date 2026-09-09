@@ -305,6 +305,7 @@ const AdminBookOrders = () => {
                   <TableHead>Zákazník</TableHead>
                   <TableHead>Cena</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Platba</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -320,8 +321,12 @@ const AdminBookOrders = () => {
                         {statusLabel(o.status)}
                       </Badge>
                     </TableCell>
+                    <TableCell>
+                      <PaidBadge order={o} />
+                    </TableCell>
                   </TableRow>
                 ))}
+
               </TableBody>
             </Table>
           </div>
