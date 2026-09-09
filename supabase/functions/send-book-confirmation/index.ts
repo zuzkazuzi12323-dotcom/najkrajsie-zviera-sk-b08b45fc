@@ -127,15 +127,22 @@ Deno.serve(async (req) => {
       const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
       const { data: order } = await admin
         .from('book_orders')
-        .select('email, customer_name, dog_name')
+        .select('email, customer_name, dog_name, status')
         .eq('id', orderId)
         .maybeSingle();
       if (order) {
+        // Only ever send the "paid" confirmation for genuinely paid orders
+        if (!['paid', 'in_production', 'shipped'].includes(String(order.status))) {
+          return new Response(JSON.stringify({ skipped: true, reason: 'order not paid' }), {
+            status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
         recipient = recipient || order.email;
         name = name || order.customer_name || '';
         dog = dog || order.dog_name || '';
       }
     }
+
 
     if (!recipient) {
       return new Response(JSON.stringify({ error: 'email or orderId required' }), {

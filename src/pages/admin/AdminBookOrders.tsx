@@ -61,6 +61,9 @@ const STATUS_OPTIONS: { value: string; label: string }[] = [
   { value: "canceled", label: "zrušené" },
 ];
 
+const PAID_STATUSES = ["paid", "in_production", "shipped"];
+
+
 const statusColor = (status: string) => {
   switch (status) {
     case "paid":
@@ -159,11 +162,11 @@ const AdminBookOrders = () => {
   const resendEmail = async (order: BookOrder) => {
     setSending(order.id);
     try {
-      const { error } = await supabase.functions.invoke("send-book-confirmation", {
-        body: { orderId: order.id },
+      const { error } = await supabase.functions.invoke("send-book-status", {
+        body: { orderId: order.id, status: order.status },
       });
       if (error) throw error;
-      toast.success("Potvrdenie odoslané");
+      toast.success(`E-mail odoslaný (${statusLabel(order.status)})`);
     } catch (e: any) {
       toast.error(e.message || "E-mail sa nepodarilo odoslať");
     } finally {
@@ -174,15 +177,10 @@ const AdminBookOrders = () => {
   const setStatus = async (order: BookOrder, status: string) => {
     const { error } = await supabase.from("book_orders").update({ status }).eq("id", order.id);
     if (error) return toast.error(error.message);
-    toast.success("Status uložený");
+    toast.success("Status uložený (bez e-mailu)");
     qc.invalidateQueries({ queryKey: ["admin-book-orders"] });
-
-    const { error: mailError } = await supabase.functions.invoke("send-book-status", {
-      body: { orderId: order.id, status },
-    });
-    if (mailError) toast.error("E-mail zákazníkovi sa nepodarilo odoslať");
-    else toast.success("E-mail o zmene stavu odoslaný");
   };
+
 
   const deleteOrder = async (order: BookOrder) => {
     setDeleting(true);
@@ -201,6 +199,21 @@ const AdminBookOrders = () => {
   const statusLabel = (value: string) =>
     STATUS_OPTIONS.find((s) => s.value === value)?.label || value;
 
+  const isPaid = (o: BookOrder) => PAID_STATUSES.includes(o.status);
+  const paidOrders = orders.filter(isPaid);
+  const revenue = paidOrders.reduce((sum, o) => sum + o.amount, 0);
+
+  const PaidBadge = ({ order }: { order: BookOrder }) =>
+    isPaid(order) ? (
+      <Badge className="bg-green-100 text-green-700 hover:bg-green-100" variant="secondary">
+        Zaplatené
+      </Badge>
+    ) : (
+      <Badge className="bg-red-100 text-red-700 hover:bg-red-100" variant="secondary">
+        Nezaplatené
+      </Badge>
+    );
+
   if (isLoading) return <p className="text-muted-foreground">Načítavam…</p>;
 
   const tabs = [
@@ -214,6 +227,22 @@ const AdminBookOrders = () => {
         <h1 className="text-2xl font-bold text-foreground">Objednávky knihy</h1>
         <p className="text-sm text-muted-foreground">Celkom {orders.length} objednávok. Kliknutím otvoríš detail.</p>
       </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="rounded-xl border border-border bg-[hsl(var(--book-orange))]/10 p-4">
+          <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Zarobené (zaplatené)</p>
+          <p className="text-2xl font-bold text-foreground">{(revenue / 100).toFixed(2)} €</p>
+        </div>
+        <div className="rounded-xl border border-border bg-card p-4">
+          <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Zaplatené objednávky</p>
+          <p className="text-2xl font-bold text-foreground">{paidOrders.length}</p>
+        </div>
+        <div className="rounded-xl border border-border bg-card p-4">
+          <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Nezaplatené</p>
+          <p className="text-2xl font-bold text-foreground">{orders.length - paidOrders.length}</p>
+        </div>
+      </div>
+
 
       <div className="-mx-1 flex flex-wrap gap-2 px-1">
         {tabs.map((t) => (
@@ -255,9 +284,13 @@ const AdminBookOrders = () => {
                     {o.customer_name} · {new Date(o.created_at).toLocaleDateString("sk")} · {(o.amount / 100).toFixed(2)} €
                   </span>
                 </span>
-                <Badge className={cn("shrink-0 text-[10px]", statusColor(o.status))} variant="secondary">
-                  {statusLabel(o.status)}
-                </Badge>
+                <span className="flex shrink-0 flex-col items-end gap-1">
+                  <Badge className={cn("text-[10px]", statusColor(o.status))} variant="secondary">
+                    {statusLabel(o.status)}
+                  </Badge>
+                  <PaidBadge order={o} />
+                </span>
+
               </button>
             ))}
           </div>
@@ -272,6 +305,7 @@ const AdminBookOrders = () => {
                   <TableHead>Zákazník</TableHead>
                   <TableHead>Cena</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Platba</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -287,8 +321,12 @@ const AdminBookOrders = () => {
                         {statusLabel(o.status)}
                       </Badge>
                     </TableCell>
+                    <TableCell>
+                      <PaidBadge order={o} />
+                    </TableCell>
                   </TableRow>
                 ))}
+
               </TableBody>
             </Table>
           </div>
@@ -303,9 +341,11 @@ const AdminBookOrders = () => {
                 <SheetTitle className="text-lg sm:text-xl">
                   {selected.dog_name} {selected.breed ? `· ${selected.breed}` : ""} {selected.age ? `· ${selected.age}` : ""}
                 </SheetTitle>
-                <SheetDescription>
-                  {new Date(selected.created_at).toLocaleString("sk")} · {(selected.amount / 100).toFixed(2)} €
+                <SheetDescription className="flex flex-wrap items-center gap-2">
+                  <span>{new Date(selected.created_at).toLocaleString("sk")} · {(selected.amount / 100).toFixed(2)} €</span>
+                  <PaidBadge order={selected} />
                 </SheetDescription>
+
               </SheetHeader>
 
               <div className="space-y-6 pt-2">
@@ -317,9 +357,10 @@ const AdminBookOrders = () => {
                     {zipping === selected.id ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <Download className="mr-1.5 h-4 w-4" />}
                     Fotky ZIP
                   </Button>
-                  <Button size="sm" variant="outline" disabled={sending === selected.id || selected.status === "pending" || selected.status === "canceled"} onClick={() => resendEmail(selected)}>
+                  <Button size="sm" variant="outline" disabled={sending === selected.id} onClick={() => resendEmail(selected)}>
                     {sending === selected.id ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <Mail className="mr-1.5 h-4 w-4" />}
-                    Poslať potvrdenie
+                    Poslať potvrdenie ({statusLabel(selected.status)})
+
                   </Button>
                 </div>
 
