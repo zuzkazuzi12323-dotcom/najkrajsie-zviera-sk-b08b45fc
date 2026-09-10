@@ -34,8 +34,9 @@ const monthKey = (y: number, m: number) => `${y}-${String(m + 1).padStart(2, "0"
 const NEXT_MONTH = (MONTH + 1) % 12;
 const NEXT_YEAR = MONTH === 11 ? YEAR + 1 : YEAR;
 
-/** Je registrácia v aktuálnom mesiaci zadarmo? (automaticky podľa dátumu) */
-export const REGISTRATION_FREE: boolean = FREE_MONTHS.includes(monthKey(YEAR, MONTH));
+/** Registrácia psa je vždy ZADARMO (0 €). Podpora 1,99 € je dobrovoľná. */
+export const REGISTRATION_FREE = true;
+void FREE_MONTHS; void monthKey;
 
 /** Bude registrácia zadarmo aj nasledujúci mesiac? */
 export const NEXT_MONTH_FREE: boolean = FREE_MONTHS.includes(monthKey(NEXT_YEAR, NEXT_MONTH));
@@ -61,7 +62,10 @@ export const CURRENT_PRICE_LABEL = registrationPriceLabel();
 
 /** Jednotný text o rozdelení podpory 20 / 80. */
 export const RESERVED_SHARE_TEXT =
-  "20 % z každej úspešnej registrácie je REZERVOVANÝCH pre spolupracujúce útulky. 80 % ide na prevádzku, ceny a poplatky.";
+  "20 % z každého dobrovoľného príspevku je REZERVOVANÝCH pre spolupracujúce útulky. 80 % ide na prevádzku, ceny a poplatky.";
+
+/** Text pre dobrovoľnú podporu. */
+export const VOLUNTARY_SUPPORT_LABEL = "Dobrovoľná podpora 1,99 € (nepovinné)";
 
 /** Krátky nadpis aktuálneho kola. */
 export const FREE_ROUND_TITLE = REGISTRATION_FREE
