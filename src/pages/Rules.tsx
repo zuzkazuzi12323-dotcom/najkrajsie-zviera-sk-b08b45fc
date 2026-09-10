@@ -8,7 +8,7 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Rules = () => {
   usePageTitle('Pravidlá súťaže – NajkrajšíPes.eu', 'Pravidlá súťaže o najkrajšieho psa: mesačné kolá, hlasovanie a poplatky.');
-  const free = REGISTRATION_FREE;
+  void REGISTRATION_FREE;
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -119,7 +119,7 @@ const Rules = () => {
                 <Handshake className="w-5 h-5 text-primary" /> Rezervovaná suma pre útulky
               </h2>
               <p className="text-foreground/80">
-                20 % z každej úspešnej registrácie je <strong>REZERVOVANÝCH</strong> pre spolupracujúce útulky. 80 % ide na
+                20 % z každého dobrovoľného príspevku je <strong>REZERVOVANÝCH</strong> pre spolupracujúce útulky. 80 % ide na
                 prevádzku, ceny a poplatky.
               </p>
               <p className="text-foreground/80 mt-3">
@@ -136,7 +136,7 @@ const Rules = () => {
                 <li className="break-words"><span className="font-bold text-primary">•</span> <strong>1 účet = 1 hlas za 24 hodín.</strong></li>
                 <li className="break-words"><span className="font-bold text-primary">•</span> Zakázané je používanie botov, automatizovaných skriptov a kupovanie hlasov.</li>
                 <li className="break-words"><span className="font-bold text-primary">•</span> Organizátor má právo vyradiť súťažiaceho pri podvode alebo manipulácii hlasovania.</li>
-                <li className="break-words"><span className="font-bold text-primary">•</span> V augustovom kole je registrácia <strong>ZADARMO</strong>; od septembra 2026 je registrácia <strong>1,99 €</strong> dobrovoľná podpora projektu a je <strong>nevratná</strong>, okrem technickej chyby na strane platby.</li>
+                <li className="break-words"><span className="font-bold text-primary">•</span> Registrácia psa je <strong>BEZPLATNÁ 0 €</strong>. Dobrovoľná podpora <strong>1,99 € (nepovinné)</strong> je <strong>nevratná</strong>, okrem technickej chyby na strane platby.</li>
                 <li className="break-words"><span className="font-bold text-primary">•</span> Reklamácie posielajte na <a href="mailto:infonajkrajsipes@gmail.com" className="text-primary font-medium hover:underline break-all">infonajkrajsipes@gmail.com</a> do <strong>14 dní</strong>.</li>
               </ul>
             </div>
