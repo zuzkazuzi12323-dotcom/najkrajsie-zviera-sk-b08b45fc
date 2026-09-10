@@ -31,9 +31,9 @@ const HowItWorks = () => {
           <p className="text-center text-muted-foreground mb-8">{ROUND_LABEL} — {MONTHLY_CYCLE_TEXT}</p>
           {free && (
             <div className="mb-8 rounded-3xl border-2 border-primary bg-primary/10 p-6 text-center shadow-golden">
-              <p className="text-2xl font-extrabold text-foreground">🔥 AUGUSTOVÁ AKCIA 🔥</p>
-              <p className="mt-2 font-bold text-foreground">Registrácia psa je počas celej augustovej súťaže ZADARMO.</p>
-              <p className="text-muted-foreground">Počas augusta 2026 je registrácia ZADARMO. Od septembra 2026 bude registrácia 1,99 €.</p>
+              <p className="text-2xl font-extrabold text-foreground">🎉 SÚŤAŽ JE NAVŽDY ZADARMO 0€ 🎉</p>
+              <p className="mt-2 font-bold text-foreground">Registrácia psa je NAVŽDY ZADARMO.</p>
+              <p className="text-muted-foreground">Súťaž prebieha každý mesiac bez poplatkov. Dobrovoľná podpora 1,99€ je nepovinná a neovplyvňuje šancu na výhru.</p>
             </div>
           )}
 
