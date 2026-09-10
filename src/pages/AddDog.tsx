@@ -265,14 +265,11 @@ const AddDog = () => {
                 <div className="h-px bg-border" />
                 <div className="flex justify-between font-bold">
                   <span className="text-foreground">Cena registrácie:</span>
-                  <span className="text-primary">
-                    {isFree ? "ZADARMO (august 2026)" : PAID_PRICE_LABEL}
-                  </span>
+                  <span className="text-primary">ZADARMO (0 €)</span>
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">
-                  {isFree
-                    ? `Po ukončení aktuálnej súťaže bude poplatok automaticky ${PAID_PRICE_LABEL}. 20 % z každej platenej registrácie ide útulkom ❤️`
-                    : "Jednorazová podpora projektu. 20 % je REZERVOVANÝCH pre spolupracujúce útulky ❤️, 80 % ide na prevádzku, vývoj, Stripe poplatky a ceny."}
+                  Súťaž je zadarmo. Dobrovoľná podpora {PAID_PRICE_LABEL} (nepovinné) je možná až po pridaní psa a
+                  neovplyvňuje šancu na výhru. 20 % z dobrovoľného príspevku je rezervovaných pre útulky ❤️
                 </p>
               </div>
               <div className="flex gap-3">
@@ -282,9 +279,38 @@ const AddDog = () => {
                 </button>
                 <motion.button whileTap={{ scale: 0.95 }} onClick={handleSubmit} disabled={loading}
                   className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50">
-                  {loading
-                    ? (isFree ? "Odosielam..." : "Presmerovávam na platbu...")
-                    : (isFree ? "Pridať psa ZADARMO 🐾" : `Zaplatiť ${PAID_PRICE_LABEL} a pridať psa 🐾`)}
+                  {loading ? "Odosielam..." : "Pridať psa ZADARMO 🐾"}
+                </motion.button>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && addedDog && (
+            <div className="space-y-6 text-center">
+              <div className="gradient-golden w-20 h-20 rounded-full flex items-center justify-center mx-auto">
+                <Check className="w-10 h-10 text-primary-foreground" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-foreground">{addedDog.name} je v súťaži! 🎉</h3>
+                <p className="text-muted-foreground mt-1">Pes je už zverejnený v galérii — zadarmo a bez schvaľovania.</p>
+              </div>
+
+              <label className="flex items-start gap-3 text-left bg-secondary/50 rounded-xl p-4 cursor-pointer">
+                <input type="checkbox" checked={wantSupport} onChange={(e) => setWantSupport(e.target.checked)}
+                  className="mt-1 w-5 h-5 accent-primary" />
+                <span className="text-sm text-foreground">
+                  Chcete dobrovoľne podporiť projekt {PAID_PRICE_LABEL}? (nepovinné, nezvyšuje šancu na výhru, 20 % ide útulkom)
+                </span>
+              </label>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button onClick={() => navigate(`/pes/${addedDog.id}`)}
+                  className="flex-1 py-3 rounded-xl border border-border font-medium text-muted-foreground hover:bg-secondary transition-colors">
+                  Nie, ďakujem — pokračovať zadarmo
+                </button>
+                <motion.button whileTap={{ scale: 0.95 }} onClick={handleSupport} disabled={!wantSupport || loading}
+                  className="flex-1 gradient-golden text-primary-foreground py-3 rounded-xl font-bold disabled:opacity-50">
+                  {loading ? "Presmerovávam na platbu..." : `Podporiť ${PAID_PRICE_LABEL} ❤️`}
                 </motion.button>
               </div>
             </div>
