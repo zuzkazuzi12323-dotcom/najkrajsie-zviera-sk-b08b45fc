@@ -251,11 +251,7 @@ const AddDog = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground">Skoro hotovo! 🎉</h3>
-                <p className="text-muted-foreground mt-1">
-                  {isFree
-                    ? "Skontrolujte údaje a odošlite prihlášku"
-                    : "Posledný krok — úhrada registračného poplatku"}
-                </p>
+                <p className="text-muted-foreground mt-1">Skontrolujte údaje a pridajte psa zadarmo</p>
               </div>
               <div className="bg-secondary/50 rounded-xl p-4 text-left space-y-2">
                 <div className="flex justify-between text-sm">
