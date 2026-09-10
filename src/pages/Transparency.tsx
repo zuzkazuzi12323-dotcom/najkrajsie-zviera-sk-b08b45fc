@@ -62,11 +62,10 @@ const Transparency = () => {
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Transparentnosť</h1>
           <p className="text-muted-foreground text-pretty">
+            <strong>20 % z každého DOBROVOĽNÉHO príspevku 1,99 € je rezervovaných pre útulky. Súťaž je zadarmo 0 €.
+            QR podpora ide 100 % priamo útulku.</strong>{" "}
             Všetky finančné dary útulkom, sponzorské príspevky a darované predmety sú tu verejne archivované a overiteľné.
-            <strong> 20 % z každej PLATENEJ registrácie psa (1,99 € od septembra) je REZERVOVANÝCH pre útulky.</strong>{" "}
-            Priama podpora cez QR kód ide 100 % priamo útulku a podpora cez Podporovateľov ide 100 % na prevádzku projektu.
-            V auguste je registrácia zadarmo, takže akumulovaná suma je 0 €. Citlivé údaje (napr. IBAN) zverejňujeme
-            len so súhlasom útulku a v primeranom rozsahu.
+            Citlivé údaje (napr. IBAN) zverejňujeme len so súhlasom útulku a v primeranom rozsahu.
           </p>
         </div>
 
