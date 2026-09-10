@@ -37,7 +37,9 @@ const AdminPayments = () => {
 
       const totalRevenue = items.filter((p) => p.status === "completed").reduce((sum, p) => sum + p.amount, 0);
       const highlightedCount = items.filter((p) => p.type === "highlight" && p.status === "completed").length;
-      const pendingCount = items.filter((p) => p.status === "pending").length;
+     // Registrácia psa je zadarmo (0 €) a schvaľuje sa automaticky bez platby,
+     // preto medzi čakajúce platby patria len dobrovoľné príspevky.
+     const pendingCount = items.filter((p) => p.status === "pending" && p.type !== "registration").length;
 
       return { items, totalRevenue, highlightedCount, pendingCount };
     },
@@ -212,7 +214,7 @@ const AdminPayments = () => {
           </div>
           <div>
             <p className="text-2xl font-bold tabular-nums text-card-foreground">{data?.pendingCount || 0}</p>
-            <p className="text-sm text-muted-foreground">Čakajúce platby</p>
+            <p className="text-sm text-muted-foreground">Čakajúce dobrovoľné príspevky</p>
           </div>
         </div>
         <div className="bg-card rounded-2xl p-5 shadow-soft flex items-center gap-4">

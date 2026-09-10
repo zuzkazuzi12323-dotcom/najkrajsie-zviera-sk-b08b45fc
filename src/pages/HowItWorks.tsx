@@ -14,10 +14,8 @@ const HowItWorks = () => {
     { icon: PawPrint, title: "Pridajte svojho psa", desc: "Vytvorte profil vášho psa s fotkou a základnými informáciami." },
     {
       icon: CreditCard,
-      title: free ? "Registrácia v auguste je zadarmo" : `Podpora projektu ${PAID_PRICE_LABEL}`,
-      desc: free
-        ? FREE_ROUND_NOTICE
-        : `Podpora projektu ${PAID_PRICE_LABEL} za psa. ${RESERVED_SHARE_TEXT}`,
+      title: "Podpora (nepovinné)",
+      desc: `Súťaž je zadarmo. Môžete dobrovoľne prispieť ${PAID_PRICE_LABEL}, 20 % ide útulkom. Neovplyvňuje výhru.`,
     },
     { icon: CheckCircle2, title: "Pes sa automaticky zaradí do hlasovania", desc: "Po registrácii sa pes ihneď zaradí do verejného hlasovania." },
     { icon: Users, title: "Zdieľajte profil a zbierajte hlasy", desc: "Zdieľajte profil psa a zbierajte hlasy od rodiny a priateľov." },
