@@ -68,24 +68,18 @@ export const RESERVED_SHARE_TEXT =
 export const VOLUNTARY_SUPPORT_LABEL = "Dobrovoľná podpora 1,99 € (nepovinné)";
 
 /** Krátky nadpis aktuálneho kola. */
-export const FREE_ROUND_TITLE = REGISTRATION_FREE
-  ? `🐶 ${ROUND_LABEL.toUpperCase()} – REGISTRÁCIA ZADARMO!`
-  : `🐾 ${ROUND_LABEL.toUpperCase()} – REGISTRÁCIA ${PAID_PRICE_LABEL}`;
+export const FREE_ROUND_TITLE = `🐶 ${ROUND_LABEL.toUpperCase()} – REGISTRÁCIA ZADARMO!`;
 
-/** Hlavné vysvetlenie cenového režimu aktuálneho kola. */
-export const FREE_ROUND_NOTICE = REGISTRATION_FREE
-  ? `Iba počas ${CURRENT_MONTH_LOCATIVE} je registrácia psa do súťaže úplne zadarmo. Od ${NEXT_MONTH_GENITIVE} bude registrácia opäť ${PAID_PRICE_LABEL}.`
-  : `Registrácia psa do súťaže je jednorazovo ${PAID_PRICE_LABEL}. ${RESERVED_SHARE_TEXT}`;
+/** Hlavné vysvetlenie cenového režimu. */
+export const FREE_ROUND_NOTICE =
+  `Registrácia psa do súťaže je BEZPLATNÁ (0 €). Dobrovoľná podpora ${PAID_PRICE_LABEL} je nepovinná, nie je podmienkou účasti a nezvyšuje šancu na výhru. Z dobrovoľného príspevku je 20 % rezervovaných pre útulky ❤️`;
 
 /** Krátky cenový riadok pod tlačidlami. */
-export const PRICE_SWITCH_LINE = REGISTRATION_FREE
-  ? `${MONTH_ADJ[MONTH].replace("ová", "")} ${YEAR}: ${FREE_PRICE_LABEL} | Od ${NEXT_MONTH_GENITIVE}: ${PAID_PRICE_LABEL}`
-  : `Registrácia: ${PAID_PRICE_LABEL} — 20 % je rezervovaných pre útulky ❤️`;
+export const PRICE_SWITCH_LINE = `Registrácia: ${FREE_PRICE_LABEL} | Dobrovoľná podpora ${PAID_PRICE_LABEL} (nepovinné) ❤️`;
 
 /** Veta o cene do právnych a informačných textov. */
-export const PRICE_TERMS_SENTENCE = REGISTRATION_FREE
-  ? `V ${CURRENT_MONTH_LOCATIVE} je registrácia psa ZADARMO. Od ${NEXT_MONTH_GENITIVE} je registrácia ${PAID_PRICE_LABEL} dobrovoľná podpora projektu a je nevratná, okrem technickej chyby platby.`
-  : `Registrácia psa je ${PAID_PRICE_LABEL} — dobrovoľná podpora projektu, nevratná, okrem technickej chyby platby.`;
+export const PRICE_TERMS_SENTENCE =
+  `Registrácia psa je BEZPLATNÁ (0 €). Dobrovoľná podpora ${PAID_PRICE_LABEL} je nepovinná a nevratná, okrem technickej chyby platby.`;
 
 /** Vysvetlenie mesačného cyklu súťaže. */
 export const MONTHLY_CYCLE_TEXT =
