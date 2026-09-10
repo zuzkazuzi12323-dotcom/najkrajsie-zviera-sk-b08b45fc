@@ -25,6 +25,8 @@ const AddDog = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [addedDog, setAddedDog] = useState<{ id: string; name: string } | null>(null);
+  const [wantSupport, setWantSupport] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -45,6 +47,23 @@ const AddDog = () => {
     if (file) {
       setImageFile(file);
       setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSupport = async () => {
+    if (!addedDog) return;
+    setLoading(true);
+    try {
+      let ref: string | null = null;
+      try { ref = localStorage.getItem(REF_STORAGE_KEY); } catch { /* ignore */ }
+      const { data, error } = await supabase.functions.invoke("create-registration-checkout", {
+        body: { dogId: addedDog.id, dogName: addedDog.name, ref: ref || "" },
+      });
+      if (error || !data?.url) throw new Error(error?.message || "Nepodarilo sa vytvoriť platbu");
+      window.location.href = data.url;
+    } catch (e: any) {
+      toast.error(e.message || "Platba sa nepodarila");
+      setLoading(false);
     }
   };
 
