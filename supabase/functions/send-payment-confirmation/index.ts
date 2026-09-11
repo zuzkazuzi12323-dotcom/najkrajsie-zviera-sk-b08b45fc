@@ -45,10 +45,12 @@ async function isAuthorized(req: Request): Promise<boolean> {
 }
 
 function buildEmail(to: string, dogName: string, dogId: string, variableSymbol = dogId, paymentId = '', amountCents = 199): string {
-  const subject = encodeRFC2047(`Potvrdenie platby – ${dogName} je v súťaži! 🐾`);
+  const subject = encodeRFC2047(`Ďakujeme za dobrovoľnú podporu – ${dogName} 🐾`);
   const fromHeader = `${encodeRFC2047(FROM_NAME)} <${FROM_EMAIL}>`;
   const dogUrl = `${SITE_URL}/pes/${dogId}`;
   const amountLabel = `${(amountCents / 100).toFixed(2).replace('.', ',')} €`;
+  const shelterLabel = `${((amountCents * 0.2) / 100).toFixed(2).replace('.', ',')} €`;
+
 
   const html = `<!DOCTYPE html>
 <html lang="sk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -59,23 +61,24 @@ function buildEmail(to: string, dogName: string, dogId: string, variableSymbol =
         <tr><td style="background:linear-gradient(135deg,#e89534 0%,#c47b2a 100%);padding:36px 24px;text-align:center;">
           <img src="${LOGO_URL}" alt="${SITE_NAME}" width="96" height="96" style="display:block;margin:0 auto 12px;border-radius:50%;background:#fff;padding:6px;">
           <h1 style="margin:0;color:#fff;font-size:24px;font-weight:700;">${SITE_NAME}</h1>
-          <p style="margin:6px 0 0;color:#fff8ee;font-size:14px;">Potvrdenie platby</p>
+          <p style="margin:6px 0 0;color:#fff8ee;font-size:14px;">Potvrdenie dobrovoľnej podpory</p>
         </td></tr>
         <tr><td style="padding:36px 32px 24px;">
-          <h2 style="margin:0 0 16px;font-size:22px;color:#c47b2a;">Ďakujeme za platbu! ✅</h2>
+          <h2 style="margin:0 0 16px;font-size:22px;color:#c47b2a;">Ďakujeme za vašu podporu! ✅</h2>
           <p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#333;">
-            Vaša platba <strong>${amountLabel}</strong> za registráciu psa <strong>${dogName}</strong> bola úspešne prijatá.
-            ${dogName} je teraz oficiálne zaradený do súťaže <strong>${SITE_NAME}</strong>! 🎉
+            Váš dobrovoľný príspevok <strong>${amountLabel}</strong> k profilu psa <strong>${dogName}</strong> bol úspešne prijatý.
+            Účasť v súťaži <strong>${SITE_NAME}</strong> je bezplatná — ${dogName} je v galérii aj bez príspevku. 🎉
           </p>
           <div style="background:#fdf6ec;border-radius:12px;padding:16px 20px;margin:20px 0;">
             <table width="100%" cellpadding="4" cellspacing="0" style="font-size:14px;color:#444;">
-              <tr><td style="color:#888;">Typ platby:</td><td align="right"><strong>Registrácia psa</strong></td></tr>
+              <tr><td style="color:#888;">Typ platby:</td><td align="right"><strong>Dobrovoľná podpora (nepovinné)</strong></td></tr>
               <tr><td style="color:#888;">Pes:</td><td align="right"><strong>${dogName}</strong></td></tr>
-              <tr><td style="color:#888;">Suma:</td><td align="right"><strong>${amountLabel}</strong></td></tr>
+              <tr><td style="color:#888;">Registrácia psa:</td><td align="right"><strong>0 € — ZADARMO</strong></td></tr>
+              <tr><td style="color:#888;">Suma príspevku:</td><td align="right"><strong>${amountLabel}</strong></td></tr>
               <tr><td style="color:#888;">Variabilný symbol / ID:</td><td align="right"><strong>${variableSymbol}</strong></td></tr>
               ${paymentId ? `<tr><td style="color:#888;">Interné ID platby:</td><td align="right"><strong>${paymentId}</strong></td></tr>` : ''}
               <tr><td style="color:#888;">Stav:</td><td align="right"><strong style="color:#16a34a;">Zaplatené</strong></td></tr>
-              <tr><td style="color:#888;">Darované útulkom (20 %):</td><td align="right"><strong>0,60 €</strong></td></tr>
+              <tr><td style="color:#888;">Rezervované útulkom (20 %):</td><td align="right"><strong>${shelterLabel}</strong></td></tr>
             </table>
           </div>
           <div style="text-align:center;margin:24px 0;">
@@ -86,11 +89,13 @@ function buildEmail(to: string, dogName: string, dogId: string, variableSymbol =
           <div style="background:#f1e7d4;border-radius:12px;padding:16px 20px;margin:20px 0;">
             <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:#c47b2a;">📜 Podmienky súťaže (zhrnutie):</p>
             <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#555;">
-              <li>Registrácia psa je jednorazová a neopakuje sa</li>
+              <li>Registrácia psa je <strong>BEZPLATNÁ (0 €)</strong> a pes sa zobrazí ihneď</li>
+              <li>Dobrovoľný príspevok 1,99 € je nepovinný a nezvyšuje šancu na výhru</li>
               <li>1 bezplatný hlas za 24 hodín z jedného účtu</li>
-              <li>20 % zo všetkých platieb a 100 % z darov ide útulkom</li>
+              <li>20 % z dobrovoľných príspevkov a 100 % z darov ide útulkom</li>
               <li>Víťazi sa vyhlasujú na konci každého kola súťaže</li>
               <li>Profil psa je verejne dostupný v galérii a v archíve</li>
+
             </ul>
             <p style="margin:10px 0 0;font-size:12px;color:#888;">
               Úplné <a href="${SITE_URL}/pravidla" style="color:#c47b2a;">pravidlá</a> a <a href="${SITE_URL}/ochrana-udajov" style="color:#c47b2a;">ochrana údajov</a>.
