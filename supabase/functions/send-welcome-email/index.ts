@@ -59,7 +59,7 @@ function buildEmail(to: string, displayName: string): string {
           <div style="background:#fdf6ec;border-radius:12px;padding:18px 22px;margin:24px 0;">
             <p style="margin:0 0 10px;font-size:14px;font-weight:600;color:#c47b2a;">Čo môžeš robiť hneď teraz:</p>
             <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.8;color:#444;">
-              <li>Prihlásiť svojho psa do súťaže — počas kampane <strong>ZADARMO</strong> 🐕</li>
+              <li>Prihlásiť svojho psa do súťaže — <strong>NAVŽDY ZADARMO</strong> 🐕</li>
               <li>Hlasovať za obľúbeného psíka (1 hlas / 24 hod)</li>
               <li>Podporiť aktuálny útulok priamym darom cez SEPA QR kód</li>
               <li>Pozrieť si sekciu <strong>Transparentnosť</strong> — kam idú všetky dary</li>
