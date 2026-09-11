@@ -45,10 +45,12 @@ async function isAuthorized(req: Request): Promise<boolean> {
 }
 
 function buildEmail(to: string, dogName: string, dogId: string, variableSymbol = dogId, paymentId = '', amountCents = 199): string {
-  const subject = encodeRFC2047(`Potvrdenie platby – ${dogName} je v súťaži! 🐾`);
+  const subject = encodeRFC2047(`Ďakujeme za dobrovoľnú podporu – ${dogName} 🐾`);
   const fromHeader = `${encodeRFC2047(FROM_NAME)} <${FROM_EMAIL}>`;
   const dogUrl = `${SITE_URL}/pes/${dogId}`;
   const amountLabel = `${(amountCents / 100).toFixed(2).replace('.', ',')} €`;
+  const shelterLabel = `${((amountCents * 0.2) / 100).toFixed(2).replace('.', ',')} €`;
+
 
   const html = `<!DOCTYPE html>
 <html lang="sk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
