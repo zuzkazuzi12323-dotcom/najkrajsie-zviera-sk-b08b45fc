@@ -48,7 +48,7 @@ serve(async (req) => {
           currency: "eur",
           product_data: {
             name: `Kniha o psovi – ${order.dog_name}`,
-            description: "10 strán A5, mäkká lesklá väzba, tlač, doprava ZADARMO + PDF do e-mailu",
+            description: "8 strán A5, mäkká lesklá väzba, tlač a doprava ZADARMO",
           },
           unit_amount: BOOK_PRICE_CENTS,
         },
