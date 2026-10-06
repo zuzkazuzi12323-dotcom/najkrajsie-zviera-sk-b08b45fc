@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { BookOpen, Truck, CreditCard, ShieldCheck, Sparkles, Upload, CheckCircle2 } from "lucide-react";
+import { BookOpen, Truck, CreditCard, ShieldCheck, Sparkles, Upload, CheckCircle2, Eye } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { usePageTitle } from "@/hooks/usePageTitle";
@@ -18,7 +25,7 @@ const MIN_PHOTOS = 5;
 const Kniha = () => {
   usePageTitle(
     "Kniha o vašom psovi za 29,99 € – doprava zadarmo | NajkrajšíPes.eu",
-    "Vytvorte knihu svojho psa: 10 strán A5, mäkká lesklá väzba, tlač aj doprava zadarmo a PDF do e-mailu. Dodanie 3–5 dní.",
+    "Vytvorte knihu svojho psa: 8 strán A5, mäkká lesklá väzba, tlač aj doprava zadarmo. Dodanie 3–5 dní.",
   );
 
   const [params] = useSearchParams();
@@ -26,7 +33,8 @@ const Kniha = () => {
   const [breed, setBreed] = useState("");
   const [age, setAge] = useState("");
   const [story, setStory] = useState("");
-  const [aiHelp, setAiHelp] = useState(false);
+  const [generatingStory, setGeneratingStory] = useState(false);
+  const [storyGenerated, setStoryGenerated] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [customerName, setCustomerName] = useState("");
   const [street, setStreet] = useState("");
@@ -35,6 +43,14 @@ const Kniha = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewViewed, setPreviewViewed] = useState(false);
+
+  const photoPreviews = useMemo(() => photos.map((photo) => URL.createObjectURL(photo)), [photos]);
+
+  useEffect(() => {
+    return () => photoPreviews.forEach((url) => URL.revokeObjectURL(url));
+  }, [photoPreviews]);
 
   useEffect(() => {
     const stav = params.get("stav");
@@ -47,6 +63,59 @@ const Kniha = () => {
     const picked = Array.from(files).filter((f) => f.type.startsWith("image/")).slice(0, MAX_PHOTOS);
     if (picked.length < files.length) toast.info(`Použijeme maximálne ${MAX_PHOTOS} fotiek.`);
     setPhotos(picked);
+    setPreviewViewed(false);
+  };
+
+  const hasThreeWords = story.trim().split(/\s+/).filter(Boolean).length >= 3;
+
+  const generateStory = async () => {
+    if (!dogName.trim()) {
+      toast.error("Najprv zadajte meno psa.");
+      return;
+    }
+    if (!hasThreeWords) {
+      toast.error("Napíšte aspoň 3 slová o vašom psovi.");
+      return;
+    }
+
+    setGeneratingStory(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-book-story", {
+        body: {
+          dogName: dogName.trim(),
+          breed: breed.trim(),
+          age: age.trim(),
+          keywords: story.trim(),
+        },
+      });
+      if (error) throw error;
+      if (!data?.story) throw new Error("Príbeh sa nepodarilo vygenerovať.");
+      setStory(data.story);
+      setStoryGenerated(true);
+      setPreviewViewed(false);
+      toast.success("Príbeh je pripravený. Môžete ho ľubovoľne upraviť.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Príbeh sa nepodarilo vygenerovať.");
+    } finally {
+      setGeneratingStory(false);
+    }
+  };
+
+  const openPreview = () => {
+    if (!dogName.trim()) {
+      toast.error("Zadajte meno psa.");
+      return;
+    }
+    if (photos.length < MIN_PHOTOS) {
+      toast.error(`Nahrajte prosím ${MIN_PHOTOS}–${MAX_PHOTOS} fotiek.`);
+      return;
+    }
+    if (!hasThreeWords) {
+      toast.error("Napíšte aspoň 3 slová o vašom psovi.");
+      return;
+    }
+    setPreviewViewed(true);
+    setPreviewOpen(true);
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -63,8 +132,12 @@ const Kniha = () => {
       toast.error(`Nahrajte prosím ${MIN_PHOTOS}–${MAX_PHOTOS} fotiek.`);
       return;
     }
-    if (!aiHelp && story.trim().length < 20) {
-      toast.error("Napíšte aspoň 3 vety o psovi, alebo zaškrtnite pomoc s AI príbehom.");
+    if (!hasThreeWords) {
+      toast.error("Napíšte aspoň 3 slová o vašom psovi.");
+      return;
+    }
+    if (!previewViewed) {
+      toast.error("Pred zaplatením si najprv otvorte náhľad knihy.");
       return;
     }
 
@@ -87,7 +160,7 @@ const Kniha = () => {
           breed: breed.trim() || null,
           age: age.trim() || null,
           story: story.trim() || null,
-          ai_help: aiHelp,
+          ai_help: storyGenerated,
           photos: paths,
           customer_name: customerName.trim(),
           street: street.trim(),
@@ -129,8 +202,8 @@ const Kniha = () => {
             Vytvorte KNIHU svojho psa za 29,99 € – Doprava ZADARMO
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-pretty sm:text-lg">
-            Nahrajte 5–10 fotiek, napíšte 3 vety alebo kliknite „Pomôž mi napísať príbeh“ pomocou AI.
-            Vytlačíme 10 strán A5 a pošleme zadarmo domov do 3–5 dní.
+            Nahrajte 5–10 fotiek a napíšte aspoň 3 slová o svojom psovi. Príbeh vám vytvorí AI a môžete si ho upraviť.
+            Vytlačíme 8 strán A5 a pošleme zadarmo domov do 3–5 dní.
           </p>
         </div>
       </section>
@@ -155,27 +228,30 @@ const Kniha = () => {
               </div>
             </div>
             <div className="mt-4 space-y-2">
-              <Label htmlFor="story">3 vety o psovi</Label>
+              <Label htmlFor="story">Príbeh a poznámky o psovi *</Label>
               <Textarea
                 id="story"
                 value={story}
-                onChange={(e) => setStory(e.target.value)}
-                maxLength={1000}
-                rows={4}
-                placeholder="Napíšte 3 vety – ako ste sa našli, čo najviac miluje, čo vás na ňom dojíma."
+                onChange={(e) => {
+                  setStory(e.target.value);
+                  setPreviewViewed(false);
+                }}
+                maxLength={5000}
+                rows={8}
+                placeholder="Napíšte aspoň 3 slová – napríklad: hravý, verný, miluje prechádzky."
               />
             </div>
-            <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-2xl bg-book-orange/10 p-4">
-              <Checkbox checked={aiHelp} onCheckedChange={(v) => setAiHelp(v === true)} className="mt-0.5" />
-              <span className="text-sm text-foreground">
-                <span className="inline-flex items-center gap-1.5 font-semibold">
-                  <Sparkles className="h-4 w-4 text-book-orange" /> Chcem pomoc s AI príbehom
-                </span>
-                <span className="mt-1 block text-muted-foreground">
-                  Pomôžeme vám napísať príbeh podľa fotiek a vašich pár slov – pred tlačou vám ho pošleme na schválenie.
-                </span>
-              </span>
-            </label>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={generatingStory}
+              onClick={generateStory}
+              className="mt-4 w-full border-book-orange text-book-orange hover:bg-book-orange/10 hover:text-book-orange sm:w-auto"
+            >
+              <Sparkles className="mr-2 h-4 w-4" />
+              {generatingStory ? "Generujem príbeh…" : "Vygenerovať príbeh s AI"}
+            </Button>
+            <p className="mt-2 text-sm text-muted-foreground">Vygenerovaný príbeh môžete pred objednaním ľubovoľne upraviť.</p>
           </div>
 
           <div>
@@ -223,19 +299,30 @@ const Kniha = () => {
             </div>
           </div>
 
-          <Button
-            type="submit"
-            disabled={loading}
-            className="h-14 w-full rounded-full bg-book-orange text-base font-bold text-book-orange-foreground hover:bg-book-orange-dark"
-          >
-            {loading ? "Pripravujeme platbu…" : "Objednať za 29,99 € s dopravou zadarmo"}
-          </Button>
+          <div className="space-y-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={openPreview}
+              className="h-14 w-full rounded-full border-2 border-book-orange text-base font-bold text-book-orange hover:bg-book-orange/10 hover:text-book-orange"
+            >
+              <Eye className="mr-2 h-5 w-5" /> Náhľad knihy
+            </Button>
+            <Button
+              type="submit"
+              disabled={loading || !previewViewed}
+              className="h-14 w-full rounded-full bg-book-orange text-base font-bold text-book-orange-foreground hover:bg-book-orange-dark"
+            >
+              {loading ? "Pripravujeme platbu…" : "Zaplatiť 29,99 €"}
+            </Button>
+            {!previewViewed && <p className="text-center text-xs text-muted-foreground">Platba sa sprístupní po otvorení náhľadu knihy.</p>}
+          </div>
         </form>
 
         {/* Pod formulárom */}
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {[
-            { icon: BookOpen, text: "Cena 29,99 € = 10 strán A5 mäkká lesklá väzba + tlač + doprava zadarmo + PDF do e-mailu" },
+            { icon: BookOpen, text: "Cena 29,99 € = 8 strán A5, mäkká lesklá väzba + tlač + doprava zadarmo" },
             { icon: Truck, text: "Dodanie 3–5 dní zadarmo, Packeta / Pošta" },
             { icon: CreditCard, text: "Platba kartou" },
             { icon: ShieldCheck, text: "Reklamácie do 14 dní na e-mail infonajkrajsipes@gmail.com" },
@@ -247,6 +334,35 @@ const Kniha = () => {
           ))}
         </div>
       </section>
+
+      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto p-4 sm:p-6">
+          <DialogHeader>
+            <DialogTitle>Náhľad knihy o psovi {dogName}</DialogTitle>
+            <DialogDescription>Orientačný náhľad obsahu a fotografií pred tlačou.</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {Array.from({ length: 8 }, (_, index) => {
+              const paragraphs = story.split(/\n+/).filter((paragraph) => paragraph.trim());
+              const text = paragraphs[index] || (index === 0 ? story : "");
+              const photo = photoPreviews[index % Math.max(photoPreviews.length, 1)];
+              return (
+                <article key={index} className="min-h-80 overflow-hidden rounded-lg border border-border bg-card shadow-soft">
+                  {photo && <img src={photo} alt={`Strana ${index + 1}`} className="h-44 w-full object-cover" />}
+                  <div className="p-4">
+                    <p className="text-xs font-semibold uppercase text-book-orange">Strana {index + 1}</p>
+                    {index === 0 && <h3 className="mt-2 text-xl text-foreground">{dogName}</h3>}
+                    <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-foreground">{text || "Fotografia vášho psa"}</p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+          <Button type="button" onClick={() => setPreviewOpen(false)} className="w-full bg-book-orange text-book-orange-foreground hover:bg-book-orange-dark">
+            Náhľad je v poriadku
+          </Button>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
