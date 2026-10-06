@@ -8,6 +8,7 @@ import SponsorBanner from "@/components/SponsorBanner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import WinnersSection from "@/components/WinnersSection";
 
 const Gallery = () => {
   usePageTitle('Galéria psov – NajkrajšíPes.eu', 'Prezrite si všetkých psov v aktuálnej súťaži a hlasujte za svojho favorita.');
@@ -77,6 +78,7 @@ const Gallery = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="container mx-auto px-4 py-10">
+        <WinnersSection />
         <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-2">Galéria psov</h1>
         <p className="text-muted-foreground mb-8">Hlasujte za svojho favorita alebo pridajte vlastného psa</p>
 
